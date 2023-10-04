@@ -8,7 +8,7 @@ window.location = "../index.php";
 <?php
 }
 $session_id=$_SESSION['alogin'];
-$session_depart = $_SESSION['arole'];
+$session_depart = $_SESSION['dept'];
 $session_role = $_SESSION['user_type'];
 
 ?>

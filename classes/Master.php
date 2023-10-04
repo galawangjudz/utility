@@ -2,7 +2,6 @@
 
 Class Master{
 
-
 	function save_user(){
 		require_once('../includes/config.php');
 	

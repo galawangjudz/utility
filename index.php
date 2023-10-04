@@ -15,20 +15,20 @@ if(isset($_POST['signin']))
 		    if ($row['role'] == 'Admin') {
 		    	$_SESSION['alogin']=$row['emp_id'];
 				$_SESSION['authenticated'] = true;
-		    	$_SESSION['arole']=$row['Department'];
+		    	$_SESSION['dept']=$row['Department'];
 				$_SESSION['user_type']=$row['role'];
 			 /* 	echo "<script type='text/javascript'> document.location = 'admin/admin_dashboard.php'; </script>"; */
 				 echo "<script type='text/javascript'> document.location = 'admin/index.php'; </script>";
 		    }
 		    elseif ($row['role'] == 'Staff') {
 		    	$_SESSION['alogin']=$row['emp_id'];
-		    	$_SESSION['arole']=$row['Department'];
+		    	$_SESSION['dept']=$row['Department'];
 				$_SESSION['user_type']=$row['role'];
 			 	echo "<script type='text/javascript'> document.location = 'staff/index.php'; </script>";
 		    }
 			elseif ($row['role'] == 'Cashier') {
 		    	$_SESSION['alogin']=$row['emp_id'];
-		    	$_SESSION['arole']=$row['Department'];
+		    	$_SESSION['dept']=$row['Department'];
 				$_SESSION['user_type']=$row['role'];
 			 	echo "<script type='text/javascript'> document.location = 'cashier/index.php'; </script>";
 		    }
