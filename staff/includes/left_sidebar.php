@@ -12,13 +12,13 @@
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li class="dropdown">
-						<a href="index.php" class="dropdown-toggle no-arrow">
+						<a href="<?php echo base_url ?>staff/?page=home" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-house-1"></span><span class="mtext">Dashboard</span>
 						</a>
 						
 					</li>
 					<li>
-						<a href="#" class="dropdown-toggle no-arrow">
+						<a href="<?php echo base_url ?>staff/?page=accounts" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Accounts</span>
 						</a>
 					</li>

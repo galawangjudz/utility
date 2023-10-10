@@ -160,31 +160,14 @@ endif;
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                            <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
                                             <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> GrassCutting Records</a>
                                             <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> Statement of Account</a>
                                             <a class="dropdown-item stl_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Streetlight Payment</a>
                                             <a class="dropdown-item mtf_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet1"></i> Grasscutting Payment</a>
-                                            <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
-                                            <a class="dropdown-item edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-delete-3"></i> Delete</a>
-                                        </div>
+                                          </div>
                                     </div>
-                                   
-                      <!-- 
-                                        <a class="btn view_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-eye text-info"></span></a>
-                                       
-                                        <a class="btn stl_bill_data" href="javascript:void(0)" id ="<?php echo $acc ?>" bill_type ="STL"><span class="fa fa-lightbulb text-dark"></span></a>
-                                        <a class="btn stl_payment_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-wallet text-success"></span></a>
-                                     
-                                       
-                                        <a class="btn mtf_bill_data" href="javascript:void(0)" id ="<?php echo $acc ?>" bill_type ="MTF"><span class="fa fa-leaf text-dark"></span></a>
-                                        <a class="btn mtf_payment_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-wallet text-success"></span></a>
-                                      
-                                        <a class="btn edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-edit text-primary"></span></a>
-                                        <a class="btn delete_data" href="javascript:void(0)" id="<?php echo $acc ?>"><span class="fa fa-trash text-danger"></span></a>
-                                       
-                                        </div> -->
 
                                     </td>
                                 </tr>
@@ -207,7 +190,6 @@ endif;
 
 <script>
     $(document).ready(function(){
-
 
         $('#create_new').click(function(){
 			uni_modal("Add New Account","accounts/manage_account.php",'large')

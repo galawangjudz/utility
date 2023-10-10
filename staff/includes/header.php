@@ -22,9 +22,20 @@
 	<link rel="stylesheet" type="text/css" href="../src/plugins/datatables/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="../src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="../vendors/styles/style.css">
+	<!-- <link rel="stylesheet" type="text/css" href="../vendors/styles/adminlte.css"> -->
+	
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+	<!-- jQuery -->
+	<script src="../plugins/jquery/jquery.min.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+	
+	<script>
+        var _base_url_ = '<?php echo base_url ?>';
+    </script>
+
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
@@ -33,4 +44,3 @@
 		gtag('config', 'UA-119386393-1');
 	</script>
 </head>
-<?php include('../includes/config.php'); ?>

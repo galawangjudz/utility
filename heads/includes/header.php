@@ -33,4 +33,4 @@
 		gtag('config', 'UA-119386393-1');
 	</script>
 </head>
-<?php include('../includes/config.php'); ?>
+<?php require_once('../includes/config.php'); ?>
