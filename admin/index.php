@@ -2,8 +2,7 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
 <?php include('includes/admin_session.php')?>
-<!DOCTYPE html>
-<html lang="en" class="" style="height: auto;">
+
 <body>
 	<div class="pre-loader">
 		<div class="pre-loader-box">
