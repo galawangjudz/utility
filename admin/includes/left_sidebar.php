@@ -28,6 +28,11 @@
 						</a>
 					</li>
 					<li>
+						<a href="<?php echo base_url ?>admin/?page=report/car_logs" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-newspaper"></span><span class="mtext">CAR Report</span>
+						</a>
+					</li>
+					<li>
 					<a href="<?php echo base_url ?>admin/?page=user_setting" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-user"></span><span class="mtext">Users</span>
 						</a>

@@ -164,8 +164,9 @@ endif;
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
                                             <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> GrassCutting Records</a>
                                             <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> Statement of Account</a>
-                                            <a class="dropdown-item stl_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Streetlight Payment</a>
-                                            <a class="dropdown-item mtf_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet1"></i> Grasscutting Payment</a>
+                                            <a class="dropdown-item payment_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i>Payment Window</a>
+                                <!--             <a class="dropdown-item stl_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Streetlight Payment</a>
+                                            <a class="dropdown-item mtf_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet1"></i> Grasscutting Payment</a> -->
                                           </div>
                                     </div>
 
@@ -202,6 +203,9 @@ endif;
 		})
         $('.soa_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/soa.php?id=" + $(this).attr('id'), 'large');
+		})
+        $('.payment_data').click(function(){
+			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
 		})
 		$('.stl_payment_data').click(function(){
 			uni_modal("StreetLight Payment Window","payments/streetlight.php?id="+$(this).attr('id'),'mid-large')

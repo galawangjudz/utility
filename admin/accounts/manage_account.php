@@ -64,16 +64,36 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <input type="text" name="acc_no" id="acc_no" class="form-control form-control-border" placeholder="ex. 15200202102" value ="<?php echo isset($account_no) ? $account_no : '' ?>"<?php if ($accfield) echo ' readonly'; ?> required>
                 </div>
             </div>
+            <?php 
+            $check = "SELECT max(c_control_no) as c_control_no FROM t_utility_accounts";
+
+		    $result = odbc_exec($conn2, $check);
+
+			if (!$result) {
+				die("ODBC query execution failed: " . odbc_errormsg());
+			}
+			// Fetch and display the results
+			while ($row = odbc_fetch_array($result)) {
+				$input= $row['c_control_no'];
+                list($prefix, $numeric) = explode('-', $input, 2);
+                $newNumeric = sprintf('%06d', (int)$numeric + 1);
+
+                // Combine the prefix and new numeric part
+                $ctr = $prefix . '-' . $newNumeric;
+
+
+			}
+            ?>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="ctr" class="control-label">Control No</label>
-                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" placeholder="ex. STL-12345" value ="<?php echo isset($ctr) ? $ctr : '' ?>"<?php if ($ctrfield) echo ' readonly'; ?> required>
+                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" placeholder="ex. STL-12345" value ="<?php echo isset($ctr) ? $ctr : '' ?>"<?php if ($ctrfield) echo ' readonly'; ?> readonly required>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="pbl" class="control-label">Phase/Block/Lot</label>
-                    <input type="text" name="pbl" id="pbl" class="form-control form-control-border" placeholder="Phase/Blk/Lot" value ="<?php echo isset($c_location) ? $c_location : '' ?>"<?php if ($pblfield) echo ' readonly'; ?> required>
+                    <input type="text" name="pbl" id="pbl" class="form-control form-control-border" placeholder="leave it Blank" value ="<?php echo isset($c_location) ? $c_location : '' ?>"<?php if ($pblfield) echo ' readonly'; ?> required>
                 </div>
             </div>
         </div>
@@ -157,7 +177,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-6">
                 <div class="form-group">
                 <label for="mtf_end" class="control-label">MTF End Date</label>
-                <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('Y-m-d'); ?>" required>
+                <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('2030-01-01'); ?>" required>
                 </div>
             </div>
         </div>

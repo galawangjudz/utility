@@ -21,9 +21,6 @@ endif;
 
 ?>
 
-
-<body>
-
 	<div class="main-container">
 		<div class="pd-ltr-20">
 			<div class="title pb-20">
@@ -116,7 +113,7 @@ endif;
                                 endif;
                                 
                                 if ($l_find == "00000000"):
-                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active'  ORDER BY c_account_no";
+                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts ORDER BY c_account_no";
                                 else:
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_account_no::text ~* '^%s' ORDER BY c_account_no";
                                 endif;
@@ -163,11 +160,12 @@ endif;
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
                                             <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> GrassCutting Records</a>
                                             <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> Statement of Account</a>
-                                            <a class="dropdown-item stl_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Streetlight Payment</a>
-                                            <a class="dropdown-item mtf_payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet1"></i> Grasscutting Payment</a>
+                                            <a class="dropdown-item payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Payment Window</a>
                                             <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
                                             <a class="dropdown-item edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <?php if ($status == "Inactive"):?>
+                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-name ="<?php echo $loc ?>" data-id="<?php echo $acc ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                    
@@ -220,6 +218,9 @@ endif;
 		})
         $('.soa_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/soa.php?id=" + $(this).attr('id'), 'large');
+		})
+        $('.payment_data').click(function(){
+			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
 		})
 		$('.stl_payment_data').click(function(){
 			uni_modal("StreetLight Payment Window","payments/streetlight.php?id="+$(this).attr('id'),'mid-large')
