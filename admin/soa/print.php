@@ -67,7 +67,7 @@ function format_num($number){
 
 if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
-    $bill_type = $_GET['bill_type'];
+    
 
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = '$l_acc_no'";
     $qry = odbc_exec($conn2, $sql);
@@ -86,9 +86,12 @@ if(isset($_GET['id'])){
 
         
     }
-
-
-    $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_bill_type LIKE '%$bill_type%'  ORDER BY c_start_date ASC";
+    if (isset($_GET['bill_type']) && !empty($_GET['bill_type'])) {
+        $bill_type = $_GET['bill_type'];
+        $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 AND c_bill_type LIKE '%$bill_type%'  ORDER BY c_start_date ASC";
+    }else{
+        $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 ORDER BY c_start_date ASC";
+    }
     $result = odbc_exec($conn2, $load_due_payment_records);
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {
@@ -120,9 +123,9 @@ if(isset($_GET['id'])){
             /* var_dump($due); */
 
             $l_edate1 = date("Y/m/d", strtotime($due['c_end_date']));
-            $l_sdate = date("m/d/Y", strtotime($due['c_start_date']));
-            $l_edate = date("m/d/Y", strtotime($due['c_end_date']));
-            $l_ddate = date("m/d/Y", strtotime($due['c_due_date']));
+            $l_sdate = date("M j, Y", strtotime($due['c_start_date']));
+            $l_edate = date("M j, Y", strtotime($due['c_end_date']));
+            $l_ddate = date("M j, Y", strtotime($due['c_due_date']));
             $l_bill_type = $due['c_bill_type'];
             $l_amount_due = $due['c_amount_due'];
             $l_prev_bal = $due['c_prev_balance'];
@@ -140,8 +143,13 @@ if(isset($_GET['id'])){
         }
     }
     // Retrieve and process payment records
-    $get_payment_records = "SELECT * FROM t_utility_payments WHERE c_account_no = '$l_acc_no' AND c_st_or_no LIKE '%$bill_type%' ORDER BY c_st_pay_date ASC";
-    $result = odbc_exec($conn2, $get_payment_records);
+    if (isset($_GET['bill_type']) && !empty($_GET['bill_type'])) {
+        $bill_type = $_GET['bill_type'];
+        $get_payment_records = "SELECT * FROM t_utility_payments WHERE c_account_no = '$l_acc_no' AND c_st_or_no LIKE '%$bill_type%' ORDER BY c_st_pay_date ASC";
+    }else{
+        $get_payment_records = "SELECT * FROM t_utility_payments WHERE c_account_no = '$l_acc_no' ORDER BY c_st_pay_date ASC";
+    }
+     $result = odbc_exec($conn2, $get_payment_records);
 
     while ($payment = odbc_fetch_array($result)) {
         $l_pdate1 = date("Y/m/d", strtotime($payment['c_st_pay_date']));
@@ -249,11 +257,21 @@ if(isset($_GET['id'])){
                 <div class="main" style="margin-top:-30px;width:1100px;">
                     <div class="container">
                         <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;width:1100px;">  
-                            <table class="table table-striped" style="text-align:right;font-size:11px;">   
+                            <table class="table table-striped" style="text-align:right;font-size:11px;">  
+                            <colgroup>
+                                <col width="20%">
+                                <col width="10%">
+                                <col width="10%">
+                                <col width="10%">
+                                <col width="10%">
+                                <col width="15%">
+                                <col width="10%">
+                                <col width="10%">
+                                <col width="15%">
+                            </colgroup> 
                                 <thead> 
                                     <tr>
-                                        <th style="text-align:center;font-size:13px;">START DATE</th>
-                                        <th style="text-align:center;font-size:13px;">END DATE</th>
+                                        <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
                                         <th style="text-align:center;font-size:13px;">DUE DATE</th>
                                         <th style="text-align:center;font-size:13px;">DESCRIPTION</th>
                                         <th style="text-align:center;font-size:13px;">AMOUNT DUE</th>
@@ -273,8 +291,7 @@ if(isset($_GET['id'])){
                                         foreach ($l_return_due_list as $l_data):
                                             ?>
                                             <tr>
-                                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[1]; ?></td>
-                                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[2]; ?></td>
+                                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . ' to ' . $l_data[2]; ?></td>
                                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
                                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[4]; ?></td>
                                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>

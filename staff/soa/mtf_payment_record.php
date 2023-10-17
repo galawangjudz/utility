@@ -6,7 +6,7 @@ if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
     $bill_type = $_GET['bill_type'];
 
-    $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_bill_type LIKE '%$bill_type%'  ORDER BY c_start_date ASC";
+    $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 AND c_bill_type LIKE '%$bill_type%'  ORDER BY c_start_date ASC";
     $result = odbc_exec($conn2, $load_due_payment_records);
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {

@@ -6,7 +6,7 @@ if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
     $bill_type = $_GET['bill_type'];
 
-    $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_bill_type LIKE '%$bill_type%'  ORDER BY c_start_date ASC";
+    $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 AND c_bill_type LIKE '%$bill_type%'  ORDER BY c_start_date ASC";
     $result = odbc_exec($conn2, $load_due_payment_records);
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {
@@ -38,9 +38,9 @@ if(isset($_GET['id'])){
             /* var_dump($due); */
 
             $l_edate1 = date("Y/m/d", strtotime($due['c_end_date']));
-            $l_sdate = date("m/d/Y", strtotime($due['c_start_date']));
-            $l_edate = date("m/d/Y", strtotime($due['c_end_date']));
-            $l_ddate = date("m/d/Y", strtotime($due['c_due_date']));
+            $l_sdate = date("M j, Y", strtotime($due['c_start_date']));
+            $l_edate = date("M j, Y", strtotime($due['c_end_date']));
+            $l_ddate = date("M j, Y", strtotime($due['c_due_date']));
             $l_bill_type = $due['c_bill_type'];
             $l_amount_due = $due['c_amount_due'];
             $l_prev_bal = $due['c_prev_balance'];
@@ -156,11 +156,20 @@ function format_num($number){
     <div class="container-fluid">
         
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
-           
+                <colgroup>
+					<col width="20%">
+					<col width="10%">
+					<col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
+				</colgroup>
                 <thead> 
                     <tr>
-                        <th style="text-align:center;font-size:13px;">START DATE</th>
-                        <th style="text-align:center;font-size:13px;">END DATE</th>
+                        <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
                         <th style="text-align:center;font-size:13px;">DUE DATE</th>
                         <th style="text-align:center;font-size:13px;">DESCRIPTION</th>
                         <th style="text-align:center;font-size:13px;">AMOUNT DUE</th>
@@ -170,17 +179,27 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">DISCOUNT</th>
                         <th style="text-align:center;font-size:13px;">TOTAL AMOUNT DUE</th>
                         
+                        
                     </tr>
                 </thead>
         </table>
         <div style="height: 300px; overflow-y: auto;">
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
-           
+                <colgroup>
+					<col width="20%">
+					<col width="10%">
+					<col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
+				</colgroup>
             <tbody>
                   <?php foreach ($l_return_due_list as $l_data): ?>
                     <tr>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[1]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[2]; ?></td>
+                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . ' to ' . $l_data[2]; ?></td>
                         <td style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
                         <td style="text-align:center;font-size:13px;"><?php echo $l_data[4]; ?></td>
                         <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>

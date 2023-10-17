@@ -77,6 +77,28 @@ Class Master{
 			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
 		}
 	}
+	function update_payment(){
+		require_once('../includes/config.php');
+		extract($_POST);
+		$acc_no = $_POST['acc_no'];
+		$pay_date = $_POST['pay_date'];
+		$pay_amount_paid = isset($_POST['pay_amount_paid']) ? (float)$_POST['pay_amount_paid'] : 0;
+		$pay_discount = isset($_POST['pay_discount']) ? (float)$_POST['pay_discount'] : 0;
+		$or_no = $_POST['payment_or'];
+
+		$sql = "UPDATE t_utility_payments SET c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$or_no'";
+		$update = odbc_exec($conn2, $sql);
+		//echo $sql;
+		if ($update) {
+			$resp['status'] = 'success';
+			$resp['msg'] = "CAR has been updated successfully.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+		}
+		return json_encode($resp);
+	}
+
 
 	function save_payment(){
 		require_once('../includes/config.php');
@@ -266,6 +288,9 @@ switch ($action) {
 	break;
 	case 'save_payment':
 		echo $Master->save_payment();
+	break;
+	case 'update_payment':
+		echo $Master->update_payment();
 	break;
 	case 'save_mtf_payment':
 		echo $Master->save_mtf_payment();

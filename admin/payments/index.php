@@ -308,35 +308,30 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                <label for="main_amount_paid" class="control-label">Payment for Streetlight Amount</label>
-                <input type="number" name="main_amount_paid" id="main_amount_paid" class="form-control form-control-border" value ="0" required>
+                <label for="stl_amount_paid" class="control-label">Payment for Streetlight Amount</label>
+                <input type="number" name="stl_amount_paid" id="stl_amount_paid" class="form-control form-control-border" value ="0" required>
                 </div>
             </div>
             <div class="col-md-6">
             <div class="form-group">
-                    <label for="main_discount" class="control-label">STL Discount</label>
-                    <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border" value ="0" required>
+                    <label for="stl_discount" class="control-label">STL Discount</label>
+                    <input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border" value ="0" required>
                 
                 </div>
             </div>
         </div>
         <div class="row">
 
-        
-
-               
-            
-           
             <div class="col-md-6">
                 <div class="form-group">
-                <label for="stl_amount_paid" class="control-label">Payment for Grasscutting Amount </label>
-                <input type="number" name="stl_amount_paid" id="stl_amount_paid" class="form-control form-control-border" value ="0" required>
+                <label for="main_amount_paid" class="control-label">Payment for Grasscutting Amount </label>
+                <input type="number" name="main_amount_paid" id="main_amount_paid" class="form-control form-control-border" value ="0" required>
                 </div>
             </div>
             <div class="col-md-6">
             <div class="form-group">
-                    <label for="stl_discount" class="control-label">GCF Discount</label>
-                    <input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border" value ="0" required>
+                    <label for="main_discount" class="control-label">GCF Discount</label>
+                    <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border" value ="0" required>
                 </div>
             </div>
         </div>
