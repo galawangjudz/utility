@@ -84,6 +84,7 @@ if (isset($_POST["update_image"])) {
 					<label class="control-label">Role: </label>
 					<select name="role" id="role" class="form-control required">
 						<option value="Admin"<?php echo isset($meta['role']) && $meta['role'] == "Admin" ? 'selected': '' ?>>Admin</option>
+						<option value="Head"<?php echo isset($meta['role']) && $meta['role'] == "Head" ? 'selected': '' ?>>Head</option>
 						<option value="Cashier"<?php echo isset($meta['role']) && $meta['role'] == "Cashier" ? 'selected': '' ?>>Cashier</option>
 						<option value="Staff"<?php echo isset($meta['role']) && $meta['role'] == "Staff" ? 'selected': '' ?>>Staff</option>
 						</select>
@@ -97,6 +98,7 @@ if (isset($_POST["update_image"])) {
 						<option value="IT"<?php echo isset($meta['Department']) && $meta['Department'] == "IT" ? 'selected': '' ?>> IT</option>
 						<option value="PA" <?php echo isset($meta['Department']) && $meta['Department'] == "PA" ? 'selected': '' ?>>Project Admin</option>
 						<option value="TSR"<?php echo isset($meta['Department']) && $meta['Department'] == "TSR" ? 'selected': '' ?>>Treasury</option>
+						<option value="CSPV"<?php echo isset($meta['Department']) && $meta['Department'] == "CSPV" ? 'selected': '' ?>>Cashier Supervisor</option>
 					</select>
 				</div>
 				<div class="form-group">
@@ -124,7 +126,7 @@ if (isset($_POST["update_image"])) {
                 el.hide()
             start_loader();
             $.ajax({
-                url:_base_url_+"classes/Master.php?f=save_user",
+                url:_base_url_+"classes/Users.php?f=save_user",
 				data: new FormData($(this)[0]),
                 cache: false,
                 contentType: false,

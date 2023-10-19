@@ -2,11 +2,6 @@
 
 Class Master{
 
-	function save_user(){
-		require_once('../includes/config.php');
-	
-	}
-	
 	function save_account(){
 		require_once('../includes/config.php');
 		extract($_POST);
