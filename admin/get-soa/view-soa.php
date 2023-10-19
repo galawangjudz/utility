@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["filename"])) {
     $requested_filename = urldecode($_GET["filename"]); // Decode the URL parameter
-    $pdf_folder = "C:/xampp/htdocs/utl_system/admin/get-soa/pdf_files/";
+    $pdf_folder = "C:/xampp/htdocs/utility/admin/get-soa/pdf_files/";
 
     $pdf_file = $pdf_folder . $requested_filename;
 
