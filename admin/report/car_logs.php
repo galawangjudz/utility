@@ -170,35 +170,41 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
 
 <script>
       $(document).ready(function(){
+       
+
         $('.edit_data').click(function(){
 			uni_modal("Update Payment Details","payments/payment_edit.php?id="+$(this).attr('id'),'mid-large')
 		})
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",[$(this).attr('data-id')])
+			_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
 		})
 
-        function delete_payment($id){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_payment",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-					location.reload();
-				}else{
-					alert("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
-	}
+        
 
       })
+
+      function delete_payment($id){
+            start_loader();
+        
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=delete_payment",
+                method:"POST",
+                data:{id: $id},
+                dataType:"json",
+                error:err=>{
+                    console.log(err)
+                    alert("An error occured.",'error');
+                    end_loader();
+                },
+                success:function(resp){
+                    if(typeof resp== 'object' && resp.status == 'success'){
+                        alert(resp.msg);
+                        location.reload();
+                    }else{
+                        alert("An error occured.",'error');
+                        end_loader();
+                    }
+                }
+            })
+        }
 </script>

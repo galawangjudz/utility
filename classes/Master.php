@@ -24,7 +24,7 @@ Class Master{
 			}
 			// Fetch and display the results
 			while ($row = odbc_fetch_array($result)) {
-				$acronym = $row['c_acronym'];
+				$acronym = $row['c_name'];
 			}
 		$pbl = sprintf("%s B-%d L-%d No. %d", $acronym, $blk, $lot, $no);
 		
@@ -67,6 +67,9 @@ Class Master{
 		require_once('../includes/config.php');
 		extract($_POST);
 		$sql = "DELETE FROM t_utility_accounts where c_account_no ='$id'";
+/* 		$sql2 = "DELETE FROM t_utility_flags where c_account_no ='$id'";
+		$sql3 = "DELETE FROM t_utility_bills where c_account_no ='$id'";
+		$sql4 = "DELETE FROM t_utility_payments where c_account_no ='$id'"; */
 		$del = odbc_exec($conn2, $sql);
 		if ($del) {
 			$resp['status'] = 'success';
@@ -98,6 +101,24 @@ Class Master{
 		}
 		return json_encode($resp);
 	}
+
+	function delete_payment(){
+		require_once('../includes/config.php');
+		extract($_POST);
+
+		$sql = "DELETE FROM t_utility_payments WHERE c_st_or_no = '$id'";
+		$delete = odbc_exec($conn2, $sql);
+		//echo $sql;
+		if ($delete) {
+			$resp['status'] = 'success';
+			$resp['msg'] = "CAR has been deleted successfully.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+		}
+		return json_encode($resp);
+	}
+
 
 
 	function save_payment(){
@@ -291,6 +312,9 @@ switch ($action) {
 	break;
 	case 'update_payment':
 		echo $Master->update_payment();
+	break;
+	case 'delete_payment':
+		echo $Master->delete_payment();
 	break;
 	case 'save_mtf_payment':
 		echo $Master->save_mtf_payment();

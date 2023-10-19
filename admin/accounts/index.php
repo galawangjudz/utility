@@ -157,12 +157,12 @@ endif;
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                            <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
+                                            <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> Statement of Account</a>
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
                                             <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> GrassCutting Records</a>
-                                            <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> Statement of Account</a>
-                                            <a class="dropdown-item payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Payment Window</a>
-                                            <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
-                                            <a class="dropdown-item edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-edit2"></i> Edit</a>
+                                              <a class="dropdown-item payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Payment Window</a>
+                                           <!--  <a class="dropdown-item edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-edit2"></i> Edit</a> -->
                                             <?php if ($status == "Inactive"):?>
                                             <a class="dropdown-item delete_data" href="javascript:void(0)" data-name ="<?php echo $loc ?>" data-id="<?php echo $acc ?>"><i class="dw dw-delete-3"></i> Delete</a>
                                             <?php endif; ?>
@@ -208,7 +208,7 @@ endif;
 
 
         $('#create_new').click(function(){
-			uni_modal("Add New Account","accounts/manage_account.php",'large')
+			uni_modal("Add New Account","accounts/manage_account.php",'mid-large')
 		})
 		$('.stl_bill_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/stl_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
@@ -220,7 +220,7 @@ endif;
 			uni_modal_2("Due and Payment Details", "soa/soa.php?id=" + $(this).attr('id'), 'large');
 		})
         $('.payment_data').click(function(){
-			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
+			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})
 		$('.stl_payment_data').click(function(){
 			uni_modal("StreetLight Payment Window","payments/streetlight.php?id="+$(this).attr('id'),'mid-large')
@@ -235,7 +235,7 @@ endif;
 			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
 		})
 		$('.view_data').click(function(){
-			uni_modal("Account Details","accounts/view_account.php?id="+$(this).attr('id'),'mid-large')
+			uni_modal("Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')
 		})
 
     })
@@ -254,6 +254,7 @@ endif;
 			},
 			success:function(resp){
 				if(typeof resp== 'object' && resp.status == 'success'){
+                    alert(resp.msg);
 					location.reload();
 				}else{
 					alert("An error occured.",'error');

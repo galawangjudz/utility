@@ -152,7 +152,7 @@ function format_num($number){
 	  -->   </div>
 	</div>
 
-<div class="card-body">
+    <div class="card-body">
     <div class="container-fluid">
         
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
@@ -179,37 +179,52 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">DISCOUNT</th>
                         <th style="text-align:center;font-size:13px;">TOTAL AMOUNT DUE</th>
                         
-                        
                     </tr>
                 </thead>
         </table>
         <div style="height: 300px; overflow-y: auto;">
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
-                <colgroup>
-					<col width="20%">
-					<col width="10%">
-					<col width="10%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="15%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="15%">
-				</colgroup>
-            <tbody>
-                  <?php foreach ($l_return_due_list as $l_data): ?>
-                    <tr>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . ' to ' . $l_data[2]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[4]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
-                        <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
-                    </tr>
-                <?php endforeach; ?>
+            <colgroup>
+                <col width="20%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="10%">
+                <col width="15%">
+                <col width="10%">
+                <col width="10%">
+                <col width="15%">
+            </colgroup>
+            <tbody><?php
+                    if (empty($l_return_due_list)) {
+                        echo '<tr><td colspan="11" style="text-align:center;font-size:13px;">No data or records found.</td></tr>';
+                    } else {
+                        foreach ($l_return_due_list as $l_data):
+                            ?>
+                            <tr>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . ' to ' . $l_data[2]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php
+                                echo ($l_data[4] == 'MTF') ? 'GCF Fee' :
+                                    (($l_data[4] == 'DLQ_MTF') ? 'GCF Surcharge' :
+                                    (($l_data[4] == 'STL') ? 'STL Fee' :
+                                    (($l_data[4] == 'DLQ_STL') ? 'STL Surcharge' : $l_data[4])));
+                                ?>
+                                </td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php $string = $l_data[7]; if (strpos($string, "MTF") === 0) {
+                                    // If the string starts with "MTF," replace it with "GCF"
+                                    $string = "GCF" . substr($string, 3);
+                                } echo $string; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
+                            </tr>
+                            <?php
+                        endforeach;
+                    }
+                    ?>
             </tbody>
         </table>
 
@@ -230,7 +245,7 @@ function format_num($number){
                             SUM(CASE WHEN c_bill_type = 'MTF' THEN c_st_amount_paid ELSE 0 END) as c_mtf_amount_paid,
                             SUM(CASE WHEN c_bill_type = 'MTF' THEN c_discount ELSE 0 END) as c_mtf_discount, 
                             SUM(CASE WHEN (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_mtf_bal,
-                            SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_MTF') THEN c_amount_due ELSE 0 END) as c_stl_bill, 
+                            SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') THEN c_amount_due ELSE 0 END) as c_stl_bill, 
                             SUM(CASE WHEN c_bill_type = 'STL' THEN c_st_amount_paid ELSE 0 END) as c_stl_amount_paid, 
                             SUM(CASE WHEN c_bill_type = 'STL' THEN c_discount ELSE 0 END) as c_stl_discount, 
                             SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_stl_bal
@@ -274,18 +289,21 @@ function format_num($number){
                                     $total_stl_bal = $summ['c_stl_bal'];
                                     $total_utl_bal = $summ['c_mtf_bal'];
                                     $total_amt_due = $summ['c_stl_bal'] + $summ['c_mtf_bal'];
+                                    $total_stl_disc =  $summ['c_stl_discount'];
 
                              }}
 
                         ?> 
                         <hr>
-                        <td style="font-size:14px;"><label for="tot_bill" class="control-label">Streetlight Total Bill: </label></td>
-                        <td><input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
-                        <td style="font-size:14px;"><label for="tot_paid" class="control-label">Streetlight Total Paid: </label></td>
-                        <td><input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
-                        <td style="font-size:14px;"><label for="tot_amt_due" class="control-label">Streetlight Balance: </label></td>
-                        <td><input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
-        
+                        <td style="font-size:12px;"><label for="tot_bill" class="control-label">STL Total Bill: </label>
+                        <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_paid" class="control-label">STL Total Paid: </label>
+                        <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">STL Total Discount: </label>
+                        <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>STL Balance:</b></label>
+                        <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
+                  
                     </tr>
                 </table>
             </div>

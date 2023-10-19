@@ -1,3 +1,12 @@
+
+<?php 
+function format_num($number){
+	$decimals = 0;
+	$num_ex = explode('.',$number);
+	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
+	return number_format($number,$decimals);
+}
+?>
 <?php
 require_once('../../includes/config.php');
 if(isset($_GET['id'])){
@@ -152,7 +161,64 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
 
     $stl_bal = $l_stl_due - $l_stl_payment;
     
+    $get_msur = "SELECT
+                    SUM(CASE WHEN c_bill_type = 'MTF' THEN c_amount_due ELSE 0 END) as c_current_mtf,
+                    SUM(CASE WHEN c_bill_type = 'DLQ_MTF' THEN c_amount_due ELSE 0 END) as c_current_mtf_sur
+                FROM 
+                    t_utility_bill
+                WHERE 
+                    c_bill_type IN ('DLQ_MTF', 'MTF')  
+                    AND  c_due_date = ' $mainte_due' AND c_account_no = '$l_acc_no'";
+    $msur_details = odbc_exec($conn2, $get_msur);
+    if ($msur_details) {
+        // Fetch the data
+        $row = odbc_fetch_array($msur_details);
+    
+        if ($row) {
+            // Access the total STL payment amount
+            $l_mtf_cur = $row['c_current_mtf'];
+            $l_mtf_sur = $row['c_current_mtf_sur'];
+        } else {
+            // No stl payment records found
+            $l_mtf_cur  = 0;
+            $l_mtf_sur = 0;
+        }
+    } else {
+        // Error executing the query
+        echo "Error: " . odbc_errormsg($conn2);
+    }
 
+
+     $get_ssur = "SELECT
+                    SUM(CASE WHEN c_bill_type = 'STL' THEN c_amount_due ELSE 0 END) as c_current_stl,
+                    SUM(CASE WHEN c_bill_type = 'DLQ_STL' THEN c_amount_due ELSE 0 END) as c_current_stl_sur
+                FROM 
+                    t_utility_bill
+                WHERE 
+                    c_bill_type IN ('DLQ_STL', 'STL')  
+                    AND  c_due_date = ' $street_due' AND c_account_no = '$l_acc_no'";
+    $ssur_details = odbc_exec($conn2, $get_ssur);
+    if ($msur_details) {
+        // Fetch the data
+        $row2 = odbc_fetch_array($ssur_details);
+    
+        if ($row2) {
+            // Access the total STL payment amount
+            $l_stl_cur = $row2['c_current_stl'];
+            $l_stl_sur = $row2['c_current_stl_sur'];
+        } else {
+            // No stl payment records found
+            $l_stl_cur  = 0;
+            $l_stl_sur = 0;
+        }
+    } else {
+        // Error executing the query
+        echo "Error: " . odbc_errormsg($conn2);
+    }
+
+    $mainte_prev =  ($mainte_bal - $l_mtf_cur - $l_mtf_sur);
+
+    $stl_prev = ($stl_bal - $l_stl_cur - $l_stl_sur);  
 }
 
 
@@ -255,41 +321,83 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </div>
         </div>
         <div class="row">
-			<div class="col-md-6">
+			<div class="col-md-2">
                 <div class="form-group">
-                    <label for="stl_due" class="control-label">Streetlight Due Date</label>
+                    <label for="stl_due" class="control-label">STL Due Date</label>
                     <input type="date" name="stl_due" id="stl_due" class="form-control form-control-border" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required>
                 
                 </div>
             </div>
-           
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
-                    <label for="stl_balance" class="control-label">StreetLight Balance</label>
+                    <label for="stl_last_bal" class="control-label">STL Prev. Bal</label>
+                    <input type="number" name="stl_last_bal" id="stl_last_bal" class="form-control form-control-border" value ="<?php echo isset($stl_prev) ? $stl_prev : '0.00' ?>"readonly required>
+                
+                </div>
+            </div>
+          
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="stl_due" class="control-label">STL Curr. Due</label>
+                    <input type="number" name="stl_due" id="stl_due" class="form-control form-control-border" value ="<?php echo isset($l_stl_cur) ? $l_stl_cur : '0.00' ?>"readonly required>
+                
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="stl_sur" class="control-label">STL Curr. Sur</label>
+                    <input type="number" name="stl_sur" id="stl_sur" class="form-control form-control-border" value ="<?php echo isset($l_stl_sur) ? $l_stl_sur : '0.00' ?>"readonly required>
+                
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="stl_balance" class="control-label">STL Total Due</label>
                     <input type="number" name="stl_balance" id="stl_balance" class="form-control form-control-border" value ="<?php echo isset($stl_bal) ? $stl_bal : '0.00' ?>"readonly required>
                 
                 </div>
             </div>
         </div>
         <div class="row">
-			<div class="col-md-6">
+			<div class="col-md-2">
                 <div class="form-group">
-                    <label for="main_date" class="control-label">Grasscutting Due Date</label>
+                    <label for="main_date" class="control-label">GCF Due Date</label>
                     <input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required>
                 
                 </div>
             </div>
-           
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
-                    <label for="main_balance" class="control-label">Maintenance Balance</label>
+                    <label for="main_last_bal" class="control-label">GCF Prev. Bal</label>
+                    <input type="number" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? $mainte_prev : 0 ?>"readonly required>
+                
+                </div>
+            </div>
+           
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="main_due" class="control-label">GCF Curr. Due</label>
+                    <input type="number" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? $l_mtf_cur : 0 ?>"readonly required>
+                
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="main_sur" class="control-label">GCF Curr. Sur</label>
+                    <input type="number" name="main_sur" id="main_sur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_sur) ? $l_mtf_sur : 0 ?>"readonly required>
+                
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="main_balance" class="control-label">GCF Total Due</label>
                     <input type="number" name="main_balance" id="main_balance" class="form-control form-control-border" value ="<?php echo isset($mainte_bal) ? $mainte_bal : 0 ?>"readonly required>
                 
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
             <div class="form-group">
                     <label for="pay_date" class="control-label">Pay Date</label>
                     <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border" value ="<?php echo date('Y-m-d'); ?>" required>
@@ -297,48 +405,145 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </div>
             </div>
            
-            <div class="col-md-6">
+           
+            <div class="col-md-4">
                 <div class="form-group">
                 <label for="payment_or" class="control-label">Or No.</label>
                 <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" placeholder= "ex.CAR153245" value ="" >
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="mode_payment" class="control-label">Mode of Payment *</label>
+                    <select name="mode_payment" id="mode_payment" class="form-control form-control-border" required>
+                        <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
+                        <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
-                <label for="stl_amount_paid" class="control-label">Payment for Streetlight Amount</label>
-                <input type="number" name="stl_amount_paid" id="stl_amount_paid" class="form-control form-control-border" value ="0" required>
+                <label for="stl_amount_pay" class="control-label">Payment for Streetlight Amount</label>
+                <input type="number" name="stl_amount_pay" id="stl_amount_pay" class="form-control form-control-border stl_amount_pay" value ="0" required>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+                <label for="main_amount_paid" class="control-label">Payment for Grasscutting Amount </label>
+                <input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="0" required>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-4">
             <div class="form-group">
                     <label for="stl_discount" class="control-label">STL Discount</label>
-                    <input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border" value ="0" required>
+                    <input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border stl_discount" value ="0" required>
                 
                 </div>
             </div>
-        </div>
-        <div class="row">
-
-            <div class="col-md-6">
-                <div class="form-group">
-                <label for="main_amount_paid" class="control-label">Payment for Grasscutting Amount </label>
-                <input type="number" name="main_amount_paid" id="main_amount_paid" class="form-control form-control-border" value ="0" required>
-                </div>
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
             <div class="form-group">
                     <label for="main_discount" class="control-label">GCF Discount</label>
-                    <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border" value ="0" required>
+                    <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="0" required>
                 </div>
             </div>
+           
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                <label for="stl_amount_paid" class="control-label">STL Amount Paid</label>
+                <input type="number" name="stl_amount_paid" id="stl_amount_paid" class="form-control form-control-border" value ="0" readonly required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                <label for="main_amount_paid" class="control-label">GCF Amount Paid</label>
+                <input type="number" name="main_amount_paid" id="main_amount_paid" class="form-control form-control-border" value ="0" readonly required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                <label for="total_amount_paid" class="control-label">Total Amount Paid</label>
+                <input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required>
+                </div>
+            </div>
+
+           
+           
         </div>
       
     </form>
 </div>
+<style>
+    input[type="number"] {
+        text-align: right;
+    }
+</style>
+
 <script>
+
+$(document).ready(function() {
+    $(document).on('keyup', ".stl_amount_pay", function(e) {
+		e.preventDefault();
+        console.log("gumana");
+		compute_total_amt_paid();
+        
+
+	});	
+
+    $(document).on('keyup', ".main_amount_pay", function(e) {
+		e.preventDefault();
+        console.log("gumana");
+		compute_total_amt_paid();
+        
+
+	});	
+
+    $(document).on('keyup', ".stl_discount", function(e) {
+		e.preventDefault();
+        console.log("gumana");
+		compute_total_amt_paid();
+        
+
+	});	
+
+    $(document).on('keyup', ".main_discount", function(e) {
+		e.preventDefault();
+        console.log("gumana");
+		compute_total_amt_paid();
+        
+
+	});
+
+});
+function compute_total_amt_paid(){
+
+    var stl_pay = $('.stl_amount_pay').val();
+    var stl_discount = $('.stl_discount').val();
+    var mtf_pay = $('.main_amount_pay').val();
+    var mtf_discount = $('.main_discount').val();
+
+    var stlAmount = stl_pay - stl_discount;
+    var mtfAmount = mtf_pay - mtf_discount;
+
+    total = (stlAmount + mtfAmount);
+    total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    $("#stl_amount_paid").val(stlAmount);
+    $("#main_amount_paid").val(mtfAmount);
+    $("#total_amount_paid").val(total);
+
+}
+
+</script>
+<script>
+    
     $(function(){
         $('#uni_modal #pay-form').submit(function(e){
             e.preventDefault();

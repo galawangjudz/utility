@@ -203,10 +203,19 @@ function format_num($number){
                             <tr>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . ' to ' . $l_data[2]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[4]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php
+                                echo ($l_data[4] == 'MTF') ? 'GCF Fee' :
+                                    (($l_data[4] == 'DLQ_MTF') ? 'GCF Surcharge' :
+                                    (($l_data[4] == 'STL') ? 'STL Fee' :
+                                    (($l_data[4] == 'DLQ_STL') ? 'STL Surcharge' : $l_data[4])));
+                                ?>
+                                </td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php $string = $l_data[7]; if (strpos($string, "MTF") === 0) {
+                                    // If the string starts with "MTF," replace it with "GCF"
+                                    $string = "GCF" . substr($string, 3);
+                                } echo $string; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
@@ -235,7 +244,7 @@ function format_num($number){
                             SUM(CASE WHEN c_bill_type = 'MTF' THEN c_st_amount_paid ELSE 0 END) as c_mtf_amount_paid,
                             SUM(CASE WHEN c_bill_type = 'MTF' THEN c_discount ELSE 0 END) as c_mtf_discount, 
                             SUM(CASE WHEN (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_mtf_bal,
-                            SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_MTF') THEN c_amount_due ELSE 0 END) as c_stl_bill, 
+                            SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') THEN c_amount_due ELSE 0 END) as c_stl_bill, 
                             SUM(CASE WHEN c_bill_type = 'STL' THEN c_st_amount_paid ELSE 0 END) as c_stl_amount_paid, 
                             SUM(CASE WHEN c_bill_type = 'STL' THEN c_discount ELSE 0 END) as c_stl_discount, 
                             SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_stl_bal
@@ -277,7 +286,9 @@ function format_num($number){
                                     $total_mtf_bill = $summ['c_mtf_bill'];
                                     $total_stl_bill = $summ['c_stl_bill'];
                                     $total_mtf_paid = $summ['c_mtf_amount_paid'];
+                                    $total_mtf_disc =  $summ['c_mtf_discount'];
                                     $total_stl_paid = $summ['c_stl_amount_paid'];
+                                    $total_stl_disc =  $summ['c_stl_discount'];
                                     $total_stl_bal = $summ['c_stl_bal'];
                                     $total_mtf_bal = $summ['c_mtf_bal'];
                                     $total_amt_due = $summ['c_stl_bal'] + $summ['c_mtf_bal'];
@@ -290,6 +301,8 @@ function format_num($number){
                         <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_mtf_bill) ? format_num($total_mtf_bill): 0; ?>" disabled></td>
                         <td style="font-size:12px;"><label for="tot_paid" class="control-label">GCF Total Paid: </label>
                         <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_mtf_paid) ? format_num($total_mtf_paid): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_mtf_disc" class="control-label">GCF Total Discount: </label>
+                        <input type="text" class= "form-control-sm" name="tot_mtf_disc" id="tot_mtf_disc" value="<?php echo isset($total_mtf_disc) ? format_num($total_mtf_disc): 0; ?>" disabled></td>
                         <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>GCF Balance:</b></label>
                         <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
                     </tr>
@@ -297,9 +310,10 @@ function format_num($number){
                     <tr>   
                         <td style="font-size:12px;"><label for="tot_bill" class="control-label">STL Total Bill: </label>
                         <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
-               
                         <td style="font-size:12px;"><label for="tot_paid" class="control-label">STL Total Paid: </label>
                         <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">STL Total Discount: </label>
+                        <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td>
                         <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>STL Balance:</b></label>
                         <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
                   
@@ -309,7 +323,8 @@ function format_num($number){
                         </td>
                         <td>
                         </td>
-                        
+                        <td>
+                        </td>
                         <td style="font-size:12px;"><label for="total_amt_due" class="control-label"><b>Total Balance:</b></label>
                         <input type="text" class= "form-control-sm" name="total_amt_due" id="total_amt_due" value="<?php echo isset($total_amt_due) ? format_num($total_amt_due): 0; ?>" disabled></td>
                      

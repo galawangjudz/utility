@@ -56,6 +56,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 ?>
 <div class="container-fluid">
     <form action="" id="account-form">
+        <h3><?php echo isset($c_location) ? $c_location : '' ?></h3>
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="row">
 			<div class="col-md-6">
@@ -92,27 +93,28 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="pbl" class="control-label">Phase/Block/Lot</label>
-                    <input type="text" name="pbl" id="pbl" class="form-control form-control-border" placeholder="leave it Blank" value ="<?php echo isset($c_location) ? $c_location : '' ?>"<?php if ($pblfield) echo ' readonly'; ?> required>
+                    <label for="date_applied" class="control-label">Date Applied *</label>
+                    <input type="date" name="date_applied" id="date_applied" class="form-control form-control-border" value ="<?php echo isset($date_applied) ? $date_applied : date('Y-m-d'); ?>" required>
+                
                 </div>
             </div>
         </div>
         <div class="row">
 			<div class="col-md-4">
                 <div class="form-group">
-                    <label for="fname" class="control-label">First Name</label>
+                    <label for="fname" class="control-label">First Name  *</label>
                     <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="lname" class="control-label">Last Name</label>
+                    <label for="lname" class="control-label">Last Name  *</label>
                     <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="mname" class="control-label">Middle Name</label>
+                    <label for="mname" class="control-label">Middle Name  *</label>
                     <input type="text" name="mname" id="mname" class="form-control form-control-border" placeholder="Enter Middle Name" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>" required>
                 </div>
             </div>
@@ -120,19 +122,19 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="row">
 			<div class="col-md-7">
                 <div class="form-group">
-                    <label for="add" class="control-label">Address</label>
+                    <label for="add" class="control-label">Address  *</label>
                     <input type="text" name="add" id="add" class="form-control form-control-border" placeholder="Enter Address" value ="<?php echo isset($address) ? $address : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label for="city_prov" class="control-label">City/ Province</label>
+                    <label for="city_prov" class="control-label">City/ Province  *</label>
                     <input type="text" name="city_prov" id="city_prov" class="form-control form-control-border" placeholder="Enter City/Prov" value ="<?php echo isset($city_prov) ? $city_prov : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label for="zip_code" class="control-label">Zip Code</label>
+                    <label for="zip_code" class="control-label">Zip Code  *</label>
                     <input type="text" name="zip_code" id="zip_code" class="form-control form-control-border" placeholder="Enter Zipcode" value ="<?php echo isset($zip_code) ? $zip_code : '' ?>" required>
                 </div>
             </div>
@@ -141,14 +143,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="row">
 			<div class="col-md-4">
                 <div class="form-group">
-                    <label for="lot_area" class="control-label">Lot Area</label>
+                    <label for="lot_area" class="control-label">Lot Area  *</label>
                     <input type="number" name="lot_area" id="lot_area" class="form-control form-control-border" placeholder="Enter Lot Area" value ="<?php echo isset($lot_area) ? $lot_area : 0 ?>" required>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="type" class="control-label">Type</label>
+                    <label for="type" class="control-label">Type  *</label>
                     <select name="type" id="type" class="form-control form-control-border" required>
                         <option value="STL and MTF" <?= isset($type) && $type == 'STL and MTF' ? 'selected' : '' ?>>STL and MTF</option>
                         <option value="STL Only" <?= isset($type) && $type == 'STL Only' ? 'selected' : '' ?>>STL Only</option>
@@ -157,7 +159,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="status" class="control-label">Status</label>
+                    <label for="status" class="control-label">Status  *</label>
                     <select name="status" id="status" class="form-control form-control-border" required>
                         <option value="Active" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Active</option>
                         <option value="Inactive" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Inactive</option>
@@ -166,18 +168,24 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </div>
         </div>
         <div class="row">
-			<div class="col-md-6">
+			
+           
+            <div class="col-md-4">
                 <div class="form-group">
-                    <label for="date_applied" class="control-label">Date Applied</label>
-                    <input type="date" name="date_applied" id="date_applied" class="form-control form-control-border" value ="<?php echo isset($date_applied) ? $date_applied : date('Y-m-d'); ?>" required>
-                
+                <label for="mtf_end" class="control-label">MTF End Date </label>
+                <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('2030-01-01'); ?>" required>
                 </div>
             </div>
-           
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
-                <label for="mtf_end" class="control-label">MTF End Date</label>
-                <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('2030-01-01'); ?>" required>
+                <label for="contact_no" class="control-label">Contact No</label>
+                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                <label for="email_add" class="control-label">Email Address</label>
+                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="">
                 </div>
             </div>
         </div>
@@ -186,14 +194,20 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="remarks" class="control-label">Remarks</label>
-                    <textarea rows="3" name="remarks" id="remarks" class="form-control form-control-sm rounded-0" required><?php echo isset($remarks) ? html_entity_decode($remarks) : '' ?></textarea>
+                    <textarea rows="3" name="remarks" id="remarks" class="form-control form-control-md rounded-0" required><?php echo isset($remarks) ? html_entity_decode($remarks) : '' ?></textarea>
                 </div>
             </div>
         </div>
       
     </form>
 </div>
+<style>
+textarea.form-control {
+    overflow-y: hidden;
+}
+</style>
 <script>
+    
     $(function(){
         $('#uni_modal #account-form').submit(function(e){
             e.preventDefault();
