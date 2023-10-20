@@ -11,6 +11,8 @@ if (isset($_GET['delete'])) {
 	}
 }
 
+
+
 ?>
 
 
@@ -143,12 +145,17 @@ if (isset($_GET['delete'])) {
 	                            <td><?php echo $row['DepartmentName']; ?></td>
 								<td><?php echo $row['role']; ?></td>
 								<td>
+								<!-- 	<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+											<a class="dropdown-item" href=".php?edit=<?php echo $row['emp_id'];?>"><i class="dw dw-edit2"></i> Edit</a>
+											<a class="dropdown-item" href="staff.php?delete=<?php echo $row['emp_id'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
+									</div> -->
+
 									<div class="dropdown">
 										<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 											<i class="dw dw-more"></i>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-											<a class="dropdown-item edit_data" href="javascript:void(0)" id ="<?php echo $row['emp_id'];?>"><i class="dw dw-edit2"></i> Edit</a>
+											<a class="dropdown-item" href="<?php echo base_url ?>admin/?page=user_setting/user_details&id=<?php echo $row['emp_id']; ?>"> <i class="dw dw-edit2"></i> Edit</a>
 											<a class="dropdown-item" href="javascript:void(0)" id ="<?php echo $row['emp_id'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
 										</div>
 									</div>
@@ -179,7 +186,7 @@ if (isset($_GET['delete'])) {
 			uni_modal("Add New Employee","user_setting/manage_user.php",'large')
 		})
         $('.edit_data').click(function(){
-			uni_modal("Update Employee Details","user_setting/manage_user.php?id="+$(this).attr('id'),'mid-large')
+			uni_modal("Update Employee Details","user_setting/user_details.php?id="+$(this).attr('id'),'mid-large')
 		})
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from User List permanently?","delete_user",[$(this).attr('data-id')])

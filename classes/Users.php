@@ -1,5 +1,6 @@
 <?php
 require_once("../includes/config.php");
+require_once("DBConnection.php");
 
 
 if(!defined('base_url')) define('base_url','http://localhost/utility/');
@@ -9,32 +10,6 @@ if(!defined('DB_PASSWORD')) define('DB_PASSWORD',"");
 if(!defined('DB_NAME')) define('DB_NAME',"db_utility");
 
 
-class DBConnection{
-
-    private $host = DB_SERVER;
-    private $username = DB_USERNAME;
-    private $password = DB_PASSWORD;
-    private $database = DB_NAME;
-    
-    public $conn;
-    
-    public function __construct(){
-
-        if (!isset($this->conn)) {
-            
-            $this->conn = new mysqli($this->host, $this->username, $this->password, $this->database);
-            
-            if (!$this->conn) {
-                echo 'Cannot connect to database server';
-                exit;
-            }            
-        }    
-        
-    }
-    public function __destruct(){
-        $this->conn->close();
-    }
-}
 
 
 Class Users extends DBConnection {
@@ -52,6 +27,8 @@ Class Users extends DBConnection {
 		extract($_POST);
 		$oid = $id;
 		$data = '';
+		
+		echo "gumanagana to";
 		/* if(isset($oldpassword)){
 			if(md5($oldpassword) != $this->settings->userdata('password')){
 				return 4;
@@ -78,7 +55,7 @@ Class Users extends DBConnection {
 			$qry = $this->conn->query("INSERT INTO tblemployees set {$data}");
 			if($qry){
 				$id = $this->conn->insert_id;
-				$this->settings->set_flashdata('success','User Details successfully saved.');
+				$resp['msg'] = "User Details successfully saved.";
 				$resp['status'] = 1;
 			}else{
 				$resp['status'] = 2;
@@ -87,16 +64,8 @@ Class Users extends DBConnection {
 		}else{
 			$qry = $this->conn->query("UPDATE tblemployees set $data where emp_id = {$id}");
 			if($qry){
-				$this->settings->set_flashdata('success','User Details successfully updated.');
-				if($id == $this->settings->userdata('id')){
-					foreach($_POST as $k => $v){
-						if($k != 'id'){
-							if(!empty($data)) $data .=" , ";
-							$this->settings->set_userdata($k,$v);
-						}
-					}
-					
-				}
+				$resp['msg'] = "User Details successfully updated.";
+			
 				$resp['status'] = 1;
 			}else{
 				$resp['status'] = 2;

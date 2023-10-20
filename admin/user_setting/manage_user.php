@@ -6,61 +6,38 @@ if(isset($_GET['id'])){
     $user = $conn->query("SELECT * FROM tblemployees where emp_id ='{$_GET['id']}'");
     foreach($user->fetch_array() as $k =>$v){
         $meta[$k] = $v;
-    
-}
+		}
 }
 
 if(isset($_POST['new_update']))
 {
-	$empid=$session_id;
+	$empid=$_POST['emp_id'];
 	$fname=$_POST['fname'];
 	$lname=$_POST['lastname'];   
 	$email=$_POST['email'];  
-	$department=$_POST['department']; 
+	$department=$_POST['Department']; 
 	$gender=$_POST['gender'];  
-	$phonenumber=$_POST['phonenumber'];
+	$phonenumber=$_POST['phone'];
 
-    $result = mysqli_query($conn,"update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender',Department='$department', Phonenumber='$phonenumber' where emp_id='$session_id'         
-		")or die(mysqli_error());
+	$l_sql = "update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber' where emp_id='$empid' ";
+    echo $l_sql;
+	$result = mysqli_query($conn,$l_sql)or die(mysqli_error());
     if ($result) {
-     	echo "<script>alert('User records Successfully Updated');</script>";
-
+     	echo "<script>alert('Your records Successfully Updated');</script>";
+		/* echo "<script type='text/javascript'> document.location = 'admin/index.php'; </script>"; */
 	} else{
 	  die(mysqli_error());
    }
-
+   echo $l_sql;
 }
-
-if (isset($_POST["update_image"])) {
-
-	$image = $_FILES['image']['name'];
-
-	if(!empty($image)){
-		move_uploaded_file($_FILES['image']['tmp_name'], '../uploads/'.$image);
-		$location = $image;	
-	}
-	else {
-		echo "<script>alert('Please Select Picture to Update');</script>";
-	}
-
-    $result = mysqli_query($conn,"update tblemployees set location='$location' where emp_id='$session_id'         
-		")or die(mysqli_error());
-    if ($result) {
-     	echo "<script>alert('Profile Picture Updated');</script>";
-     	echo "<script type='text/javascript'> document.location = 'my_profile.php'; </script>";
-	} else{
-	  die(mysqli_error());
-   }
-}
-
 
 ?>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-body">
 		<div class="container-fluid">
 			<div id="msg"></div>
-			<form action="" id="manage-user">	
-				<input type="hidden" name="id" value="<?php echo isset($meta['id']) ? $meta['id']: '' ?>">
+			<form method="post" id="manage-user">	
+				<input type="text" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>">
 				<div class="form-group">
 					<label for="name">First Name: </label>
 					<input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo isset($meta['FirstName']) ? $meta['FirstName']: '' ?>" required>
@@ -109,13 +86,41 @@ if (isset($_POST["update_image"])) {
 					
 					<?php }?>
 				</div>
-				
+				<div class="form-group">
+					<button type="submit" name="new_update" class="btn btn-primary">Update Record</button>
+				</div>
+		</div>
+		</div>
 				
 			</form>
 		</div>
 	</div>
 </div>
-<script>
+<!-- <script>
+	$('#manage-user').submit(function(e){
+		e.preventDefault();
+		start_loader()
+		$.ajax({
+			url:_base_url_+'classes/Users.php?f=save',
+			data: new FormData($(this)[0]),
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    method: 'POST',
+		    type: 'POST',
+			success:function(resp){
+				if(resp ==1){
+					location.href='./?page=user_settings/'
+				}else{
+					$('#msg').html('<div class="alert alert-danger">Username already exist</div>')
+					end_loader()
+				}
+			}
+		})
+	})
+
+</script> -->
+<!-- <script>
     $(function(){
         $('#uni_modal #manage-user').submit(function(e){
             e.preventDefault();
@@ -159,4 +164,4 @@ if (isset($_POST["update_image"])) {
             })
         })
     })
-</script>
+</script> -->

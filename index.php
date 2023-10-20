@@ -17,7 +17,6 @@ if(isset($_POST['signin']))
 				$_SESSION['authenticated'] = true;
 		    	$_SESSION['dept']=$row['Department'];
 				$_SESSION['user_type']=$row['role'];
-			 /* 	echo "<script type='text/javascript'> document.location = 'admin/admin_dashboard.php'; </script>"; */
 				 echo "<script type='text/javascript'> document.location = 'admin/index.php'; </script>";
 		    }
 		    elseif ($row['role'] == 'Staff') {

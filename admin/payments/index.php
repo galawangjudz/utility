@@ -415,7 +415,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="mode_payment" class="control-label">Mode of Payment *</label>
-                    <select name="mode_payment" id="mode_payment" class="form-control form-control-border" required>
+                    <select name="mode_payment" id="mode_payment" class="form-control form-control-border" readonly disabled required>
                         <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
                         <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
                     </select>
@@ -473,8 +473,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required>
                 </div>
             </div>
-
-           
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="button" id="printDataButton" class="btn btn-primary">
+                        <i class="fa fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
            
         </div>
       
@@ -485,8 +490,87 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         text-align: right;
     }
 </style>
+<script>
+    function convertToWords(number) {
+        var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+    var teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    var tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+    function convertGroup(num) {
+        var result = "";
+        if (num >= 100) {
+            result += ones[Math.floor(num / 100)] + " Hundred ";
+            num %= 100;
+        }
+        if (num >= 10 && num <= 19) {
+            result += teens[num - 10];
+        } else if (num >= 20) {
+            result += tens[Math.floor(num / 10)];
+            if (num % 10 > 0) {
+                result += " " + ones[num % 10];
+            }
+        } else if (num > 0) {
+            result += ones[num];
+        }
+        return result;
+    }
+
+    var result = "";
+    if (number >= 1000000) {
+        result += convertGroup(Math.floor(number / 1000000)) + " Million ";
+        number %= 1000000;
+    }
+    if (number >= 1000) {
+        result += convertGroup(Math.floor(number / 1000)) + " Thousand ";
+        number %= 1000;
+    }
+    if (number >= 1) {
+        result += convertGroup(Math.floor(number));
+    }
+
+    // Handling the fractional part
+    var decimalPart = number % 1;
+    if (decimalPart > 0) {
+        result += " and " + (decimalPart * 100).toFixed(0) + "/100";
+    }
+
+    return result.trim();
+    }
+
+
+    // Function to print the input data
+    function printInputData() {
+
+        var dataToPrint = "Pay Date: " + document.getElementById("pay_date").value + "\n";
+        var totalAmountPaid = parseFloat(document.getElementById("stl_amount_paid").value) + parseFloat(document.getElementById("main_amount_paid").value);
+        var totalAmountWords = convertToWords(totalAmountPaid);
+        dataToPrint += "Or No.: " + document.getElementById("payment_or").value + "\n";
+        dataToPrint += "Mode of Payment: " + document.getElementById("mode_payment").value + "\n";
+        dataToPrint += "Payment for Streetlight Amount: " + document.getElementById("stl_amount_pay").value + "\n";
+        dataToPrint += "Payment for Grasscutting Amount: " + document.getElementById("main_amount_pay").value + "\n";
+        dataToPrint += "STL Discount: " + document.getElementById("stl_discount").value + "\n";
+        dataToPrint += "GCF Discount: " + document.getElementById("main_discount").value + "\n";
+        dataToPrint += "STL Amount Paid: " + document.getElementById("stl_amount_paid").value + "\n";
+        dataToPrint += "GCF Amount Paid: " + document.getElementById("main_amount_paid").value + "\n";
+        dataToPrint += "Total Amount Paid: " + document.getElementById("total_amount_paid").value  + " (" + totalAmountWords + ")" + "\n";
+
+        // Create a new window for printing
+        var printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write('<html><body>');
+        printWindow.document.write('<pre>' + dataToPrint + '</pre>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+        printWindow.close();
+    }
+
+    // Add a click event listener to the "Print" button
+    document.getElementById("printDataButton").addEventListener("click", printInputData);
+</script>
 
 <script>
+
 
 $(document).ready(function() {
     $(document).on('keyup', ".stl_amount_pay", function(e) {
