@@ -222,15 +222,6 @@ endif;
         $('.payment_data').click(function(){
 			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})
-		$('.stl_payment_data').click(function(){
-			uni_modal("StreetLight Payment Window","payments/streetlight.php?id="+$(this).attr('id'),'mid-large')
-		})
-		$('.mtf_payment_data').click(function(){
-			uni_modal("Maintenance Payment Window","payments/maintenance.php?id="+$(this).attr('id'),'mid-large')
-		})
-        $('.edit_data').click(function(){
-			uni_modal("Update Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')
-		})
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
 		})
