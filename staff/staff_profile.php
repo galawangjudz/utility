@@ -1,5 +1,6 @@
 <?php include('includes/header.php')?>
 <?php include('../includes/session.php')?>
+<?php include('includes/staff_session.php')?>
 <?php
 if(isset($_POST['new_update']))
 {
