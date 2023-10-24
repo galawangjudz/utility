@@ -14,7 +14,7 @@
                     // Get the submitted account number
                     $account_number = $_POST["account_number"];
                     // Define the main PDF folder path
-                    $main_pdf_folder =  "C:/xampp/htdocs/utility/admin/get-soa/pdf_files/";
+                    $main_pdf_folder =  "C:/xampp/htdocs/utility/pdf_files/";
 
                     // Recursively scan all subfolders for matching files
                     //$pdf_files = glob_recursive($main_pdf_folder . '*' . DIRECTORY_SEPARATOR . $account_number . "*.pdf");

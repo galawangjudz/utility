@@ -22,11 +22,20 @@
 							<span class="micon dw dw-user-13"></span><span class="mtext">Accounts</span>
 						</a>
 					</li>
+
+					<li>
+						<a href="<?php echo base_url ?>admin/?page=adjustments" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext">Adjustments</span>
+						</a>
+					</li>
+
 					<li>
 						<a href="<?php echo base_url ?>admin/?page=get-soa" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-newspaper"></span><span class="mtext">Bill Report</span>
 						</a>
 					</li>
+
+
 					<li>
 						<a href="<?php echo base_url ?>admin/?page=report/car_logs" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-newspaper"></span><span class="mtext">CAR Report</span>
