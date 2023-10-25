@@ -95,16 +95,16 @@ $l_find = isset($_GET["search"]) ? $_GET["search"] : '';
 
 
             $('.delete_data').click(function(){
-                _conf("Are you sure to delete from Bill List permanently?","delete_bill",[$(this).attr('data-date'),$(this).attr('data-type'),$(this).attr('data-id')])
+                _conf("Are you sure to delete from Bill List permanently?","delete_bill",[$(this).attr('data-id')])
             })
     })
 
-    function delete_bill($date,$type,$id){
+    function delete_bill($id){
         start_loader();
         $.ajax({
             url:_base_url_+"classes/Master.php?f=delete_bill",
             method:"POST",
-            data:{date: $date, type: $type, id: $id },
+            data:{id: $id },
             dataType:"json",
             error:err=>{
                 console.log(err)

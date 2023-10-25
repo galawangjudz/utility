@@ -291,8 +291,8 @@ Class Master{
 
 	function delete_bill(){
 		require_once('../includes/config.php');
-	
-		$sql = "DELETE FROM t_utility_bill WHERE c_due_date = '$date' and c_bill_type = '$type' and c_account_no = '$id'";
+		extract($_POST);
+		$sql = "DELETE FROM t_utility_bill WHERE c_due_date = '2023-10-16' and c_bill_type = 'MTF' and c_account_no = '$id'";
 		$delete = odbc_exec($conn2, $sql);
 		//echo $sql;
 		if ($delete) {
