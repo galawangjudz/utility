@@ -75,16 +75,9 @@ $l_find = isset($_GET["search"]) ? $_GET["search"] : '';
                             
                         
                                     <td>
-                                    <div class="dropdown">
-                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                            <i class="dw dw-more"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                            <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-id="<?php echo $acc ?>"><i class="dw dw-delete-3"></i> Delete</a>
-                                        </div>
-                                    </div>
-                                
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle delete_data" data-id="<?php echo $acc ?>" href="javascript:void(0)" role="button" data-toggle="dropdown">
+                                        <i class="dw dw-delete-3"></i>
+                                    </a>
 
                                     </td>
                                 </tr>
@@ -96,3 +89,37 @@ $l_find = isset($_GET["search"]) ? $_GET["search"] : '';
 			
 		</div>
 	</div>
+
+    <script>
+    $(document).ready(function(){
+
+
+            $('.delete_data').click(function(){
+                _conf("Are you sure to delete from Bill List permanently?","delete_bill",[$(this).attr('data-date'),$(this).attr('data-type'),$(this).attr('data-id')])
+            })
+    })
+
+    function delete_bill($date,$type,$id){
+        start_loader();
+        $.ajax({
+            url:_base_url_+"classes/Master.php?f=delete_bill",
+            method:"POST",
+            data:{date: $date, type: $type, id: $id },
+            dataType:"json",
+            error:err=>{
+                console.log(err)
+                alert("An error occured.");
+                end_loader();
+            },
+            success:function(resp){
+                if(typeof resp== 'object' && resp.status == 'success'){
+                    alert(resp.msg);
+                    location.reload();
+                }else{
+                    alert("An error occured.");
+                    end_loader();
+                }
+            }
+        })
+    }
+</script>

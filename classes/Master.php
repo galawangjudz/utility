@@ -289,6 +289,23 @@ Class Master{
 	}
 
 
+	function delete_bill(){
+		require_once('../includes/config.php');
+	
+		$sql = "DELETE FROM t_utility_bill WHERE c_due_date = '$date' and c_bill_type = '$type' and c_account_no = '$id'";
+		$delete = odbc_exec($conn2, $sql);
+		//echo $sql;
+		if ($delete) {
+			$resp['status'] = 'success';
+			$resp['msg'] = "BILL has been deleted successfully.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+		}
+		return json_encode($resp);
+	}
+
+
 }
 
 $Master = new Master();
@@ -316,6 +333,9 @@ switch ($action) {
 	break;
 	case 'save_stl_payment':
 		echo $Master->save_stl_payment();
+	break;
+	case 'delete_bill':
+		echo $Master->delete_bill();
 	break;
 	case 'save_user':
 		echo $Master->save_user();
