@@ -612,7 +612,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
        
         printWindow.document.write('<p class="payment-for">' + paymentForText +'</p>');
-
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();
