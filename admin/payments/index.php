@@ -126,18 +126,14 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
     $load_stl_bill = "SELECT SUM(c_amount_due) as c_total_stl from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%STL%%'" ;
     $stl_result = odbc_exec($conn2, $load_stl_bill);
     if ($stl_result) {
-        // Fetch the data
         $row = odbc_fetch_array($stl_result);
     
         if ($row) {
-            // Access the total STL amount
             $l_stl_due = $row['c_total_stl'];
         } else {
-            // No STL records found
             $l_stl_due = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -155,7 +151,6 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_stl_payment = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -171,20 +166,15 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
                     AND  c_due_date = ' $mainte_due' AND c_account_no = '$l_acc_no'";
     $msur_details = odbc_exec($conn2, $get_msur);
     if ($msur_details) {
-        // Fetch the data
         $row = odbc_fetch_array($msur_details);
-    
         if ($row) {
-            // Access the total STL payment amount
             $l_mtf_cur = $row['c_current_mtf'];
             $l_mtf_sur = $row['c_current_mtf_sur'];
         } else {
-            // No stl payment records found
             $l_mtf_cur  = 0;
             $l_mtf_sur = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -199,20 +189,16 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
                     AND  c_due_date = ' $street_due' AND c_account_no = '$l_acc_no'";
     $ssur_details = odbc_exec($conn2, $get_ssur);
     if ($msur_details) {
-        // Fetch the data
         $row2 = odbc_fetch_array($ssur_details);
     
         if ($row2) {
-            // Access the total STL payment amount
             $l_stl_cur = $row2['c_current_stl'];
             $l_stl_sur = $row2['c_current_stl_sur'];
         } else {
-            // No stl payment records found
             $l_stl_cur  = 0;
             $l_stl_sur = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -223,12 +209,10 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
 
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    // If 'id' is set and not empty, it means you want to disable specific fields
     $accfield = true;
     $ctrfield = true;
     $pblfield = true;
 } else {
-    // If 'id' is not set or empty, you don't want to disable any fields
     $accfield = false;
     $ctrfield = false;
     $pblfield = false;
@@ -236,6 +220,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 ?>
 <div class="container-fluid">
 <form action="" id="pay-form">
+<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="row">
 			<div class="col-md-4">
@@ -260,14 +245,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="row">
 			<div class="col-md-4">
                 <div class="form-group">
-                    <label for="fname" class="control-label">First Name</label>
-                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
+                    <label for="lname" class="control-label">Last Name</label>
+                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="lname" class="control-label">Last Name</label>
-                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
+                    <label for="fname" class="control-label">First Name</label>
+                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
                 </div>
             </div>
             <div class="col-md-4">
@@ -452,7 +437,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="0" required>
                 </div>
             </div>
-           
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -482,7 +466,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </div>
            
         </div>
-      
     </form>
 </div>
 <style>
@@ -528,7 +511,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         result += convertGroup(Math.floor(number));
     }
 
-    // Handling the fractional part
     var decimalPart = number % 1;
     if (decimalPart > 0) {
         result += " and " + (decimalPart * 100).toFixed(0) + "/100";
@@ -537,35 +519,108 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     return result.trim();
     }
 
-
-    // Function to print the input data
+    function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
     function printInputData() {
+       
+        var mainAmountPaid = parseFloat(document.getElementById("main_amount_paid").value);
+        var stlAmountPaid = parseFloat(document.getElementById("stl_amount_paid").value);
+        var totalPaid =mainAmountPaid + stlAmountPaid;
+        var amtToWord = convertToWords(totalPaid);
+        var paymentForText;
 
-        var dataToPrint = "Pay Date: " + document.getElementById("pay_date").value + "\n";
-        var totalAmountPaid = parseFloat(document.getElementById("stl_amount_paid").value) + parseFloat(document.getElementById("main_amount_paid").value);
-        var totalAmountWords = convertToWords(totalAmountPaid);
-        dataToPrint += "Or No.: " + document.getElementById("payment_or").value + "\n";
-        dataToPrint += "Mode of Payment: " + document.getElementById("mode_payment").value + "\n";
-        dataToPrint += "Payment for Streetlight Amount: " + document.getElementById("stl_amount_pay").value + "\n";
-        dataToPrint += "Payment for Grasscutting Amount: " + document.getElementById("main_amount_pay").value + "\n";
-        dataToPrint += "STL Discount: " + document.getElementById("stl_discount").value + "\n";
-        dataToPrint += "GCF Discount: " + document.getElementById("main_discount").value + "\n";
-        dataToPrint += "STL Amount Paid: " + document.getElementById("stl_amount_paid").value + "\n";
-        dataToPrint += "GCF Amount Paid: " + document.getElementById("main_amount_paid").value + "\n";
-        dataToPrint += "Total Amount Paid: " + document.getElementById("total_amount_paid").value  + " (" + totalAmountWords + ")" + "\n";
+        if (mainAmountPaid === 0) {
+            paymentForText = 'Payment for Streetlight Fee';
+        } else if (stlAmountPaid === 0) {
+            paymentForText = 'Payment for Maintenance Fee';
+        }else{
+            paymentForText = 'Payment for Maintenance and Streetlight Fee';
+        }
 
-        // Create a new window for printing
         var printWindow = window.open('', '_blank');
         printWindow.document.open();
-        printWindow.document.write('<html><body>');
-        printWindow.document.write('<pre>' + dataToPrint + '</pre>');
+        printWindow.document.write('<html><head>');
+        printWindow.document.write('<style>');
+        printWindow.document.write('body {');
+        printWindow.document.write('    background-image: url("payments/car.jpg");');
+        printWindow.document.write('    background-size: 820px 350px;');
+        printWindow.document.write('}');
+        printWindow.document.write('.pay-date { margin: 150px 450px; width: 100px; position:absolute; }');
+        printWindow.document.write('.full-name { margin: 170px 180px; width: 350px; position:absolute; }');
+        printWindow.document.write('.add { margin: 190px 150px; width: 350px; position:absolute; }');
+        printWindow.document.write('.payment-or { margin: 20px 180px; }');
+        printWindow.document.write('.mode-payment { margin: 10px 0; }');
+       
+        printWindow.document.write('.stl { margin: 100px -170px; position:absolute; }');
+
+        printWindow.document.write('.mtf { margin: 100px -170px; position:absolute; }');
+
+        printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
+        printWindow.document.write('.payment-for { margin: 260px 240px; width:300px; position:absolute; }');
+        printWindow.document.write('.numtowords { margin: 215px 160px; width:400px; position:absolute; }');
+
+        printWindow.document.write('.stl-pay { text-align:right; position:absolute; }');
+        printWindow.document.write('.stl-disc { text-align:right; position:absolute; }');
+        printWindow.document.write('.stl-amt { text-align:right; position:absolute; }');
+
+        printWindow.document.write('.stl_amount_pay { disabled:disabled; }');
+
+        if (mainAmountPaid === 0 && stlAmountPaid !== 0) {
+            printWindow.document.write('.mtf { display: none; }');
+            printWindow.document.write('.stl { display: block; }');
+        } else if(mainAmountPaid !== 0 && stlAmountPaid === 0) {
+            //printWindow.document.write('.mtf { display: block; margin: 180px -170px; position:absolute; }');
+            printWindow.document.write('.mtf { display: block; }');
+            printWindow.document.write('.stl { display: none; }');
+        }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
+            printWindow.document.write('.mtf { display: block; margin: 180px -170px; position:absolute; }');
+            printWindow.document.write('.stl { display: block; }');
+        }
+
+        document.getElementById("pay_date").disabled = true;
+        document.getElementById("payment_or").disabled = true;
+        document.getElementById("stl_amount_pay").disabled = true;
+        document.getElementById("main_amount_pay").disabled = true;
+        document.getElementById("main_discount").disabled = true;
+        document.getElementById("stl_discount").disabled = true;
+
+        printWindow.document.write('</style>');
+
+        printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
+        printWindow.document.write('<p class="full-name">' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value + '</p>');
+        //printWindow.document.write('<p class="add">' + document.getElementById("add").value + ' ' + document.getElementById("city_prov").value + ' ' + document.getElementById("zip_code").value + '</p>');
+        printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
+        //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
+        //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
+        
+        printWindow.document.write('<table class="stl">');
+        printWindow.document.write('<tr><td>STL Amount:</td><td style="text-align:right;">'+ formatNumberWithCommas(parseFloat(document.getElementById("stl_amount_pay").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>STL Discount:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("stl_discount").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>STL Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("stl_amount_paid").value)) + '</td></tr>');
+        printWindow.document.write('</table>');
+
+        printWindow.document.write('<table class="mtf">');
+        printWindow.document.write('<tr><td>GCF Amount:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_pay").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>GCF Discount:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_discount").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>GCF Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_paid").value)) + '</td></tr>');
+        printWindow.document.write('</table>');
+
+        printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
+
+       
+        printWindow.document.write('<p class="payment-for">' + paymentForText +'</p>');
+
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();
         printWindow.close();
-    }
+        }
 
-    // Add a click event listener to the "Print" button
+
+
     document.getElementById("printDataButton").addEventListener("click", printInputData);
 </script>
 
