@@ -624,8 +624,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 </script>
 
 <script>
-
-
 $(document).ready(function() {
     $(document).on('keyup', ".stl_amount_pay", function(e) {
 		e.preventDefault();
