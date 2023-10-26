@@ -292,7 +292,7 @@ Class Master{
 	function delete_bill(){
 		require_once('../includes/config.php');
 		extract($_POST);
-		$sql = "DELETE FROM t_utility_bill WHERE c_due_date = '2023-10-16' and c_bill_type = 'MTF' and c_account_no = '$id'";
+		$sql = "DELETE FROM t_utility_bill WHERE c_due_date = '$date' and c_bill_type = '$type' and c_account_no = '$id'";
 		$delete = odbc_exec($conn2, $sql);
 		//echo $sql;
 		if ($delete) {
@@ -302,6 +302,32 @@ Class Master{
 			$resp['status'] = 'failed';
 			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
 		}
+		return json_encode($resp);
+	}
+
+
+	function save_bill(){
+		require_once('../includes/config.php');
+		extract($_POST);
+		$acc_no = $_POST['acc_no'];
+		$start_date = $_POST['start_date'];
+		$end_date = $_POST['end_date'];
+		$due_date = $_POST['due_date'];
+		$bill_type = $_POST['type'];
+		$amount_due = $_POST['amount'];
+		$prev_bal = $_POST['prev_bal'];
+		
+		$params = "'$acc_no', '$start_date', '$end_date', '$due_date', '$bill_type', '$amount_due', '$prev_bal'";
+		$insert_query = "INSERT INTO t_utility_bill VALUES ($params)";
+		if (odbc_exec($conn2, $insert_query)) {
+			$resp['status'] = 'success';
+			$resp['msg'] = "Utility Bill has been successfully added.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
+		}
+		
 		return json_encode($resp);
 	}
 
@@ -336,6 +362,9 @@ switch ($action) {
 	break;
 	case 'delete_bill':
 		echo $Master->delete_bill();
+	break;
+	case 'save_bill':
+		echo $Master->save_bill();
 	break;
 	case 'save_user':
 		echo $Master->save_user();

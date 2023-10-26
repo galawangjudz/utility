@@ -5,11 +5,15 @@
             </div>
             <div class="card-box mb-30">
                 <div class="pd-20">
-                    <form action="<?php echo base_url ?>staff/?page=get-soa/list-soa" method="post">
-                        <!-- Change the form action to list-soa.php -->
-                        <label for="account_number">Account Number:</label>
-                        <input type="text" id="account_number" name="account_number" required>
-                        <input type="submit" value="View SOA">
+                    <form action="<?php echo base_url ?>admin/?page=get-soa/list-soa" method="post">
+                        <div class="col-md-4 form-group">
+                            <label for="account_number" class="control-label">Account Number:</label>
+                            <input type="text" id="account_number" name="account_number" class="form-control">
+                            
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <button type="submit" class="btn btn-primary" name="find"><i class="dw dw-search"></i> Search</button>
+                        </div>
                     </form>
                 </div>
             </div>

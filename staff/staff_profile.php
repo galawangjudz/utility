@@ -1,6 +1,3 @@
-<?php include('includes/header.php')?>
-<?php include('../includes/session.php')?>
-<?php include('includes/staff_session.php')?>
 <?php
 if(isset($_POST['new_update']))
 {
@@ -8,20 +5,20 @@ if(isset($_POST['new_update']))
 	$fname=$_POST['fname'];
 	$lname=$_POST['lastname'];   
 	$email=$_POST['email'];  
-	$dob=$_POST['dob']; 
 	$department=$_POST['department']; 
-	$address=$_POST['address']; 
 	$gender=$_POST['gender'];  
 	$phonenumber=$_POST['phonenumber'];
 
-    $result = mysqli_query($conn,"update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Dob='$dob', Department='$department', Address='$address', Phonenumber='$phonenumber' where emp_id='$session_id'         
+    $result = mysqli_query($conn,"update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber' where emp_id='$session_id'         
 		")or die(mysqli_error());
     if ($result) {
      	echo "<script>alert('Your records Successfully Updated');</script>";
-     	echo "<script type='text/javascript'> document.location = 'staff_profile.php'; </script>";
+     
 	} else{
 	  die(mysqli_error());
    }
+
+   
 
 }
 
@@ -41,38 +38,13 @@ if (isset($_POST["update_image"])) {
 		")or die(mysqli_error());
     if ($result) {
      	echo "<script>alert('Profile Picture Updated');</script>";
-     	echo "<script type='text/javascript'> document.location = 'staff_profile.php'; </script>";
+     /* 	echo "<script type='text/javascript'> document.location = 'my_profile.php'; </script>"; */
 	} else{
 	  die(mysqli_error());
    }
 }
 
 ?>
-
-<body>
-	<div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="../vendors/images/deskapp-logo-svg.png" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>0%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div>
-
-	<?php include('includes/navbar.php')?>
-
-	<?php include('includes/right_sidebar.php')?>
-
-	<?php include('includes/left_sidebar.php')?>
-
-	<div class="mobile-menu-overlay"></div>
-
-	<div class="mobile-menu-overlay"></div>
-
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
@@ -140,10 +112,7 @@ if (isset($_POST["update_image"])) {
 										<span>My Role:</span>
 										<?php echo $row['role']; ?>
 									</li>
-									<li>
-										<span>Address:</span>
-										<?php echo $row['Address']; ?>
-									</li>
+									
 								</ul>
 							</div>
 						</div>
@@ -153,19 +122,19 @@ if (isset($_POST["update_image"])) {
 							<div class="profile-tab height-100-p">
 								<div class="tab height-100-p">
 									<ul class="nav nav-tabs customtab" role="tablist">
-										<!-- <li class="nav-item">
-											<a class="nav-link" data-toggle="tab" href="#timeline" role="tab">Leave Records</a>
+									<!-- 	<li class="nav-item">
+											<a class="nav-link active" data-toggle="tab" href="#timeline" role="tab">Leave Records</a>
 										</li> -->
 										<li class="nav-item">
 											<a class="nav-link active" data-toggle="tab" href="#setting" role="tab">Settings</a>
 										</li>
 									</ul>
 									<div class="tab-content">
-									
-										<!-- Setting Tab start -->
+										<!-- Timeline Tab start -->
 										<div class="tab-pane fade show active" id="setting" role="tabpanel">
+										
 											<div class="profile-setting">
-												<form method="POST" enctype="multipart/form-data">
+												<form method="POST" enctype="multipart/form-data" action="<?php echo base_url ?>staff/?page=staff_profile">
 													<div class="profile-edit-list row">
 														<div class="col-md-12"><h4 class="text-blue h5 mb-20">Edit Your Personal Setting</h4></div>
 
@@ -199,47 +168,35 @@ if (isset($_POST["update_image"])) {
 														</div>
 														<div class="weight-500 col-md-6">
 															<div class="form-group">
-																<label>Date Of Birth</label>
-																<input name="dob" class="form-control form-control-lg date-picker" type="text" placeholder="" required="true" autocomplete="off" value="<?php echo $row['Dob']; ?>">
+																<label>Department</label>
+																<select name="department" class="custom-select form-control" required="true" autocomplete="off">
+																	<?php
+																	$query_staff = mysqli_query($conn, "select * from tblemployees join tbldepartments where emp_id = '$session_id'") or die(mysqli_error());
+																	$row_staff = mysqli_fetch_array($query_staff);
+																	?>
+
+																	<?php
+																	$query = mysqli_query($conn, "select * from tbldepartments");
+																	while ($row = mysqli_fetch_array($query)) {
+																		$selected = ($row['DepartmentShortName'] === $row_staff['Department']) ? 'selected' : '';
+																	?>
+																		<option value="<?php echo $row['DepartmentShortName']; ?>" <?php echo $selected; ?>><?php echo $row['DepartmentName']; ?></option>
+																	<?php } ?>
+																</select>
 															</div>
 														</div>
+														
 														<div class="weight-500 col-md-6">
 															<div class="form-group">
 																<label>Gender</label>
 																<select name="gender" class="custom-select form-control" required="true" autocomplete="off">
-																<option value="<?php echo $row['Gender']; ?>"><?php echo $row['Gender']; ?></option>
-																	<option value="male">Male</option>
-																	<option value="female">Female</option>
+																					
+																	<option value="Male" <?php echo isset($row_staff['Gender']) && $row_staff['Gender'] == "Male" ? 'selected': '' ?>> Male</option>
+																	<option value="Female" <?php echo isset($row_staff['Gender']) && $row_staff['Gender'] == "Female" ? 'selected': '' ?>> Female</option>
 																</select>
 															</div>
 														</div>
-														<div class="weight-500 col-md-6">
-															
-															<div class="form-group">
-																<label>Address</label>
-																<input name="address" class="form-control form-control-lg" type="text" placeholder="" required="true" autocomplete="off" value="<?php echo $row['Address']; ?>">
-															</div>
-														</div>
-														<div class="weight-500 col-md-6">
-															<div class="form-group">
-																<label>Department</label>
-																<select name="department" class="custom-select form-control" required="true" autocomplete="off">
-																	<?php
-																		$query_staff = mysqli_query($conn,"select * from tblemployees join  tbldepartments where emp_id = '$session_id'")or die(mysqli_error());
-																		$row_staff = mysqli_fetch_array($query_staff);
-																		
-																	 ?>
-																	<option value="<?php echo $row_staff['DepartmentShortName']; ?>"><?php echo $row_staff['DepartmentName']; ?></option>
-																		<?php
-																		$query = mysqli_query($conn,"select * from tbldepartments");
-																		while($row = mysqli_fetch_array($query)){
-																		
-																		?>
-																		<option value="<?php echo $row['DepartmentShortName']; ?>"><?php echo $row['DepartmentName']; ?></option>
-																		<?php } ?>
-																</select>
-															</div>
-														</div>
+														
 													
 														<div class="weight-500 col-md-6">
 															<div class="form-group">
@@ -261,12 +218,7 @@ if (isset($_POST["update_image"])) {
 					</div>
 				</div>
 			</div>
-			<?php include('includes/footer.php'); ?>
-		</div>
-	</div>
-	<!-- js -->
-	<?php include('includes/scripts.php')?>
-
+	
 	<script type="text/javascript">
 		var loader = function(e) {
 			let file = e.target.files;
@@ -300,5 +252,3 @@ if (isset($_POST["update_image"])) {
 		    return true;
 		}
 	</script>
-</body>
-</html>

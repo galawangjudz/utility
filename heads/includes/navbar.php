@@ -27,8 +27,8 @@
 						<span class="user-name"><?php echo $row['FirstName']. " " .$row['LastName']; ?></span>
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="staff_profile.php"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="change_password.php"><i class="dw dw-help"></i> Reset Password</a>
+						<a class="dropdown-item" href="<?php echo base_url ?>heads/?page=head_profile"><i class="dw dw-user1"></i> Profile</a>
+						<a class="dropdown-item" href="#"><i class="dw dw-help"></i> Reset Password</a>
 						<a class="dropdown-item" href="../logout.php"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>

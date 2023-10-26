@@ -126,18 +126,14 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
     $load_stl_bill = "SELECT SUM(c_amount_due) as c_total_stl from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%STL%%'" ;
     $stl_result = odbc_exec($conn2, $load_stl_bill);
     if ($stl_result) {
-        // Fetch the data
         $row = odbc_fetch_array($stl_result);
     
         if ($row) {
-            // Access the total STL amount
             $l_stl_due = $row['c_total_stl'];
         } else {
-            // No STL records found
             $l_stl_due = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -155,7 +151,6 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_stl_payment = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -171,20 +166,15 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
                     AND  c_due_date = ' $mainte_due' AND c_account_no = '$l_acc_no'";
     $msur_details = odbc_exec($conn2, $get_msur);
     if ($msur_details) {
-        // Fetch the data
         $row = odbc_fetch_array($msur_details);
-    
         if ($row) {
-            // Access the total STL payment amount
             $l_mtf_cur = $row['c_current_mtf'];
             $l_mtf_sur = $row['c_current_mtf_sur'];
         } else {
-            // No stl payment records found
             $l_mtf_cur  = 0;
             $l_mtf_sur = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -199,20 +189,16 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
                     AND  c_due_date = ' $street_due' AND c_account_no = '$l_acc_no'";
     $ssur_details = odbc_exec($conn2, $get_ssur);
     if ($msur_details) {
-        // Fetch the data
         $row2 = odbc_fetch_array($ssur_details);
     
         if ($row2) {
-            // Access the total STL payment amount
             $l_stl_cur = $row2['c_current_stl'];
             $l_stl_sur = $row2['c_current_stl_sur'];
         } else {
-            // No stl payment records found
             $l_stl_cur  = 0;
             $l_stl_sur = 0;
         }
     } else {
-        // Error executing the query
         echo "Error: " . odbc_errormsg($conn2);
     }
 
@@ -223,12 +209,10 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
 
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    // If 'id' is set and not empty, it means you want to disable specific fields
     $accfield = true;
     $ctrfield = true;
     $pblfield = true;
 } else {
-    // If 'id' is not set or empty, you don't want to disable any fields
     $accfield = false;
     $ctrfield = false;
     $pblfield = false;
@@ -236,6 +220,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 ?>
 <div class="container-fluid">
 <form action="" id="pay-form">
+<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="row">
 			<div class="col-md-4">
@@ -260,14 +245,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="row">
 			<div class="col-md-4">
                 <div class="form-group">
-                    <label for="fname" class="control-label">First Name</label>
-                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
+                    <label for="lname" class="control-label">Last Name</label>
+                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="lname" class="control-label">Last Name</label>
-                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
+                    <label for="fname" class="control-label">First Name</label>
+                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
                 </div>
             </div>
             <div class="col-md-4">
@@ -415,7 +400,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="mode_payment" class="control-label">Mode of Payment *</label>
-                    <select name="mode_payment" id="mode_payment" class="form-control form-control-border" required>
+                    <select name="mode_payment" id="mode_payment" class="form-control form-control-border" readonly disabled required>
                         <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
                         <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
                     </select>
@@ -452,7 +437,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="0" required>
                 </div>
             </div>
-           
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -473,11 +457,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required>
                 </div>
             </div>
-
-           
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button type="button" id="printDataButton" class="btn btn-primary">
+                        <i class="fa fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
            
         </div>
-      
     </form>
 </div>
 <style>
@@ -485,9 +473,157 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         text-align: right;
     }
 </style>
+<script>
+    function convertToWords(number) {
+        var ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+    var teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    var tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+    function convertGroup(num) {
+        var result = "";
+        if (num >= 100) {
+            result += ones[Math.floor(num / 100)] + " Hundred ";
+            num %= 100;
+        }
+        if (num >= 10 && num <= 19) {
+            result += teens[num - 10];
+        } else if (num >= 20) {
+            result += tens[Math.floor(num / 10)];
+            if (num % 10 > 0) {
+                result += " " + ones[num % 10];
+            }
+        } else if (num > 0) {
+            result += ones[num];
+        }
+        return result;
+    }
+
+    var result = "";
+    if (number >= 1000000) {
+        result += convertGroup(Math.floor(number / 1000000)) + " Million ";
+        number %= 1000000;
+    }
+    if (number >= 1000) {
+        result += convertGroup(Math.floor(number / 1000)) + " Thousand ";
+        number %= 1000;
+    }
+    if (number >= 1) {
+        result += convertGroup(Math.floor(number));
+    }
+
+    var decimalPart = number % 1;
+    if (decimalPart > 0) {
+        result += " and " + (decimalPart * 100).toFixed(0) + "/100";
+    }
+
+    return result.trim();
+    }
+
+    function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    
+    function printInputData() {
+       
+        var mainAmountPaid = parseFloat(document.getElementById("main_amount_paid").value);
+        var stlAmountPaid = parseFloat(document.getElementById("stl_amount_paid").value);
+        var totalPaid =mainAmountPaid + stlAmountPaid;
+        var amtToWord = convertToWords(totalPaid);
+        var paymentForText;
+
+        if (mainAmountPaid === 0) {
+            paymentForText = 'Payment for Streetlight Fee';
+        } else if (stlAmountPaid === 0) {
+            paymentForText = 'Payment for Maintenance Fee';
+        }else{
+            paymentForText = 'Payment for Maintenance and Streetlight Fee';
+        }
+
+        var printWindow = window.open('', '_blank');
+        printWindow.document.open();
+        printWindow.document.write('<html><head>');
+        printWindow.document.write('<style>');
+        printWindow.document.write('body {');
+        printWindow.document.write('    background-image: url("payments/car.jpg");');
+        printWindow.document.write('    background-size: 820px 350px;');
+        printWindow.document.write('}');
+        printWindow.document.write('.pay-date { margin: 150px 450px; width: 100px; position:absolute; }');
+        printWindow.document.write('.full-name { margin: 170px 180px; width: 350px; position:absolute; }');
+        printWindow.document.write('.add { margin: 190px 150px; width: 350px; position:absolute; }');
+        printWindow.document.write('.payment-or { margin: 20px 180px; }');
+        printWindow.document.write('.mode-payment { margin: 10px 0; }');
+       
+        printWindow.document.write('.stl { margin: 100px -170px; position:absolute; }');
+
+        printWindow.document.write('.mtf { margin: 100px -170px; position:absolute; }');
+
+        printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
+        printWindow.document.write('.payment-for { margin: 260px 240px; width:300px; position:absolute; }');
+        printWindow.document.write('.numtowords { margin: 215px 160px; width:400px; position:absolute; }');
+
+        printWindow.document.write('.stl-pay { text-align:right; position:absolute; }');
+        printWindow.document.write('.stl-disc { text-align:right; position:absolute; }');
+        printWindow.document.write('.stl-amt { text-align:right; position:absolute; }');
+
+        printWindow.document.write('.stl_amount_pay { disabled:disabled; }');
+
+        if (mainAmountPaid === 0 && stlAmountPaid !== 0) {
+            printWindow.document.write('.mtf { display: none; }');
+            printWindow.document.write('.stl { display: block; }');
+        } else if(mainAmountPaid !== 0 && stlAmountPaid === 0) {
+            //printWindow.document.write('.mtf { display: block; margin: 180px -170px; position:absolute; }');
+            printWindow.document.write('.mtf { display: block; }');
+            printWindow.document.write('.stl { display: none; }');
+        }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
+            printWindow.document.write('.mtf { display: block; margin: 180px -170px; position:absolute; }');
+            printWindow.document.write('.stl { display: block; }');
+        }
+
+        document.getElementById("pay_date").disabled = true;
+        document.getElementById("payment_or").disabled = true;
+        document.getElementById("stl_amount_pay").disabled = true;
+        document.getElementById("main_amount_pay").disabled = true;
+        document.getElementById("main_discount").disabled = true;
+        document.getElementById("stl_discount").disabled = true;
+
+        printWindow.document.write('</style>');
+
+        printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
+        printWindow.document.write('<p class="full-name">' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value + '</p>');
+        //printWindow.document.write('<p class="add">' + document.getElementById("add").value + ' ' + document.getElementById("city_prov").value + ' ' + document.getElementById("zip_code").value + '</p>');
+        printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
+        //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
+        //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
+        
+        printWindow.document.write('<table class="stl">');
+        printWindow.document.write('<tr><td>STL Amount:</td><td style="text-align:right;">'+ formatNumberWithCommas(parseFloat(document.getElementById("stl_amount_pay").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>STL Discount:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("stl_discount").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>STL Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("stl_amount_paid").value)) + '</td></tr>');
+        printWindow.document.write('</table>');
+
+        printWindow.document.write('<table class="mtf">');
+        printWindow.document.write('<tr><td>GCF Amount:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_pay").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>GCF Discount:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_discount").value)) + '</td></tr>');
+        printWindow.document.write('<tr><td>GCF Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_paid").value)) + '</td></tr>');
+        printWindow.document.write('</table>');
+
+        printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
+
+       
+        printWindow.document.write('<p class="payment-for">' + paymentForText +'</p>');
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+        printWindow.close();
+        }
+
+
+
+    document.getElementById("printDataButton").addEventListener("click", printInputData);
+</script>
 
 <script>
-
 $(document).ready(function() {
     $(document).on('keyup', ".stl_amount_pay", function(e) {
 		e.preventDefault();

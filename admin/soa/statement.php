@@ -5,7 +5,6 @@ require_once('../../includes/config.php');
 if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
 
-    //$load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 ORDER BY c_start_date ASC";
     $load_due_payment_records = "SELECT
         c_start_date,
         c_end_date,
@@ -22,24 +21,24 @@ if(isset($_GET['id'])){
     ORDER BY
         c_start_date ASC";
     
-    echo $load_due_payment_records;
+   
     $result = odbc_exec($conn2, $load_due_payment_records);
     $due_count = odbc_num_rows($result);
     while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y/m/d", strtotime($due['c_end_date']));
-            $l_sdate = date("M j, Y", strtotime($due['c_start_date']));
-            $l_edate = date("M j, Y", strtotime($due['c_end_date']));
-            $l_ddate = date("M j, Y", strtotime($due['c_due_date']));
+            $l_sdate = date("M j, y", strtotime($due['c_start_date']));
+            $l_edate = date("M j, y", strtotime($due['c_end_date']));
+            $l_ddate = date("M j, y", strtotime($due['c_due_date']));
             $l_mtf_amount_due = $due['mtf'];
             $l_mtf_sur = $due['dlq_mtf'];
             $l_stl_amount_due = $due['stl'];
             $l_stl_sur = $due['dlq_stl'];
-            $l_pdate = '';
-            $l_or_no = '';
-            $mtf_amtpd = '';
-            $mtf_discount = '';
-            $stl_amtpd = '';
-            $stl_discount = '';
+            $l_pdate = '----------';
+            $l_or_no = '----------';
+            $mtf_amtpd = 0;
+            $mtf_discount = 0;
+            $stl_amtpd = 0;
+            $stl_discount = 0;
             $l_data = array(
                 $l_edate1, $l_sdate, $l_edate, $l_ddate,  $l_mtf_amount_due, $l_mtf_sur, $l_stl_amount_due,
                 $l_stl_sur, $l_pdate, $l_or_no, $mtf_amtpd, $mtf_discount, $stl_amtpd, $stl_discount, 'bill'
@@ -47,22 +46,22 @@ if(isset($_GET['id'])){
             $l_due_list[] = $l_data;
         }
     
-    // Retrieve and process payment records
-    //$get_payment_records = "SELECT * FROM t_utility_payments WHERE c_account_no = '$l_acc_no' ORDER BY c_st_pay_date ASC";
     $get_payment_records = "SELECT
-            c_account_no,
-            c_st_or_no,
-            c_st_pay_date,
-            SUM(CASE WHEN c_st_or_no LIKE '%MTF%' THEN c_st_amount_paid ELSE 0 END) AS MTF_Payments,
-            SUM(CASE WHEN c_st_or_no LIKE '%STL%' THEN c_st_amount_paid ELSE 0 END) AS STL_Payments,
-            SUM(CASE WHEN c_st_or_no LIKE '%MTF%' THEN c_discount ELSE 0 END) AS MTF_Discount,
-            SUM(CASE WHEN c_st_or_no LIKE '%STL%' THEN c_discount ELSE 0 END) AS STL_Discount
-        FROM
-            t_utility_payments WHERE c_account_no = '$l_acc_no'
-        GROUP BY
-            c_account_no, c_st_or_no, c_st_pay_date
-        ORDER BY
-        c_st_pay_date ASC";
+                c_account_no,
+                RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                c_st_pay_date,
+                SUM(CASE WHEN c_st_or_no LIKE '%MTF%' THEN c_st_amount_paid ELSE 0 END) AS MTF_Payments,
+                SUM(CASE WHEN c_st_or_no LIKE '%STL%' THEN c_st_amount_paid ELSE 0 END) AS STL_Payments,
+                SUM(CASE WHEN c_st_or_no LIKE '%MTF%' THEN c_discount ELSE 0 END) AS MTF_Discount,
+                SUM(CASE WHEN c_st_or_no LIKE '%STL%' THEN c_discount ELSE 0 END) AS STL_Discount
+            FROM
+                t_utility_payments
+            WHERE c_account_no = '$l_acc_no'
+            GROUP BY
+                c_account_no, st_or_no_clear, c_st_pay_date
+            ORDER BY
+                c_st_pay_date ASC
+            ";
     $result = odbc_exec($conn2, $get_payment_records);
 
     while ($payment = odbc_fetch_array($result)) {
@@ -75,12 +74,12 @@ if(isset($_GET['id'])){
         $l_stl_amount_due = 0;
         $l_stl_sur = 0;
         $l_pdate = date("m/d/Y", strtotime($payment['c_st_pay_date']));
-        $l_or_no = $payment['c_st_or_no'];
+        $l_or_no = $payment['st_or_no_clear'];
         $mtf_amtpd = $payment['mtf_payments'];
         $mtf_discount = $payment['mtf_discount'];
         $stl_amtpd = $payment['stl_payments'];
         $stl_discount = $payment['stl_discount'];
-        $l_data2 = array($l_edate1, $l_sdate, $l_edate, $l_ddate,  $l_mtf_amount_due, $l_mtf_sur, $l_stl_amount_due,
+        $l_data2 = array($l_pdate1, $l_sdate, $l_edate, $l_ddate, $l_mtf_amount_due, $l_mtf_sur, $l_stl_amount_due,
                 $l_stl_sur, $l_pdate, $l_or_no, $mtf_amtpd, $mtf_discount, $stl_amtpd, $stl_discount, 'payment'
         );
         
@@ -126,17 +125,21 @@ if(isset($_GET['id'])){
         
         if ($l_class == 'payment') {
             $l_tot_amt_due_mtf -= ($mtf_amtpd + $mtf_discount);
-            $l_prev_bal_mtf = $l_tot_amt_due_mtf;
+            $l_mtf_prev_bal = $l_tot_amt_due_mtf;
             $l_tot_amt_due_stl -= ($stl_amtpd + $stl_discount);
-            $l_prev_bal_stl = $l_tot_amt_due_stl;
+            $l_stl_prev_bal = $l_tot_amt_due_stl;
            /*  $l_amt_pd = format_num($l_amt_pd); // Assuming ftom() is a custom function for conversion
             $l_discount = format_num($l_discount); // Assuming ftom() is a custom function for conversion */
         }
 
         $l_data = array(
-            $l_dte, $l_sdate, $l_edate, $l_ddate, $l_mtf_amount_due, $l_mtf_sur, $mtf_tot_due, $l_stl_amount_due, $l_stl_sur, 
-            $stl_tot_due, $l_pdate, $l_or_no, $mtf_amtpd, $mtf_discount, $stl_amtpd, $stl_discount, 
-            format_num($l_mtf_prev_bal), format_num($l_stl_prev_bal) , format_num($l_tot_amt_due_mtf) , format_num($l_tot_amt_due_stl)
+            $l_dte, $l_sdate, $l_edate, $l_ddate,$l_or_no, $l_pdate, format_num($l_mtf_amount_due), format_num($l_mtf_sur),
+             format_num($mtf_tot_due), format_num($mtf_amtpd),
+             format_num($mtf_discount), format_num($l_tot_amt_due_mtf),
+             format_num($l_stl_amount_due), format_num($l_stl_sur), 
+             format_num($stl_tot_due), format_num($stl_amtpd), format_num($stl_discount), 
+             format_num($l_tot_amt_due_stl), format_num($l_mtf_prev_bal),
+             format_num($l_stl_prev_bal)
         );
         $l_return_due_list[] = $l_data;
 
@@ -163,7 +166,7 @@ function format_num($number){
 	<div class="card-header">
 		<h3 class="card-title">Due and Payment Records</h3>
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/admin/soa/print.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>/admin/soa/print_statement.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>
@@ -173,15 +176,12 @@ function format_num($number){
         
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
                 <colgroup>
-					<col width="20%">
 					<col width="10%">
-					<col width="10%">
+                    <col width="5%">
                     <col width="10%">
-                    <col width="10%">
-                    <col width="15%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="15%">
+                    <col width="5%">
+                    
+			
 				</colgroup>
                 <thead> 
                     <tr>
@@ -190,34 +190,29 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">OR NO.</th>
                         <th style="text-align:center;font-size:13px;">PAY DATE</th>
                         <th style="text-align:center;font-size:13px;">GCF DUE</th>
-                        <th style="text-align:center;font-size:13px;">GCF SURCHARGE</th>
-                        <th style="text-align:center;font-size:13px;">GCF TOTAL DUE</th>
-                        <th style="text-align:center;font-size:13px;">GCF AMOUNT PAID</th>
-                        <th style="text-align:center;font-size:13px;">GCF DISCOUNT</th>
-                        <th style="text-align:center;font-size:13px;">GCF REMAINING BAL</th>
+                        <th style="text-align:center;font-size:13px;">GCF SUR.</th>
+                        <th style="text-align:center;font-size:13px;">GCF TOT DUE</th>
+                        <th style="text-align:center;font-size:13px;">GCF AMT PD</th>
+                        <th style="text-align:center;font-size:13px;">GCF DISC.</th>
+                        <th style="text-align:center;font-size:13px;">GCF REM.BAL</th>
                         <th style="text-align:center;font-size:13px;">STL DUE</th>
-                        <th style="text-align:center;font-size:13px;">STL SURCHARGE</th>
-                        <th style="text-align:center;font-size:13px;">STL TOTAL DUE</th>
-                        <th style="text-align:center;font-size:13px;">STL AMOUNT PAID</th>
-                        <th style="text-align:center;font-size:13px;">STL DISCOUNT</th>
-                        <th style="text-align:center;font-size:13px;">STL REMAINING BAL</th>
+                        <th style="text-align:center;font-size:13px;">STL SUR.</th>
+                        <th style="text-align:center;font-size:13px;">STL TOT DUE</th>
+                        <th style="text-align:center;font-size:13px;">STL AMT PD</th>
+                        <th style="text-align:center;font-size:13px;">STL DISC</th>
+                        <th style="text-align:center;font-size:13px;">STL REM. BAL</th>
                         
                     </tr>
                 </thead>
         </table>
         <div style="height: 300px; overflow-y: auto;">
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
-           <!--  <colgroup>
-                <col width="20%">
+            <colgroup>
                 <col width="10%">
+                <col width="5%">
                 <col width="10%">
-                <col width="10%">
-                <col width="10%">
-                <col width="15%">
-                <col width="10%">
-                <col width="10%">
-                <col width="15%">
-            </colgroup> -->
+                <col width="5%">
+            </colgroup>
             <tbody><?php
                     if (empty($l_return_due_list)) {
                         echo '<tr><td colspan="11" style="text-align:center;font-size:13px;">No data or records found.</td></tr>';
@@ -225,14 +220,23 @@ function format_num($number){
                         foreach ($l_return_due_list as $l_data):
                             ?>
                             <tr>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . ' to ' . $l_data[2]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[1] . '-' . $l_data[2]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[4]; ?> </td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[12]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[13]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[14]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[15]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[16]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[17]; ?></td>
+
                             </tr>
                             <?php
                         endforeach;

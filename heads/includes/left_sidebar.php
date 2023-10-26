@@ -23,6 +23,11 @@
 						</a>
 					</li>
 					<li>
+						<a href="<?php echo base_url ?>heads/?page=adjustments" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-list"></span><span class="mtext">Adjustments</span>
+						</a>
+					</li>
+					<li>
 						<a href="<?php echo base_url ?>heads/?page=get-soa" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-newspaper"></span><span class="mtext">Bill Report</span>
 						</a>

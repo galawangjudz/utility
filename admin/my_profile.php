@@ -171,19 +171,19 @@ if (isset($_POST["update_image"])) {
 																<label>Department</label>
 																<select name="department" class="custom-select form-control" required="true" autocomplete="off">
 																	<?php
-																		$query_staff = mysqli_query($conn,"select * from tblemployees join  tbldepartments where emp_id = '$session_id'")or die(mysqli_error());
-																		$row_staff = mysqli_fetch_array($query_staff);
-																		
-																	 ?>
-																	<option value="<?php echo $row_staff['DepartmentShortName']; ?>"><?php echo $row_staff['DepartmentName']; ?></option>
-																		<?php
-																		$query = mysqli_query($conn,"select * from tbldepartments");
-																		while($row = mysqli_fetch_array($query)){
-																		
-																		?>
-																		<option value="<?php echo $row['DepartmentShortName']; ?>"><?php echo $row['DepartmentName']; ?></option>
-																		<?php } ?>
+																	$query_staff = mysqli_query($conn, "select * from tblemployees join tbldepartments where emp_id = '$session_id'") or die(mysqli_error());
+																	$row_staff = mysqli_fetch_array($query_staff);
+																	?>
+
+																	<?php
+																	$query = mysqli_query($conn, "select * from tbldepartments");
+																	while ($row = mysqli_fetch_array($query)) {
+																		$selected = ($row['DepartmentShortName'] === $row_staff['Department']) ? 'selected' : '';
+																	?>
+																		<option value="<?php echo $row['DepartmentShortName']; ?>" <?php echo $selected; ?>><?php echo $row['DepartmentName']; ?></option>
+																	<?php } ?>
 																</select>
+
 															</div>
 														</div>
 														
