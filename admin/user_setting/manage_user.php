@@ -9,35 +9,13 @@ if(isset($_GET['id'])){
 		}
 }
 
-if(isset($_POST['new_update']))
-{
-	$empid=$_POST['emp_id'];
-	$fname=$_POST['fname'];
-	$lname=$_POST['lastname'];   
-	$email=$_POST['email'];  
-	$department=$_POST['Department']; 
-	$gender=$_POST['gender'];  
-	$phonenumber=$_POST['phone'];
-
-	$l_sql = "update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber' where emp_id='$empid' ";
-    echo $l_sql;
-	$result = mysqli_query($conn,$l_sql)or die(mysqli_error());
-    if ($result) {
-     	echo "<script>alert('Your records Successfully Updated');</script>";
-		/* echo "<script type='text/javascript'> document.location = 'admin/index.php'; </script>"; */
-	} else{
-	  die(mysqli_error());
-   }
-   echo $l_sql;
-}
-
 ?>
 <div class="card card-outline rounded-0 card-maroon">
 	<div class="card-body">
 		<div class="container-fluid">
 			<div id="msg"></div>
-			<form method="post" id="manage-user">	
-				<input type="text" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>">
+			<form method="post" enctype="multipart/form-data" action="<?php echo base_url ?>admin/?page=user_setting">	
+				<input type="hidden" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>">
 				<div class="form-group">
 					<label for="name">First Name: </label>
 					<input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo isset($meta['FirstName']) ? $meta['FirstName']: '' ?>" required>
@@ -54,6 +32,22 @@ if(isset($_POST['new_update']))
 					<label for="username">Contact No: </label>
 					<input type="text" name="phone" id="phone" class="form-control" value="<?php echo isset($meta['Phonenumber']) ? $meta['Phonenumber']: '' ?>" required  autocomplete="off">
 				</div>
+				<div class="form-group">
+					<label>Gender</label>
+					<select name="gender" class="custom-select form-control" required="true" autocomplete="off">			
+						<option value="Male" <?php echo isset($meta['Gender']) && $meta['Gender'] == "Male" ? 'selected': '' ?>> Male</option>
+						<option value="Female" <?php echo isset($meta['Gender']) && $meta['Gender'] == "Female" ? 'selected': '' ?>> Female</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Status</label>
+					<select name="status" class="custom-select form-control" required="true" autocomplete="off">			
+						<option value="1" <?php echo isset($meta['Status']) && $meta['Status'] == "1" ? 'selected': '' ?>> Active</option>
+						<option value="0" <?php echo isset($meta['Status']) && $meta['Status'] == "0" ? 'selected': '' ?>> Inactive</option>
+					</select>
+				</div>
+				
 				<div class="form-group">
 					<style>
 						select:invalid { color: gray; }
@@ -96,72 +90,3 @@ if(isset($_POST['new_update']))
 		</div>
 	</div>
 </div>
-<!-- <script>
-	$('#manage-user').submit(function(e){
-		e.preventDefault();
-		start_loader()
-		$.ajax({
-			url:_base_url_+'classes/Users.php?f=save',
-			data: new FormData($(this)[0]),
-		    cache: false,
-		    contentType: false,
-		    processData: false,
-		    method: 'POST',
-		    type: 'POST',
-			success:function(resp){
-				if(resp ==1){
-					location.href='./?page=user_settings/'
-				}else{
-					$('#msg').html('<div class="alert alert-danger">Username already exist</div>')
-					end_loader()
-				}
-			}
-		})
-	})
-
-</script> -->
-<!-- <script>
-    $(function(){
-        $('#uni_modal #manage-user').submit(function(e){
-            e.preventDefault();
-            var _this = $(this)
-            $('.pop-msg').remove()
-            var el = $('<div>')
-                el.addClass("pop-msg alert")
-                el.hide()
-            start_loader();
-            $.ajax({
-                url:_base_url_+"classes/Users.php?f=save_user",
-				data: new FormData($(this)[0]),
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                dataType: 'json',
-				error:err=>{
-					console.log(err)
-					alert("An error occured",'error');
-					end_loader();
-				},
-                success:function(resp){
-                    if(resp.status == 'success'){
-                        alert(resp.msg);
-                        location.reload();
-                    }else if(!!resp.msg){
-                        el.addClass("alert-danger")
-                        el.text(resp.msg)
-                        _this.prepend(el)
-                    }else{
-                        el.addClass("alert-danger")
-                        el.text("An error occurred due to unknown reason.")
-                        _this.prepend(el)
-                    }
-                    el.show('slow')
-                    $('html,body,.modal').animate({scrollTop:0},'fast')
-                    end_loader();
-                }
-            })
-        })
-    })
-</script> -->

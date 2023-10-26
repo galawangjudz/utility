@@ -13,6 +13,7 @@ if(isset($_POST['new_update']))
 		")or die(mysqli_error());
     if ($result) {
      	echo "<script>alert('Your records Successfully Updated');</script>";
+		echo "<script>location.replace(_base_url_+'staff/?page=staff_profile');</script>";
      
 	} else{
 	  die(mysqli_error());
@@ -32,12 +33,14 @@ if (isset($_POST["update_image"])) {
 	}
 	else {
 		echo "<script>alert('Please Select Picture to Update');</script>";
+		echo "<script>location.replace(_base_url_+'staff/?page=staff_profile');</script>";
 	}
 
     $result = mysqli_query($conn,"update tblemployees set location='$location' where emp_id='$session_id'         
 		")or die(mysqli_error());
     if ($result) {
      	echo "<script>alert('Profile Picture Updated');</script>";
+		echo "<script>location.replace(_base_url_+'staff/?page=staff_profile');</script>";
      /* 	echo "<script type='text/javascript'> document.location = 'my_profile.php'; </script>"; */
 	} else{
 	  die(mysqli_error());

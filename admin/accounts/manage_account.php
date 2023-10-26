@@ -76,12 +76,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 			// Fetch and display the results
 			while ($row = odbc_fetch_array($result)) {
 				$input= $row['c_control_no'];
-                list($prefix, $numeric) = explode('-', $input, 2);
-                $newNumeric = sprintf('%06d', (int)$numeric + 1);
+                $prefix = preg_replace('/[0-9]/', '', $input);
+                $numeric = (int)preg_replace('/[A-Za-z]/', '', $input);
 
-                // Combine the prefix and new numeric part
-                $ctr = $prefix . '-' . $newNumeric;
+                // Increment the numeric part
+                $newNumeric = sprintf('%06d', $numeric + 1);
 
+                // Combine the prefix and incremented numeric part
+                $ctr = $prefix . $newNumeric;
 
 			}
             ?>

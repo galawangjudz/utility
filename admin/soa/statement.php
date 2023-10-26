@@ -133,11 +133,8 @@ if(isset($_GET['id'])){
         }
 
         $l_data = array(
-            $l_dte, $l_sdate, $l_edate, $l_ddate,$l_or_no, $l_pdate, format_num($l_mtf_amount_due), format_num($l_mtf_sur),
-             format_num($mtf_tot_due), format_num($mtf_amtpd),
-             format_num($mtf_discount), format_num($l_tot_amt_due_mtf),
-             format_num($l_stl_amount_due), format_num($l_stl_sur), 
-             format_num($stl_tot_due), format_num($stl_amtpd), format_num($stl_discount), 
+            $l_dte, $l_sdate, $l_edate, $l_ddate, $l_pdate, format_num($mtf_tot_due), format_num($stl_tot_due), $l_or_no, 
+             format_num($mtf_amtpd),
              format_num($l_tot_amt_due_stl), format_num($l_mtf_prev_bal),
              format_num($l_stl_prev_bal)
         );
@@ -178,8 +175,13 @@ function format_num($number){
                 <colgroup>
 					<col width="10%">
                     <col width="5%">
-                    <col width="10%">
                     <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="15%">
                     
 			
 				</colgroup>
@@ -187,20 +189,13 @@ function format_num($number){
                     <tr>
                         <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
                         <th style="text-align:center;font-size:13px;">DUE DATE</th>
-                        <th style="text-align:center;font-size:13px;">OR NO.</th>
                         <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                        <th style="text-align:center;font-size:13px;">GCF DUE</th>
-                        <th style="text-align:center;font-size:13px;">GCF SUR.</th>
                         <th style="text-align:center;font-size:13px;">GCF TOT DUE</th>
-                        <th style="text-align:center;font-size:13px;">GCF AMT PD</th>
-                        <th style="text-align:center;font-size:13px;">GCF DISC.</th>
-                        <th style="text-align:center;font-size:13px;">GCF REM.BAL</th>
-                        <th style="text-align:center;font-size:13px;">STL DUE</th>
-                        <th style="text-align:center;font-size:13px;">STL SUR.</th>
                         <th style="text-align:center;font-size:13px;">STL TOT DUE</th>
-                        <th style="text-align:center;font-size:13px;">STL AMT PD</th>
-                        <th style="text-align:center;font-size:13px;">STL DISC</th>
-                        <th style="text-align:center;font-size:13px;">STL REM. BAL</th>
+                        <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                        <th style="text-align:center;font-size:13px;">OR #</th>
+                        <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
+                        <th style="text-align:center;font-size:13px;">BALANCE</th>
                         
                     </tr>
                 </thead>
