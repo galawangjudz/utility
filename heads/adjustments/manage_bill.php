@@ -27,7 +27,7 @@ if(isset($_GET['id'])){
     <form action="" id="bill-form">
         <h3><?php echo isset($account_no) ? $account_no : '' ?></h3>
         <input type="hidden" name="acc_no" value="<?php echo isset($account_no) ? $account_no : '' ?>">
-        <input type="number" name="prev_bal" id="prev_bal" value ="<?php echo isset($prev_bal) ? $prev_bal : '' ?>">      
+        <input type="hidden" name="prev_bal" id="prev_bal" value ="<?php echo isset($prev_bal) ? $prev_bal : '' ?>">      
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">

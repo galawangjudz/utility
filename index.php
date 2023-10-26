@@ -29,7 +29,7 @@ if(isset($_POST['signin']))
 		    	$_SESSION['alogin']=$row['emp_id'];
 		    	$_SESSION['dept']=$row['Department'];
 				$_SESSION['user_type']=$row['role'];
-			 	echo "<script type='text/javascript'> document.location = 'cashier/index.php'; </script>";
+			 	echo "<script type='text/javascript'> document.location = 'staff/index.php'; </script>";
 		    }
 		    else {
 		    	$_SESSION['alogin']=$row['emp_id'];
