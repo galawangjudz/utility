@@ -5,6 +5,25 @@ require_once('../../includes/config.php');
 if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
 
+    $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = '$l_acc_no'";
+    $qry = odbc_exec($conn2, $sql);
+    while ($res = odbc_fetch_array($qry)) {
+    
+        $account_no = $res["c_account_no"];
+        $first_name = $res["c_first_name"];
+        $first_name = $res["c_first_name"];
+        $last_name = $res["c_last_name"];
+        $middle_name = $res["c_middle_name"];
+        $location = $res["c_location"];
+        $address = $res["c_address"];
+        $city_prov = $res["c_city_prov"];
+        $zip_code = $res["c_zipcode"];
+        $full_name = $last_name . ', ' .$first_name . ' ' .$middle_name;
+
+        
+    }
+
+
     $load_due_payment_records = "SELECT
         c_start_date,
         c_end_date,
