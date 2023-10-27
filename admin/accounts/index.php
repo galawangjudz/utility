@@ -210,6 +210,9 @@ endif;
         $('#create_new').click(function(){
 			uni_modal("Add New Account","accounts/manage_account.php",'mid-large')
 		})
+        $('.soa_data').click(function(){
+			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
+		})
 		/* $('.stl_bill_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/stl_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		}) */
@@ -222,12 +225,7 @@ endif;
         $('.mtf_bill_data').click(function(){
 			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
-      /*   $('.soa_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/soa.php?id=" + $(this).attr('id'), 'large');
-		}) */
-        $('.soa_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
-		})
+      
         $('.payment_data').click(function(){
 			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})

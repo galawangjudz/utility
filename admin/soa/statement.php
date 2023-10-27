@@ -5,7 +5,6 @@ require_once('../../includes/config.php');
 if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
     
-
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = '$l_acc_no'";
     $qry = odbc_exec($conn2, $sql);
     while ($res = odbc_fetch_array($qry)) {
