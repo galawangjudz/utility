@@ -201,10 +201,10 @@ function format_num($number){
          <hr>
         </div>
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
-                <colgroup>
+            <colgroup>
 					<col width="10%">
-                    <col width="5%">
-                    <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">
@@ -231,8 +231,8 @@ function format_num($number){
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
                 <colgroup>
 					<col width="10%">
-                    <col width="5%">
-                    <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">

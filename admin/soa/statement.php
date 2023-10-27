@@ -77,7 +77,7 @@ if(isset($_GET['id'])){
                             END AS c_pay_type,
                             c_st_amount_paid + c_discount as c_tot_amt_paid
                         FROM
-                            t_utility_payments;
+                            t_utility_payments WHERE c_account_no = '$l_acc_no';
             ";
     $result = odbc_exec($conn2, $get_payment_records);
 

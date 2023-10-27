@@ -25,9 +25,9 @@ require_once('../../includes/config.php');
             margin-right:0px!important;
         }
         .buyer_info{
-            border:black 2px solid;
+
             margin-bottom:-10px;
-            width:1100px;
+            width:100%;
         }
         table.report-container{
             page-break-after:always;
@@ -237,20 +237,20 @@ foreach ($l_due_list as $item) {
         <tr>
             <th class="report-header-cell">
                 <div class="header-info">
-                <img src="images/Header.jpg" class="img-thumbnail" style="height:110px;width:750px;margin-left:15px;border:none;margin-bottom:-5px;z-index:-1;position: relative;margin-bottom:-35px;" alt="">
-                <h6 style="margin-top:-25px;margin-left:240px;font-weight:normal;">OVERDUE AMOUNT AND LAST PAYMENT RECORDS</h6>
+                <img src="images/Header.jpg" class="img-thumbnail" style="height:110px;width:750px;margin-left:-55px;border:none;margin-bottom:-5px;z-index:-1;position: relative;margin-bottom:-35px;" alt="">
+                <h6 style="margin-top:-25px;margin-left:65px;font-weight:normal;font-size:16px;"><b>OVERDUE AMOUNT AND LAST PAYMENT RECORDS</b></h6>
 
                     <div class="container" style="margin-top:15px;">
                         <div class="buyer_info">
-                             <table style="font-size:13px;width:1100px;">
+                            <table style="font-size:13px;width:99.5%;border:solid 1px black;">
                                 <tr>
-                                    <th style="padding-left:5px; width:150px;">Account No. : </th><td><?php echo $l_acc_no; ?>
-                                    <th style="padding-left:5px; width:150px;">Project Site : </th><td><?php echo $location; ?>
-
-                                   
+                                    <th style="padding-left:5px;width:150px;text-align:left;">Account No. : </th><td style="text-align:left;"><?php echo $l_acc_no; ?>
+                                    <th style="padding-left:5px;width:150px;text-align:left;">Project Site : </th><td style="text-align:left;"><?php echo $location; ?>
                                 </tr>
-                                <tr><th style="padding-left:5px; width:150px;">Buyer's Name : </th><td><?php echo $full_name ;?></td>
-                                <th style="padding-left:5px; width:150px;">Home Address : </th><td><?php echo $address ;?> <?php echo $city_prov;?> <?php echo $zip_code;?></td></tr>
+                                <tr>
+                                    <th style="padding-left:5px;width:150px;text-align:left;">Buyer's Name : </th><td style="text-align:left;"><?php echo $full_name ;?></td>
+                                    <th style="padding-left:5px;width:150px;text-align:left;">Home Address : </th><td style="text-align:left;"><?php echo $address ;?> <?php echo $city_prov;?> <?php echo $zip_code;?></td>
+                                </tr>
                             </table>
 
                         </div>
@@ -260,75 +260,71 @@ foreach ($l_due_list as $item) {
         </tr>
     </thead>
            
-    <tbody class="report-content">
+    <tbody class="report-content" style="background-color:snow;width:500px;">
         <tr>
             <td class="report-content-cell">
-                <div class="main" style="margin-top:-30px;width:3100px;">
+                <div class="main" style="margin-top:-30px;">
                     <div class="container">
-                        <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;width:1100px;"> 
-                            <table class="table table-striped" style="text-align:right;font-size:11px;">  
-                                <colgroup>
-                                    <col width="10%">
-                                    <col width="5%">
-                                    <col width="5%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                    <col width="10%">
-                                    <col width="15%">
-                                    
-                            
-                                </colgroup>
-                                <thead> 
-                                    <tr>
-                                        <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
-                                        <th style="text-align:center;font-size:13px;">DUE DATE</th>
-                                        <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                                        <th style="text-align:center;font-size:13px;">GCF + CHARGES</th>
-                                        <th style="text-align:center;font-size:13px;">STL + CHARGES</th>
-                                        <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
-                                        <th style="text-align:center;font-size:13px;">OR #</th>
-                                        <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
-                                        <th style="text-align:center;font-size:13px;">BALANCE</th>
-                                        
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                    $oddRow = true; 
-                                    if (empty($l_return_due_list)) {
-                                        echo '<tr><td colspan="11" style="text-align:center;font-size:13px;">No data or records found.</td></tr>';
-                                    } else {
-                                        foreach ($l_return_due_list as $l_data):
-                                            $rowClass = $oddRow ? 'odd-row' : 'even-row';
-                                            $oddRow = !$oddRow; // Toggle the oddRow variable for the next iteration
-                                          
-                                            ?>
-                                            <tr>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[1] . '-' . $l_data[2]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[3]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[4]; ?> </td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
-                                                <td class="<?php echo $rowClass; ?>" style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
-                                    
-                                            </tr>
-                                            <?php
-                                        endforeach;
-                                    }
+                        <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;width:99.3%;"> 
+                        <table class="table table-striped" style="text-align:right; font-size:11px; table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 10%;">
+                            <col style="width: 15%;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th style="text-align:center; font-size:13px;">COVER PERIOD</th>
+                                <th style="text-align:center; font-size:13px;">DUE DATE</th>
+                                <th style="text-align:center; font-size:13px;">PAY DATE</th>
+                                <th style="text-align:center; font-size:13px;">GCF + CHARGES</th>
+                                <th style="text-align:center; font-size:13px;">STL + CHARGES</th>
+                                <th style="text-align:center; font-size:13px;">AMOUNT PAID</th>
+                                <th style="text-align:center; font-size:13px;">OR #</th>
+                                <th style="text-align:center; font-size:13px;">PAYMENT TYPE</th>
+                                <th style="text-align:center; font-size:13px;">BALANCE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $oddRow = true;
+                            if (empty($l_return_due_list)) {
+                                echo '<tr><td colspan="11" style="text-align:center; font-size:13px;">No data or records found.</td></tr>';
+                            } else {
+                                foreach ($l_return_due_list as $l_data):
+                                    $rowClass = $oddRow ? 'odd-row' : 'even-row';
+                                    $oddRow = !$oddRow; // Toggle the oddRow variable for the next iteration
                                     ?>
-                                </tbody>
-                            </table>  
+                                    <tr>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:left;"><?php echo $l_data[1] . '-' . $l_data[2]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:left;"><?php echo $l_data[3]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:left;"><?php echo $l_data[4]; ?> </td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[5]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[6]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[7]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[8]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[9]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[10]; ?></td>
+                                    </tr>
+                                    <?php
+                                endforeach;
+                            }
+                            ?>
+                        </tbody>
+                </table>
+
                         </div>
                     </div>
                 </div>
                 <div class="main" style="margin-top:-30px;width:1100px;">
                     <div class="container" style="margin-top:-30px;width:1100px;">
-                        <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;width:1100px;">  
+                        <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;width:99.3%;"> 
                                 
                         <table style="width:100%;">
                             
@@ -421,8 +417,6 @@ foreach ($l_due_list as $item) {
                                     <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
                                 </tr>
                                 <?php endif; ?>
-                           
-                    
                                 <?php else: ?>
                                 <hr>
                                 <tr>
@@ -432,8 +426,10 @@ foreach ($l_due_list as $item) {
                                     <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_mtf_paid) ? format_num($total_mtf_paid): 0; ?>" disabled></td> 
                                     <td style="font-size:12px;"><label for="tot_disc" class="control-label">GCF Total Discount: </label>
                                     <input type="text" class= "form-control-sm" name="tot_disc" id="tot_disc" value="<?php echo isset($total_mtf_disc) ? format_num($total_mtf_disc): 0; ?>" disabled></td>     
-                                    <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>GCF Remaining Balance:</b></label>
-                                    <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
+                                    
+                                    <td style="font-size:12px;float:right;">
+                                    <label for="tot_amt_due" class="control-label" style="float:right;margin-right:28px;"><b>GCF Remaining Balance:</b></label>
+                                    <input type="text" style="float:right;" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
                                 </tr>
                                 
                                 <tr>   
@@ -443,20 +439,46 @@ foreach ($l_due_list as $item) {
                                     <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
                                     <td style="font-size:12px;"><label for="tot_disc" class="control-label">STL Total Discount: </label>
                                     <input type="text" class= "form-control-sm" name="tot_disc" id="tot_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td> 
-                                    <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>STL Remaining Balance:</b></label>
-                                    <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
-                            
+                                    <td style="font-size:12px;float:right;">
+                                        <label for="tot_amt_due" class="control-label" style="float:right;margin-right:30px;"><b>STL Remaining Balance</b></label>
+                                    <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" style="float:right;" disabled></td>
+                                </tr>
+
+                                <tr>
+                                    
+                                </tr>
+
+                                <tr><td></td></tr>
+                                <tr><td></td></tr>
+                                <tr>
+                                    <td><hr style="height: 1px; color:black; width:100%;"></td>
+                                    <td><hr style="height: 1px; color:black; width:100%;"></td>
+                                    <td><hr style="height: 1px; color:black; width:100%;"></td>
+                                    <td><hr style="height: 1px; color:black; width:100%;"></td>
+                                </tr>
+                                <tr><td></td></tr>
+                                <tr>
+                                    <td style="font-size:12px;"><b><label for="gcf_stl_total" class="control-label">TOTAL BILL: </b></label></td>
+                                    <td style="font-size:12px;"><b><label for="gcf_stl_paid" class="control-label">TOTAL PAID:</b></label></td>
+                                    <td style="font-size:12px;"><b><label for="gcf_stl_disc" class="control-label">TOTAL DISCOUNT:</b></label></td>
+                                    <td style="font-size:12px;float:right;"><b>
+                                        <label for="total_amt_due" class="control-label" style="margin-right:80px;"><b>TOTAL BALANCE:</b></label>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="equal-width-td">
+                                        <input type="text" class="form-control-sm" name="gcf_stl_total" id="gcf_stl_total" value="<?php echo (isset($total_mtf_bill) ? $total_mtf_bill : 0) + (isset($total_stl_bill) ? $total_stl_bill : 0); ?>" disabled>
                                     </td>
-                                    <td>
+                                    <td class="equal-width-td">
+                                        <input type="text" class="form-control-sm" name="gcf_stl_paid" id="gcf_stl_paid" value="<?php echo (isset($total_mtf_paid) ? format_num($total_mtf_paid) : 0) + (isset($total_stl_paid) ? format_num($total_stl_paid) : 0); ?>" disabled>
                                     </td>
-                                    <td>
+                                    <td class="equal-width-td">
+                                        <input type="text" class="form-control-sm" name="gcf_stl_disc" id="gcf_stl_disc" value="<?php echo (isset($total_mtf_disc) ? format_num($total_mtf_disc) : 0) + (isset($total_stl_disc) ? format_num($total_stl_disc) : 0); ?>" disabled>
                                     </td>
-                                    <td style="font-size:12px;"><label for="total_amt_due" class="control-label"><b>Total Balance:</b></label>
-                                    <input type="text" class= "form-control-sm" name="total_amt_due" id="total_amt_due" value="<?php echo isset($total_amt_due) ? format_num($total_amt_due): 0; ?>" disabled></td>
-                                
+                                    <td style="float:right;">
+                                        <b><input type="text" class="form-control-sm" name="total_amt_due" id="total_amt_due" value="<?php echo isset($total_amt_due) ? format_num($total_amt_due) : 0; ?>" disabled>
+                                        </b>
+                                    </td>
                                 </tr>
                                 <?php endif; ?>
                                 
