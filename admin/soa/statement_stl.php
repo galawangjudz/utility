@@ -180,7 +180,6 @@ function format_num($number){
 
 <div class="card card-outline card-primary rounded-0 shadow">
 	<div class="card-header">
-		<h3 class="card-title">Due and Payment Records</h3>
 		<div class="card-tools">
         <a href="<?php echo base_url ?>/admin/soa/print_statement.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
@@ -189,7 +188,19 @@ function format_num($number){
 
 <div class="card-body">
     <div class="container-fluid">
-        
+        <div class="buyer_info">
+                <table style="font-size:13px;width:1100px;">
+                <tr>
+                    <th style="padding-left:5px; width:150px;">Account No. : </th><td><?php echo $l_acc_no; ?>
+                    <th style="padding-left:5px; width:150px;">Project Site : </th><td><?php echo $location; ?>
+
+                    
+                </tr>
+                <tr><th style="padding-left:5px; width:150px;">Buyer's Name : </th><td><?php echo $full_name ;?></td>
+                <th style="padding-left:5px; width:150px;">Home Address : </th><td><?php echo $address ;?> <?php echo $city_prov;?> <?php echo $zip_code;?></td></tr>
+            </table>
+         <hr>
+        </div>
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
                 <colgroup>
 					<col width="10%">
