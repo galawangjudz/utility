@@ -218,22 +218,42 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $pblfield = false;
 }
 ?>
+<style>
+    .control-label{
+        font-weight:bold;
+        font-size:14px;
+    }
+    .form-control{
+        font-size:14px;
+        margin:5px;
+        text-align: right;
+    }
+    #stl_due{
+        padding:0;
+    }
+</style>
 <div class="container-fluid">
 <form action="" id="pay-form">
 <img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
+
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
-      
-        <div class="row">
-            <dt class="col-md-2 text-muted">Account No</dt>
-            <dd class="col-md-10 fs-5 fw-bold"><h5><?= isset($account_no) ? $account_no : '' ?></h5></dd>
-            <dt class="col-md-2 text-muted">Location</dt>
-            <dd class="col-md-10 fs-5 fw-bold"><h5><?= isset($c_location) ? $c_location : '' ?></h5></dd>
-            <dt class="col-md-2 text-muted">Full Name</dt>
-            <dd class="col-md-10 fs-5 fw-bold"><h5><?= isset($full_name) ? $full_name : '' ?></h5></dd>
+        <div class="fieldset-container">
 
-           
+                <table style="width:100%;font-size:14px;">
+                    <tr>
+                        <td><b>Account No:</b></td>
+                        <td><?= isset($account_no) ? $account_no : '' ?></td>
+
+                        <td><b>Location:</b></td>
+                        <td><?= isset($c_location) ? $c_location : '' ?></td>
+                    </tr>
+                    <tr>
+                        <td><b>Full Name:</b></td>
+                        <td><?= isset($full_name) ? $full_name : '' ?></td>
+                    </tr>
+                </table>  
         </div>
-
+      
      
         <input type="hidden" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
 
@@ -243,146 +263,141 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     
         <div class="fieldset-container">
             <fieldset class="fieldset">
-                <legend>STL (Streetlight) Details</legend>
-                <div class="row">
-               
-                    <label for="stl_due" class="control-label">STL Due Date</label>
-                    <input type="date" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required>
-                 
-                    <label for="stl_last_bal" class="control-label">STL Prev. Bal</label>
-                    <input type="number" name="stl_last_bal" id="stl_last_bal" class="form-control" value ="<?php echo isset($stl_prev) ? $stl_prev : '0.00' ?>"readonly required>
-                   
-         
-                    <label for="stl_due" class="control-label">STL Curr. Due</label>
-                    <input type="number" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($l_stl_cur) ? $l_stl_cur : '0.00' ?>"readonly required>
-                  
-        
-                    <label for="stl_sur" class="control-label">STL Curr. Sur</label>
-                    <input type="number" name="stl_sur" id="stl_sur" class="form-control" value ="<?php echo isset($l_stl_sur) ? $l_stl_sur : '0.00' ?>"readonly required>
-                  
-        
-                    <label for="stl_balance" class="control-label">STL Total Due</label>
-                    <input type="number" name="stl_balance" id="stl_balance" class="form-control" value ="<?php echo isset($stl_bal) ? $stl_bal : '0.00' ?>"readonly required>
-            
-                </div>
+                <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
+                <table style="width:100%;">
+                    <tr>
+                        <td><label for="stl_due" class="control-label">STL Due Date: </label></td>
+                        <td><input type="date" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stl_last_bal" class="control-label">STL Prev. Bal: </label></td>
+                        <td><input type="number" name="stl_last_bal" id="stl_last_bal" class="form-control" value ="<?php echo isset($stl_prev) ? $stl_prev : '0.00' ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stl_due" class="control-label">STL Curr. Due: </label></td>
+                        <td><input type="number" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($l_stl_cur) ? $l_stl_cur : '0.00' ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stl_sur" class="control-label">STL Curr. Sur: </label></td>
+                        <td><input type="number" name="stl_sur" id="stl_sur" class="form-control" value ="<?php echo isset($l_stl_sur) ? $l_stl_sur : '0.00' ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stl_balance" class="control-label">STL Total Due: </label></td>
+                        <td><input type="number" name="stl_balance" id="stl_balance" class="form-control" value ="<?php echo isset($stl_bal) ? $stl_bal : '0.00' ?>"readonly required></td>
+                    </tr>
+                </table>
             </fieldset>
             <fieldset class="fieldset">
-                <legend>GCF (GrassCutting) Details</legend>
+                <legend style="text-align:center;font-weight:bold;font-size:16px;">GCF (GrassCutting) Details</legend>
             
-			    <div class="row">
-                
-                    <label for="main_date" class="control-label">GCF Due Date</label>
-                    <input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required>
-                
-         
-                    <label for="main_last_bal" class="control-label">GCF Prev. Bal</label>
-                    <input type="number" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? $mainte_prev : 0 ?>"readonly required>
-                
-           
-          
-                    <label for="main_due" class="control-label">GCF Curr. Due</label>
-                    <input type="number" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? $l_mtf_cur : 0 ?>"readonly required>
-                
-           
-                    <label for="main_sur" class="control-label">GCF Curr. Sur</label>
-                    <input type="number" name="main_sur" id="main_sur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_sur) ? $l_mtf_sur : 0 ?>"readonly required>
-                
-          
-                    <label for="main_balance" class="control-label">GCF Total Due</label>
-                    <input type="number" name="main_balance" id="main_balance" class="form-control form-control-border" value ="<?php echo isset($mainte_bal) ? $mainte_bal : 0 ?>"readonly required>
-                
-        
-            
-                </div>
+                <table style="width:100%;">
+                    <tr>
+                        <td><label for="main_date" class="control-label">GCF Due Date: </label></td>
+                        <td><input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="main_last_bal" class="control-label">GCF Prev. Bal: </label></td>
+                        <td><input type="number" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? $mainte_prev : 0 ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="main_due" class="control-label">GCF Curr. Due: </label></td>
+                        <td><input type="number" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? $l_mtf_cur : 0 ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="main_sur" class="control-label">GCF Curr. Sur: </label></td>
+                        <td><input type="number" name="main_sur" id="main_sur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_sur) ? $l_mtf_sur : 0 ?>"readonly required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="main_balance" class="control-label">GCF Total Due: </label></td>
+                        <td><input type="number" name="main_balance" id="main_balance" class="form-control form-control-border" value ="<?php echo isset($mainte_bal) ? $mainte_bal : 0 ?>"readonly required></td>
+                    </tr>
+                </table>
             </fieldset>
         </div>
+
+
+
+        <div class="fieldset-container">
+            <fieldset class="fieldset">
+                <table style="width:100%;">
+                    <tr>
+                        <td><label for="stl_amount_pay" class="control-label"><b>Payment for Streetlight Amount: </b></label></td>
+                        <td><input type="number" name="stl_amount_pay" id="stl_amount_pay" class="form-control form-control-border stl_amount_pay" value ="0" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stl_discount" class="control-label"><b>STL Discount:</b></label></td>
+                        <td><input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border stl_discount" value ="0" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="stl_amount_paid" class="control-label"><b>STL Amount Paid: </b></label></td>
+                        <td><input type="number" name="stl_amount_paid" id="stl_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
+                    </tr>
+                </table>
+            </fieldset>
+            <fieldset class="fieldset">
+                <table style="width:100%;">
+                    <tr>
+                        <td><label for="main_amount_paid" class="control-label"><b>Payment for Grasscutting Amount: </b></label></td>
+                        <td><input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="0" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="main_discount" class="control-label"><b>GCF Discount:</b></label></td>
+                        <td><input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="0" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="main_amount_paid" class="control-label"><b>GCF Amount Paid: </b></label></td>
+                        <td><input type="number" name="main_amount_paid" id="main_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
+                    </tr>
+
+                </table>
+            </fieldset>
+        </div>
+        <div class="fieldset-container">     
+            <table style="width:100%;">
+                <tr>
+                    <td><label for="total_amount_paid" class="control-label"><b>Total Amount Paid: </b></label></td>
+                    <td><input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
+                </tr>
+            </table>
+        </div>
+        <div class="fieldset-container">     
+            <table style="width:100%;">
+                <tr>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
+                            <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border" value ="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                    </div>
+                </tr>
+                <tr>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="payment_or" class="control-label"><b>Or No.: </b></label>
+                            <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" placeholder= "ex.CAR153245" value ="" >
+                        </div>
+                    </div>
+                </tr>
+                <tr>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="mode_payment" class="control-label"><b>Mode of Payment: *</b></label>
+                            <select name="mode_payment" id="mode_payment" class="form-control form-control-border" readonly disabled required>
+                                <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
+                                <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
+                            </select>
+                        </div>
+                    </div>
+                </tr>
+            </table>
+        </div>
         <div class="row">
-            <div class="col-md-4">
-            <div class="form-group">
-                    <label for="pay_date" class="control-label">Pay Date</label>
-                    <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border" value ="<?php echo date('Y-m-d'); ?>" required>
-                
-                </div>
-            </div>
-           
-           
-            <div class="col-md-4">
-                <div class="form-group">
-                <label for="payment_or" class="control-label">Or No.</label>
-                <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" placeholder= "ex.CAR153245" value ="" >
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="mode_payment" class="control-label">Mode of Payment *</label>
-                    <select name="mode_payment" id="mode_payment" class="form-control form-control-border" readonly disabled required>
-                        <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
-                        <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
-                    </select>
-                </div>
+            <div class="col-md-12 text-right">
+                <button type="button" id="printDataButton" class="btn btn-primary">
+                    <i class="fa fa-print"></i> Print
+                </button>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                <label for="stl_amount_pay" class="control-label">Payment for Streetlight Amount</label>
-                <input type="number" name="stl_amount_pay" id="stl_amount_pay" class="form-control form-control-border stl_amount_pay" value ="0" required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                <label for="main_amount_paid" class="control-label">Payment for Grasscutting Amount </label>
-                <input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="0" required>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-            <div class="form-group">
-                    <label for="stl_discount" class="control-label">STL Discount</label>
-                    <input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border stl_discount" value ="0" required>
-                
-                </div>
-            </div>
-            <div class="col-md-4">
-            <div class="form-group">
-                    <label for="main_discount" class="control-label">GCF Discount</label>
-                    <input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="0" required>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                <label for="stl_amount_paid" class="control-label">STL Amount Paid</label>
-                <input type="number" name="stl_amount_paid" id="stl_amount_paid" class="form-control form-control-border" value ="0" readonly required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                <label for="main_amount_paid" class="control-label">GCF Amount Paid</label>
-                <input type="number" name="main_amount_paid" id="main_amount_paid" class="form-control form-control-border" value ="0" readonly required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                <label for="total_amount_paid" class="control-label">Total Amount Paid</label>
-                <input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <button type="button" id="printDataButton" class="btn btn-primary">
-                        <i class="fa fa-print"></i> Print
-                    </button>
-                </div>
-            </div>
-
-
-            
-           
         </div>
     </form>
 </div>
