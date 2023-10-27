@@ -15,6 +15,7 @@ if (isset($_GET['delete'])) {
 if(isset($_POST['new_update']))
 {
 	$empid=$_POST['emp_id'];
+	$id=$_POST['empid'];
 	$fname=$_POST['firstname'];
 	$lname=$_POST['lastname'];   
 	$email=$_POST['email'];  
@@ -35,7 +36,7 @@ if(isset($_POST['new_update']))
 	}
 
 
-	$l_sql = "update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber', Status='$status' $passwordUpdate where emp_id='$empid' ";
+	$l_sql = "update tblemployees set emp_id='$id', FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber', Status='$status' $passwordUpdate where emp_id='$empid' ";
    
 	$result = mysqli_query($conn,$l_sql)or die(mysqli_error());
     if ($result) {

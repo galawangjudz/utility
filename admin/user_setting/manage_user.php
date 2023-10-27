@@ -15,7 +15,11 @@ if(isset($_GET['id'])){
 		<div class="container-fluid">
 			<div id="msg"></div>
 			<form method="post" enctype="multipart/form-data" action="<?php echo base_url ?>admin/?page=user_setting">	
-				<input type="hidden" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>">
+			<input type="hidden" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>" required>
+				<div class="form-group">
+					<label for="name">Employee ID: </label>
+					<input type="int" name="empid" id="empid" class="form-control" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>" required>
+				</div>
 				<div class="form-group">
 					<label for="name">First Name: </label>
 					<input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo isset($meta['FirstName']) ? $meta['FirstName']: '' ?>" required>

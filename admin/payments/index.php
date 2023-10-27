@@ -222,164 +222,79 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 <form action="" id="pay-form">
 <img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
-        <div class="row">
-			<div class="col-md-4">
-                <div class="form-group">
-                    <label for="acc_no" class="control-label">Account No</label>
-                    <input type="text" name="acc_no" id="acc_no" class="form-control form-control-border" placeholder="ex. 15200202102" value ="<?php echo isset($account_no) ? $account_no : '' ?>"<?php if ($accfield) echo ' readonly'; ?> required>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="ctr" class="control-label">Control No</label>
-                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" placeholder="ex. STL-12345" value ="<?php echo isset($ctr) ? $ctr : '' ?>"<?php if ($ctrfield) echo ' readonly'; ?> required>
-                </div>
-            </div>
-            <div class="col-md-5">
-                <div class="form-group">
-                    <label for="pbl" class="control-label">Phase/Block/Lot</label>
-                    <input type="text" name="pbl" id="pbl" class="form-control form-control-border" placeholder="Phase/Blk/Lot" value ="<?php echo isset($c_location) ? $c_location : '' ?>"<?php if ($pblfield) echo ' readonly'; ?> required>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-			<div class="col-md-4">
-                <div class="form-group">
-                    <label for="lname" class="control-label">Last Name</label>
-                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="fname" class="control-label">First Name</label>
-                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="mname" class="control-label">Middle Name</label>
-                    <input type="text" name="mname" id="mname" class="form-control form-control-border" placeholder="Enter Middle Name" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>"readonly required>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-			<div class="col-md-7">
-                <div class="form-group">
-                    <label for="add" class="control-label">Address</label>
-                    <input type="text" name="add" id="add" class="form-control form-control-border" placeholder="Enter Address" value ="<?php echo isset($address) ? $address : '' ?>"readonly required>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="city_prov" class="control-label">City/ Province</label>
-                    <input type="text" name="city_prov" id="city_prov" class="form-control form-control-border" placeholder="Enter City/Prov" value ="<?php echo isset($city_prov) ? $city_prov : '' ?>"readonly required>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label for="zip_code" class="control-label">Zip Code</label>
-                    <input type="text" name="zip_code" id="zip_code" class="form-control form-control-border" placeholder="Enter Zipcode" value ="<?php echo isset($zip_code) ? $zip_code : '' ?>"readonly required>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-			<div class="col-md-4">
-                <div class="form-group">
-                    <label for="lot_area" class="control-label">Lot Area</label>
-                    <input type="number" name="lot_area" id="lot_area" class="form-control form-control-border" placeholder="Enter Lot Area" value ="<?php echo isset($lot_area) ? $lot_area : 0 ?>"readonly required>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="type" class="control-label">Type</label>
-                    <input type="type" name="type" id="type" class="form-control form-control-border" placeholder="Type" value ="<?php echo isset($type) ? $type : 0 ?>"readonly required>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="status" class="control-label">Status</label>
-                    <input type="status" name="status" id="status" class="form-control form-control-border" placeholder="Status" value ="<?php echo isset($status) ? $status : 0 ?>"readonly required>
       
-                </div>
-            </div>
-        </div>
         <div class="row">
-			<div class="col-md-2">
-                <div class="form-group">
+            <dt class="col-md-2 text-muted">Account No</dt>
+            <dd class="col-md-10 fs-5 fw-bold"><h5><?= isset($account_no) ? $account_no : '' ?></h5></dd>
+            <dt class="col-md-2 text-muted">Location</dt>
+            <dd class="col-md-10 fs-5 fw-bold"><h5><?= isset($c_location) ? $c_location : '' ?></h5></dd>
+            <dt class="col-md-2 text-muted">Full Name</dt>
+            <dd class="col-md-10 fs-5 fw-bold"><h5><?= isset($full_name) ? $full_name : '' ?></h5></dd>
+
+           
+        </div>
+
+     
+        <input type="hidden" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
+
+        <input type="hidden" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
+
+        <input type="hidden" name="mname" id="mname" class="form-control form-control-border" placeholder="Enter Middle Name" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>"readonly required>
+    
+        <div class="fieldset-container">
+            <fieldset class="fieldset">
+                <legend>STL (Streetlight) Details</legend>
+                <div class="row">
+               
                     <label for="stl_due" class="control-label">STL Due Date</label>
-                    <input type="date" name="stl_due" id="stl_due" class="form-control form-control-border" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required>
-                
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
+                    <input type="date" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required>
+                 
                     <label for="stl_last_bal" class="control-label">STL Prev. Bal</label>
-                    <input type="number" name="stl_last_bal" id="stl_last_bal" class="form-control form-control-border" value ="<?php echo isset($stl_prev) ? $stl_prev : '0.00' ?>"readonly required>
-                
-                </div>
-            </div>
-          
-            <div class="col-md-2">
-                <div class="form-group">
+                    <input type="number" name="stl_last_bal" id="stl_last_bal" class="form-control" value ="<?php echo isset($stl_prev) ? $stl_prev : '0.00' ?>"readonly required>
+                   
+         
                     <label for="stl_due" class="control-label">STL Curr. Due</label>
-                    <input type="number" name="stl_due" id="stl_due" class="form-control form-control-border" value ="<?php echo isset($l_stl_cur) ? $l_stl_cur : '0.00' ?>"readonly required>
-                
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
+                    <input type="number" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($l_stl_cur) ? $l_stl_cur : '0.00' ?>"readonly required>
+                  
+        
                     <label for="stl_sur" class="control-label">STL Curr. Sur</label>
-                    <input type="number" name="stl_sur" id="stl_sur" class="form-control form-control-border" value ="<?php echo isset($l_stl_sur) ? $l_stl_sur : '0.00' ?>"readonly required>
-                
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
+                    <input type="number" name="stl_sur" id="stl_sur" class="form-control" value ="<?php echo isset($l_stl_sur) ? $l_stl_sur : '0.00' ?>"readonly required>
+                  
+        
                     <label for="stl_balance" class="control-label">STL Total Due</label>
-                    <input type="number" name="stl_balance" id="stl_balance" class="form-control form-control-border" value ="<?php echo isset($stl_bal) ? $stl_bal : '0.00' ?>"readonly required>
-                
+                    <input type="number" name="stl_balance" id="stl_balance" class="form-control" value ="<?php echo isset($stl_bal) ? $stl_bal : '0.00' ?>"readonly required>
+            
                 </div>
-            </div>
-        </div>
-        <div class="row">
-			<div class="col-md-2">
-                <div class="form-group">
+            </fieldset>
+            <fieldset class="fieldset">
+                <legend>GCF (GrassCutting) Details</legend>
+            
+			    <div class="row">
+                
                     <label for="main_date" class="control-label">GCF Due Date</label>
                     <input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required>
                 
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
+         
                     <label for="main_last_bal" class="control-label">GCF Prev. Bal</label>
                     <input type="number" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? $mainte_prev : 0 ?>"readonly required>
                 
-                </div>
-            </div>
            
-            <div class="col-md-2">
-                <div class="form-group">
+          
                     <label for="main_due" class="control-label">GCF Curr. Due</label>
                     <input type="number" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? $l_mtf_cur : 0 ?>"readonly required>
                 
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
+           
                     <label for="main_sur" class="control-label">GCF Curr. Sur</label>
                     <input type="number" name="main_sur" id="main_sur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_sur) ? $l_mtf_sur : 0 ?>"readonly required>
                 
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
+          
                     <label for="main_balance" class="control-label">GCF Total Due</label>
                     <input type="number" name="main_balance" id="main_balance" class="form-control form-control-border" value ="<?php echo isset($mainte_bal) ? $mainte_bal : 0 ?>"readonly required>
                 
+        
+            
                 </div>
-            </div>
+            </fieldset>
         </div>
         <div class="row">
             <div class="col-md-4">
@@ -464,6 +379,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </button>
                 </div>
             </div>
+
+
+            
            
         </div>
     </form>
@@ -623,11 +541,28 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     document.getElementById("printDataButton").addEventListener("click", printInputData);
 </script>
 
+<style>
+    .fieldset-container {
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+    }
+    .fieldset {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 5px;
+    }
+</style>
+
 <script>
 $(document).ready(function() {
     $(document).on('keyup', ".stl_amount_pay", function(e) {
 		e.preventDefault();
-        console.log("gumana");
+     
 		compute_total_amt_paid();
         
 
@@ -635,7 +570,7 @@ $(document).ready(function() {
 
     $(document).on('keyup', ".main_amount_pay", function(e) {
 		e.preventDefault();
-        console.log("gumana");
+       
 		compute_total_amt_paid();
         
 
@@ -643,7 +578,7 @@ $(document).ready(function() {
 
     $(document).on('keyup', ".stl_discount", function(e) {
 		e.preventDefault();
-        console.log("gumana");
+    
 		compute_total_amt_paid();
         
 
@@ -651,7 +586,7 @@ $(document).ready(function() {
 
     $(document).on('keyup', ".main_discount", function(e) {
 		e.preventDefault();
-        console.log("gumana");
+     
 		compute_total_amt_paid();
         
 

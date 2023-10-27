@@ -3,10 +3,11 @@ session_start();
 require_once('includes/config.php');
 if(isset($_POST['signin']))
 {
-	$username=$_POST['username'];
+	$username= htmlspecialchars($_POST['username']);
 	$password=md5($_POST['password']);
 
-	$sql ="SELECT * FROM tblemployees where EmailId ='$username' AND Password ='$password'";
+	$sql ="SELECT * FROM tblemployees where emp_id ='$username' AND Password ='$password'";
+	//echo $sql;
 	$query= mysqli_query($conn, $sql);
 	$count = mysqli_num_rows($query);
 	if($count > 0)
@@ -43,6 +44,8 @@ if(isset($_POST['signin']))
 	else{
 	  
 	  echo "<script>alert('Invalid Details');</script>";
+	  echo "<script type='text/javascript'> document.location = 'index.php'; </script>";
+	  
 
 	}
 
@@ -107,9 +110,9 @@ if(isset($_POST['signin']))
 						<form name="signin" method="post">
 						
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" placeholder="Email ID" name="username" id="username" autocomplete="off">
+								<input type="text" class="form-control form-control-lg" placeholder="Employe ID" name="username" id="username" autocomplete="off">
 								<div class="input-group-append custom">
-									<span class="input-group-text"><i class="icon-copy fa fa-envelope-o" aria-hidden="true"></i></span>
+									<span class="input-group-text"><i class="icon-copy fa fa-user-o" aria-hidden="true"></i></span>
 								</div>
 							</div>
 							<div class="input-group custom">
