@@ -10,4 +10,5 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true ||
     <?php
 }
 
+echo $_SESSION['alogin'];
 ?>

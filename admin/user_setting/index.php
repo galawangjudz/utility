@@ -170,6 +170,7 @@ if(isset($_POST['new_update']))
 						<thead>
 							<tr>
 								<th class="table-plus">FULL NAME</th>
+								<th>EMPLOYEE ID</th>
 								<th>EMAIL</th>
 								<th>DEPARTMENT</th>
 								<th>ROLE</th>
@@ -196,6 +197,7 @@ if(isset($_POST['new_update']))
 										</div>
 									</div>
 								</td>
+								<td><?php echo $row['emp_id']; ?></td>
 								<td><?php echo $row['EmailId']; ?></td>
 	                            <td><?php echo $row['DepartmentName']; ?></td>
 								<td><?php echo $row['role']; ?></td>
