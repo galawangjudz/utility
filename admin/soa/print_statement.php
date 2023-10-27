@@ -233,7 +233,7 @@ foreach ($l_due_list as $item) {
 ?>
 <body>
 <table class="report-container" style="margin-top:-10px;">
-<thead class="report-header">
+    <thead class="report-header">
         <tr>
             <th class="report-header-cell">
                 <div class="header-info">
