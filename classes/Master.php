@@ -2,7 +2,28 @@
 
 Class Master{
 
-	function save_account(){
+	public function log_log($module, $notes){
+		$dsn = "pgadmin4"; 
+		$user = "glicelo";   
+		$pass = "admin12345";   
+		$conn2 = odbc_connect($dsn, $user, $pass);
+		require_once('../includes/session.php');
+		$employee_id = $_SESSION['alogin'];
+		$date = date('Y-m-d');
+		$time = date('H:i:s');
+		$values = "'$employee_id', '$date','$time','$module','$notes'";
+		$insert = "INSERT INTO t_utility_logs (c_username, c_date, c_time, c_module, c_notes) VALUES ($values)";
+		$save = odbc_exec($conn2, $insert);
+		if ($save) {
+				$resp['status'] = 'success';
+				$resp['msg'] = "Logs has been successfully inserted.";
+		} else {
+				$resp['status'] = 'failed';
+				$resp['err'] = odbc_errormsg($conn2) . " [$insert]";
+		}
+	}
+
+	public function save_account(){
 		require_once('../includes/config.php');
 		extract($_POST);
 		$site = substr($acc_no, 0, 3);
@@ -44,8 +65,10 @@ Class Master{
 				#$rid = !empty($id) ? $id : odbc_insert_id($conn2);
 				$resp['status'] = 'success';
 				if (empty($id)) {
+					$this->log_log('Customer Account', "ADD - $id : $lname $fname ");
 					$resp['msg'] = "Account has been successfully added.";
 				} else {
+					$this->log_log('Customer Account', "UPDATE - $id : $lname $fname ");
 					$resp['msg'] = "Account has been updated successfully.";
 				}
 			
@@ -67,6 +90,7 @@ Class Master{
 		$sql4 = "DELETE FROM t_utility_payments where c_account_no ='$id'"; */
 		$del = odbc_exec($conn2, $sql);
 		if ($del) {
+			$this->log_log('Customer Account', "DELETE - $id ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Account has been successfully deleted.";
 			
@@ -74,6 +98,7 @@ Class Master{
 			$resp['status'] = 'failed';
 			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
 		}
+		return json_encode($resp);
 	}
 	function update_payment(){
 		require_once('../includes/config.php');
@@ -88,6 +113,7 @@ Class Master{
 		$update = odbc_exec($conn2, $sql);
 		//echo $sql;
 		if ($update) {
+			$this->log_log('Utility Payment', "UPDATE - $acc_no : $or_no : $pay_date : $pay_amount_paid : $pay_discount");
 			$resp['status'] = 'success';
 			$resp['msg'] = "CAR has been updated successfully.";
 		} else {
@@ -100,11 +126,23 @@ Class Master{
 	function delete_payment(){
 		require_once('../includes/config.php');
 		extract($_POST);
-
+		$del_details = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$id'";
+		$result = odbc_exec($conn2, $del_details);
+		if (!$result) {
+			die("ODBC query execution failed: " . odbc_errormsg());
+		}
+		while ($row = odbc_fetch_array($result)) {
+			$acc_no = $row['c_account_no'];
+			$or_no = $row['c_st_or_no'];
+			$pay_date = $row['c_st_pay_date'];
+			$pay_amount_paid = $row['c_st_amount_paid'];
+			$pay_discount = $row['c_discount'];
+		}
 		$sql = "DELETE FROM t_utility_payments WHERE c_st_or_no = '$id'";
 		$delete = odbc_exec($conn2, $sql);
 		//echo $sql;
 		if ($delete) {
+			$this->log_log('Utility Payment', "DELETE - $acc_no : $or_no : $pay_date : $pay_amount_paid : $pay_discount");
 			$resp['status'] = 'success';
 			$resp['msg'] = "CAR has been deleted successfully.";
 		} else {
@@ -164,6 +202,8 @@ Class Master{
 			if (isset($insert_query_gcf) && isset($insert_query_stl)) {
 				// Both conditions are true, so execute both queries
 				if (odbc_exec($conn2, $insert_query_gcf) && odbc_exec($conn2, $insert_query_stl)) {
+					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount");
+					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount");
 					$resp['status'] = 'success';
 					$resp['msg'] = "Both payments have been successfully added.";
 				} else {
@@ -174,6 +214,7 @@ Class Master{
 			} elseif (isset($insert_query_gcf)) {
 				// Only $l_gcf is true, so execute the GCF query
 				if (odbc_exec($conn2, $insert_query_gcf)) {
+					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount");
 					$resp['status'] = 'success';
 					$resp['msg'] = "GCF Payment has been successfully added.";
 				} else {
@@ -184,6 +225,7 @@ Class Master{
 			} elseif (isset($insert_query_stl)) {
 				// Only $l_stl is true, so execute the STL query
 				if (odbc_exec($conn2, $insert_query_stl)) {
+					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount");
 					$resp['status'] = 'success';
 					$resp['msg'] = "STL Payment has been successfully added.";
 				} else {
@@ -296,6 +338,7 @@ Class Master{
 		$delete = odbc_exec($conn2, $sql);
 		//echo $sql;
 		if ($delete) {
+			$this->log_log('Utility Bill', "DELETE - $date : $type : $id ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "BILL has been deleted successfully.";
 		} else {
@@ -320,6 +363,7 @@ Class Master{
 		$params = "'$acc_no', '$start_date', '$end_date', '$due_date', '$bill_type', '$amount_due', '$prev_bal'";
 		$insert_query = "INSERT INTO t_utility_bill VALUES ($params)";
 		if (odbc_exec($conn2, $insert_query)) {
+			$this->log_log('Utility Bill', "DELETE - $date : $type : $id ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Utility Bill has been successfully added.";
 		} else {

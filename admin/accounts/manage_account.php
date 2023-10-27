@@ -3,6 +3,7 @@ require_once('../../includes/config.php');
 
 if(isset($_GET['id'])){
 
+    
 
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
     $acc = $_GET['id'];
