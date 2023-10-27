@@ -218,8 +218,8 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
                         <th style="text-align:center;font-size:13px;">DUE DATE</th>
                         <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                        <th style="text-align:center;font-size:13px;">GCF AMOUNT DUE</th>
-                        <th style="text-align:center;font-size:13px;">GCF SURCHARGE</th>
+                        <th style="text-align:center;font-size:13px;">STL AMOUNT DUE</th>
+                        <th style="text-align:center;font-size:13px;">STL SURCHARGE</th>
                         <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
                         <th style="text-align:center;font-size:13px;">DISCOUNT</th>
                         <th style="text-align:center;font-size:13px;">OR #</th>
