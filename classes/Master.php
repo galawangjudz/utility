@@ -192,11 +192,13 @@ Class Master{
 			if ($l_gcf == 1) {
 				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount'";
 				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount) VALUES ($params)";
+				
 			}
 			
 			if ($l_stl == 1) {
 				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount'";
 				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount) VALUES ($params2)";
+			
 			}
 			
 			if (isset($insert_query_gcf) && isset($insert_query_stl)) {

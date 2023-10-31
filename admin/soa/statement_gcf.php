@@ -161,7 +161,7 @@ function format_num($number){
 	<div class="card-header">
 		
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/admin/soa/print_statement.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>/admin/soa/print_statement_gcf.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>

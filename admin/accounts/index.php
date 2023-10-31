@@ -113,7 +113,7 @@ endif;
                                 endif;
                                 
                                 if ($l_find == "00000000"):
-                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts ORDER BY c_account_no";
+                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active' ORDER BY c_account_no limit 10 ";
                                 else:
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_account_no::text ~* '^%s' ORDER BY c_account_no";
                                 endif;
@@ -227,7 +227,7 @@ endif;
 		})
       
         $('.payment_data').click(function(){
-			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
+			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])

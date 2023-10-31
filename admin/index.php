@@ -73,6 +73,21 @@
 			</div>
 			</div>
 		</div>
+		<div class="modal fade rounded-0" id="uni_modal_payment" role='dialog'>
+			<div class="modal-dialog modal-md modal-dialog-centered rounded-0" role="document">
+			<div class="modal-content rounded-0">
+				<div class="modal-header rounded-0">
+				<h5 class="modal-title"></h5>
+			</div>
+			<div class="modal-body rounded-0">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-flat" id='submit' onclick="$('#uni_modal_payment form').submit()">Save & Print</button>
+				<button type="button" class="btn btn-secondary btn-flat" data-dismiss="modal">Cancel</button>
+			</div>
+			</div>
+			</div>
+		</div>
 		<div class="modal fade rounded-0" id="uni_modal_right" role='dialog'>
 			<div class="modal-dialog modal-full-height  modal-md rounded-0" role="document">
 			<div class="modal-content">

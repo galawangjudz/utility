@@ -195,23 +195,18 @@ endif;
         $('#create_new').click(function(){
 			uni_modal("Add New Account","accounts/manage_account.php",'large')
 		})
-		$('.stl_bill_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/stl_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
+		$('.soa_data').click(function(){
+			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
 		})
-		$('.mtf_bill_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/mtf_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
+        $('.stl_bill_data').click(function(){
+			uni_modal_2("STL Due and Payment Details", "soa/statement_stl.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
-        $('.soa_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/soa.php?id=" + $(this).attr('id'), 'large');
+	
+        $('.mtf_bill_data').click(function(){
+			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
         $('.payment_data').click(function(){
-			uni_modal("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
-		})
-		$('.stl_payment_data').click(function(){
-			uni_modal("StreetLight Payment Window","payments/streetlight.php?id="+$(this).attr('id'),'mid-large')
-		})
-		$('.mtf_payment_data').click(function(){
-			uni_modal("Maintenance Payment Window","payments/maintenance.php?id="+$(this).attr('id'),'mid-large')
+			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})
         $('.edit_data').click(function(){
 			uni_modal("Update Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')

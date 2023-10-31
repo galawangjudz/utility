@@ -253,8 +253,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </tr>
                 </table>  
         </div>
-      
-     
+        <input type="hidden" name="acc_no" id="acc_no" class="form-control form-control-border"  value ="<?php echo isset($account_no) ? $account_no : '' ?>">
+
         <input type="hidden" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
 
         <input type="hidden" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
@@ -391,13 +391,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </tr>
             </table>
         </div>
-        <div class="row">
+       <!--  <div class="row">
             <div class="col-md-12 text-right">
                 <button type="button" id="printDataButton" class="btn btn-primary">
-                    <i class="fa fa-print"></i> Print
+                    <i class="fa fa-print"></i> Preview
                 </button>
             </div>
-        </div>
+        </div> -->
         </div>
     </form>
 </div>
@@ -512,12 +512,12 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.stl { display: block; }');
         }
 
-        document.getElementById("pay_date").disabled = true;
+     /*    document.getElementById("pay_date").disabled = true;
         document.getElementById("payment_or").disabled = true;
         document.getElementById("stl_amount_pay").disabled = true;
         document.getElementById("main_amount_pay").disabled = true;
         document.getElementById("main_discount").disabled = true;
-        document.getElementById("stl_discount").disabled = true;
+        document.getElementById("stl_discount").disabled = true; */
 
         printWindow.document.write('</style>');
 
@@ -631,7 +631,7 @@ function compute_total_amt_paid(){
 <script>
     
     $(function(){
-        $('#uni_modal #pay-form').submit(function(e){
+        $('#uni_modal_payment #pay-form').submit(function(e){
             e.preventDefault();
             var _this = $(this)
             $('.pop-msg').remove()
@@ -655,8 +655,15 @@ function compute_total_amt_paid(){
 				},
                 success:function(resp){
                     if(resp.status == 'success'){
-                        alert(resp.msg);
-                        location.reload();
+                        setTimeout(()=>{
+                            printInputData()
+                            end_loader();
+                            location.reload();
+                            /*  location.replace('./?page=admin/index.php&id='+resp.id_encrypt) */
+                        },200)
+
+                        /* alert(resp.msg);
+                        location.reload(); */
                     }else if(!!resp.msg){
                         el.addClass("alert-danger")
                         el.text(resp.msg)

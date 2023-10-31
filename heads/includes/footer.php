@@ -76,6 +76,34 @@
             }
         })
     }
+    window.uni_modal_payment = function($title = '' , $url='',$size=""){
+        start_loader()
+        $.ajax({
+            url:$url,
+            error:err=>{
+                console.log()
+                alert("An error occured")
+            },
+            success:function(resp){
+                if(resp){
+                    $('#uni_modal_payment .modal-title').html($title)
+                    $('#uni_modal_payment .modal-body').html(resp)
+                    if($size != ''){
+                        $('#uni_modal_payment .modal-dialog').addClass($size+'  modal-dialog-centered')
+                    }else{
+                        $('#uni_modal_payment .modal-dialog').removeAttr("class").addClass("modal-dialog modal-lg modal-dialog-centered")
+                    }
+                    $('#uni_modal_payment').modal({
+                      show:true,
+                      backdrop:'static',
+                      keyboard:false,
+                      focus:true
+                    })
+                    end_loader()
+                }
+            }
+        })
+    }
 
     window.uni_modal_right = function($title = '' , $url='',$size=""){
         start_loader()
