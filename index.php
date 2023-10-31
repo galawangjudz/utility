@@ -1,7 +1,9 @@
 <?php
 session_start();
 require_once('includes/config.php');
-if(isset($_POST['signin']))
+$errorMsg = '';
+
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 {
 	$username= htmlspecialchars($_POST['username']);
 	$password=md5($_POST['password']);
@@ -42,13 +44,15 @@ if(isset($_POST['signin']))
 
 	} 
 	else{
-	  
-	  echo "<script>alert('Invalid Details');</script>";
-	  echo "<script type='text/javascript'> document.location = 'index.php'; </script>";
+			$errorMsg = 'Incorrect Employee ID or Password';
+	/*   echo "<script>alert('Invalid Details');</script>"; */
+	/*   echo "<script type='text/javascript'> document.location = 'index.php'; </script>"; */
 	  
 
 	}
-
+/* 	header('Location: ' . $_SERVER['REQUEST_URI']);
+    exit; // Exit to ensure the page doesn't continue processing
+ */
 }
 // $_SESSION['alogin']=$_POST['username'];
 // 	echo "<script type='text/javascript'> document.location = 'changepassword.php'; </script>";
@@ -108,7 +112,8 @@ if(isset($_POST['signin']))
 							<h2 class="text-center text-primary">Welcome To Utility Portal</h2>
 						</div>
 						<form name="signin" method="post">
-						
+							<div class="alert alert-danger <?php echo $errorMsg ? '' : 'd-none'; ?>"><?php echo $errorMsg; ?></div>
+							
 							<div class="input-group custom">
 								<input type="text" class="form-control form-control-lg" placeholder="Employe ID" name="username" id="username" autocomplete="off">
 								<div class="input-group-append custom">
@@ -141,6 +146,11 @@ if(isset($_POST['signin']))
 		</div>
 	</div>
 	<!-- js -->
+	<style>
+        .alert {
+            text-align: center; /* Center the text in the alert */
+        }
+    </style>
 	<script src="vendors/scripts/core.js"></script>
 	<script src="vendors/scripts/script.min.js"></script>
 	<script src="vendors/scripts/process.js"></script>
