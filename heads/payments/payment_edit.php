@@ -1,8 +1,8 @@
 <?php
 require_once('../../includes/config.php');
 if(isset($_GET['id'])){
-
-    $query = "SELECT * from t_utility_payments where c_st_or_no = '".$_GET['id']. "'";
+    $or_no = $_GET['data-car'];
+    $query = "SELECT * from t_utility_payments where c_st_or_no = '".$or_no."' and c_account_no = ".$_GET['id'];
     $result = odbc_exec($conn2, $query);
     if (!$result) {
         die("ODBC query execution failed: " . odbc_errormsg());
@@ -37,6 +37,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 <div class="container-fluid">
 <form action="" id="pay-form">
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
+        <input type="hidden" name="car_no" value="<?php echo isset($l_car_no) ? $l_car_no : '' ?>">
         <div class="row">
 			<div class="col-md-6">
                 <div class="form-group">
@@ -47,7 +48,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-6">
                 <div class="form-group">
                 <label for="payment_or" class="control-label">CAR No.</label>
-                <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border" value ="<?php echo isset($l_car_no) ? $l_car_no : '' ?>"readonly required>
+                <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border" value ="<?php echo isset($l_car_no) ? $l_car_no : '' ?>" required>
                 </div>
             </div>
         </div>
