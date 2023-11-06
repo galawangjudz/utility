@@ -36,7 +36,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 		    }
 		    else {
 		    	$_SESSION['alogin']=$row['emp_id'];
-		    	$_SESSION['arole']=$row['Department'];
+		    	$_SESSION['dept']=$row['Department'];
 				$_SESSION['user_type']=$row['role'];
 			 	echo "<script type='text/javascript'> document.location = 'heads/index.php'; </script>";
 		    }
