@@ -104,16 +104,29 @@ Class Master{
 		require_once('../includes/config.php');
 		extract($_POST);
 		$acc_no = $_POST['acc_no'];
+		$car_no = $_POST['car_no'];
 		$pay_date = $_POST['pay_date'];
+		$or_no = isset($_POST['payment_or']) ? $_POST['payment_or'] : '';
+
+		if ($car_no != $or_no) {
+			$checking = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$or_no'";
+			$check = odbc_exec($conn2, $checking);
+			if (odbc_fetch_row($check)) {
+			/* 	echo "The payment OR number exists in the database."; */
+				$resp['status'] = 'failed';
+				$resp['msg'] = "The payment OR number already exists!";
+				return json_encode($resp);
+				exit;
+			}
+		}
 		$pay_amount_paid = isset($_POST['pay_amount_paid']) ? (float)$_POST['pay_amount_paid'] : 0;
 		$pay_discount = isset($_POST['pay_discount']) ? (float)$_POST['pay_discount'] : 0;
-		$or_no = $_POST['payment_or'];
 
-		$sql = "UPDATE t_utility_payments SET c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$or_no'";
+		$sql = "UPDATE t_utility_payments SET c_st_or_no = '$or_no', c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$car_no'";
 		$update = odbc_exec($conn2, $sql);
 		//echo $sql;
 		if ($update) {
-			$this->log_log('Utility Payment', "UPDATE - $acc_no : $or_no : $pay_date : $pay_amount_paid : $pay_discount");
+			$this->log_log('Utility Payment', "UPDATE - $acc_no : $car_no : $pay_date : $pay_amount_paid : $pay_discount");
 			$resp['status'] = 'success';
 			$resp['msg'] = "CAR has been updated successfully.";
 		} else {

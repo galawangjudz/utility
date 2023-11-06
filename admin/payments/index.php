@@ -522,7 +522,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
-        printWindow.document.write('<p class="full-name">' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value + '</p>');
+        printWindow.document.write('<p class="full-name">' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value + ' / ' + document.getElementById("acc_no").value + '</p>');
         //printWindow.document.write('<p class="add">' + document.getElementById("add").value + ' ' + document.getElementById("city_prov").value + ' ' + document.getElementById("zip_code").value + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
