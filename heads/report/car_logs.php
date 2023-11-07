@@ -59,35 +59,62 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                     <hr>
 
                     <table class="table table-hover table-bordered">
-                <colgroup>
+                <!-- <colgroup>
 					<col width="5%">
+					<col width="10%">
 					<col width="5%">
-					<col width="5%">
-                    <col width="10%">
+                    <col width="15%">
                     <col width="20%">
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">
-				</colgroup>
+                    <col width="10%">
+				</colgroup> -->
 				<thead>
 					<tr>
-                        <th>No</th>
+                        
 						<th>Pay Date</th>
-						<th>Account No</th>
-                        <th>Location</th>
-                        <th>Full Name</th>
-                        <th>CAR No.</th>
-                        <th>Amount Paid</th>
+                        <th>CAR # </th>
+						<th>Category</th>
+                        <th>Account #</th>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Phase</th>
+                        <th>Block </th>
+                        <th>Lot</th>
+                        <th>Cash</th>
+                        <th>Check</th>
+                        <th>Gcash/Online</th>
+                        <th>Discount</th>
+                        <th>Reference #</th>
+                        <th>Encoded by</th>
                         <th>Action</th>
 					</tr>
 				</thead>
                 <tbody>
 					<?php 
 					$i = 1;
-                    $query = "SELECT * FROM t_utility_accounts x 
-                    JOIN t_utility_payments y ON x.c_account_no = y.c_account_no 
-                    WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to' 
-                    ORDER BY date(y.c_st_pay_date) ASC";
+                    $query = "SELECT 
+                            x.*, 
+                            RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                            c_st_pay_date,
+                            CASE 
+                                WHEN c_st_or_no LIKE 'MTF%' AND c_st_or_no NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                                WHEN c_st_or_no LIKE 'STL%' AND c_st_or_no NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
+                                WHEN c_st_or_no LIKE 'STL-ADJ%' THEN 'STL Adjustment'
+                                WHEN c_st_or_no LIKE 'MTF-ADJ%' THEN 'GCF Adjustment'
+                                ELSE 'Others'
+                            END AS c_pay_type,
+                            c_st_amount_paid,
+                            c_st_or_no,
+                            c_discount,
+                            c_mop,
+                            c_ref_no,
+                            c_encoded_by
+                        FROM t_utility_accounts x
+                        JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                        WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                        ORDER BY date(y.c_st_pay_date) ASC";
                     $result = odbc_exec($conn2, $query);
                     if (!$result) {
                         die("ODBC query execution failed: " . odbc_errormsg());
@@ -95,13 +122,24 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                     while ($row = odbc_fetch_array($result)):
 					?>
 					<tr>
-                        <td class="text-center"><?php echo $i++ ?></td>
+                        
 						<td class="text-center"><?= date("M d, Y", strtotime($row['c_st_pay_date'])) ?></td>
+                        <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
+                        <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
 						<td class="text-center"><?php echo $row['c_account_no'] ?></td>
-                        <td class="text-center"><?php echo $row['c_location'] ?></td>
-                        <td class="text-center"><?php echo $row['c_first_name'] . ' ' . $row['c_last_name'] ?></td>
-                        <td class="text-center"><?php echo $row['c_st_or_no'] ?></td>
-                        <td class="text-center"><?php echo $row['c_st_amount_paid'] ?></td>
+                        <td class="text-center"><?php echo $row['c_last_name'] ?></td>
+                        <td class="text-center"><?php echo $row['c_first_name'] ?></td>
+                        <td class="text-center"><?php echo $row['c_site'] ?></td>
+                        <td class="text-center"><?php echo $row['c_block'] ?></td>
+                        <td class="text-center"><?php echo $row['c_lot'] ?></td>
+                        <td class="text-center"><?php echo ($row['c_mop'] == '1') ? $row['c_st_amount_paid'] : ''; ?></td>
+                        <td class="text-center"><?php echo ($row['c_mop'] == '2') ? $row['c_st_amount_paid'] : ''; ?></td>
+                        <td class="text-center"><?php echo ($row['c_mop'] == '3') ? $row['c_st_amount_paid'] : ''; ?></td>
+                        <td class="text-center"><?php echo $row['c_discount'] ?></td>
+                        <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
+                        <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
+                   
+                        <?php $query = "SELECT * FROM t_utility_logs"?>
                     <td>
                         <div class="dropdown">
                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -149,6 +187,8 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
             var el = $('<div>')
             _h.find('title').text('Cash Acknowledgement Receipt - Print View')
             _h.append('<style>html,body{ min-height: unset !important;}</style>')
+            _h.append('<style>@media print { @page { size: landscape; }}</style>');
+            
             el.append(_h)
             el.append(_p)
              var nw = window.open("","_blank","width=900,height=700,top=50,left=250")

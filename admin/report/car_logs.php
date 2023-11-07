@@ -106,7 +106,11 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                                 ELSE 'Others'
                             END AS c_pay_type,
                             c_st_amount_paid,
-                            c_discount
+                            c_st_or_no,
+                            c_discount,
+                            c_mop,
+                            c_ref_no,
+                            c_encoded_by
                         FROM t_utility_accounts x
                         JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
                         WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
@@ -128,13 +132,13 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                         <td class="text-center"><?php echo $row['c_site'] ?></td>
                         <td class="text-center"><?php echo $row['c_block'] ?></td>
                         <td class="text-center"><?php echo $row['c_lot'] ?></td>
-                        <td class="text-center"><?php echo $row['c_st_amount_paid'] ?></td>
-                        <td class="text-center"><?php echo $row['c_st_amount_paid'] ?></td>
-                        <td class="text-center"><?php echo $row['c_st_amount_paid'] ?></td>
+                        <td class="text-center"><?php echo ($row['c_mop'] == '1') ? $row['c_st_amount_paid'] : ''; ?></td>
+                        <td class="text-center"><?php echo ($row['c_mop'] == '2') ? $row['c_st_amount_paid'] : ''; ?></td>
+                        <td class="text-center"><?php echo ($row['c_mop'] == '3') ? $row['c_st_amount_paid'] : ''; ?></td>
                         <td class="text-center"><?php echo $row['c_discount'] ?></td>
-                        <td> </td>
-                        <td> </td>
-                        
+                        <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
+                        <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
+                   
                         <?php $query = "SELECT * FROM t_utility_logs"?>
                     <td>
                         <div class="dropdown">
