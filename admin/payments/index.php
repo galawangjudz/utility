@@ -385,9 +385,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="mode_payment" class="control-label"><b>Mode of Payment: *</b></label>
-                            <select name="mode_payment" id="mode_payment" class="form-control form-control-border" readonly disabled required>
-                                <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
-                                <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
+                            <select name="mode_payment" id="mode_payment" class="form-control form-control-border" required>
+                                <option value="1" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
+                                <option value="2" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Check</option>
+                                <option value="3" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Gcash/Online</option>
                             </select>
                         </div>
                     </div>

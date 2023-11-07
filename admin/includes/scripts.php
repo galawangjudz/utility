@@ -20,4 +20,21 @@
 	<script src="../src/plugins/datatables/js/vfs_fonts.js"></script>
 	
 <!-- 	<script src="../vendors/scripts/advanced-components.js"></script> -->
-	
+<script>
+function check_session_id()
+  {
+    var session_id = "<?php echo $_SESSION['user_session_id']; ?>";
+    fetch('../includes/session.php').then(function(response){
+        return response.json();
+    }).then(function(responseData){
+        if(responseData.output == 'logout')
+        {
+			window.location = "../logout.php";
+        }
+    }); 
+  }  
+  setInterval(function() {
+        check_session_id()
+  }, 10000);
+
+  </script>

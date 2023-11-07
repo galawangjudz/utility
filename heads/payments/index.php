@@ -255,12 +255,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         </div>
         <input type="hidden" name="acc_no" id="acc_no" class="form-control form-control-border"  value ="<?php echo isset($account_no) ? $account_no : '' ?>">
 
-        <input type="hidden" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
+        <input type="hidden" name="lname" id="lname" class="form-control form-control-border" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly required>
 
-        <input type="hidden" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
+        <input type="hidden" name="fname" id="fname" class="form-control form-control-border" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
 
-        <input type="hidden" name="mname" id="mname" class="form-control form-control-border" placeholder="Enter Middle Name" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>"readonly required>
+        <input type="hidden" name="mname" id="mname" class="form-control form-control-border" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>"readonly required>
     
+        <input type="hidden" name="address" id="address" class="form-control form-control-border" value ="<?php echo isset($add) ? $add : '' ?>">
+    
+ 
         <div class="fieldset-container">
             <fieldset class="fieldset">
                 <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
@@ -523,7 +526,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
         printWindow.document.write('<p class="full-name">' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value + ' / ' + document.getElementById("acc_no").value + '</p>');
-        //printWindow.document.write('<p class="add">' + document.getElementById("add").value + ' ' + document.getElementById("city_prov").value + ' ' + document.getElementById("zip_code").value + '</p>');
+        printWindow.document.write('<p class="add">' + document.getElementById("address").value + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');

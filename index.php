@@ -3,56 +3,79 @@ session_start();
 require_once('includes/config.php');
 $errorMsg = '';
 
+
+
+
+
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 {
-	$username= htmlspecialchars($_POST['username']);
-	$password=md5($_POST['password']);
-
-	$sql ="SELECT * FROM tblemployees where emp_id ='$username' AND Password ='$password'";
-	//echo $sql;
-	$query= mysqli_query($conn, $sql);
-	$count = mysqli_num_rows($query);
-	if($count > 0)
+	if(empty($_POST['username']))
 	{
-		while ($row = mysqli_fetch_assoc($query)) {
-		    if ($row['role'] == 'Admin') {
-		    	$_SESSION['alogin']=$row['emp_id'];
-				$_SESSION['authenticated'] = true;
-		    	$_SESSION['dept']=$row['Department'];
-				$_SESSION['user_type']=$row['role'];
-				 echo "<script type='text/javascript'> document.location = 'admin/index.php'; </script>";
-		    }
-		    elseif ($row['role'] == 'Staff') {
-		    	$_SESSION['alogin']=$row['emp_id'];
-		    	$_SESSION['dept']=$row['Department'];
-				$_SESSION['user_type']=$row['role'];
-			 	echo "<script type='text/javascript'> document.location = 'staff/index.php'; </script>";
-		    }
-			elseif ($row['role'] == 'Cashier') {
-		    	$_SESSION['alogin']=$row['emp_id'];
-		    	$_SESSION['dept']=$row['Department'];
-				$_SESSION['user_type']=$row['role'];
-			 	echo "<script type='text/javascript'> document.location = 'staff/index.php'; </script>";
-		    }
-		    else {
-		    	$_SESSION['alogin']=$row['emp_id'];
-		    	$_SESSION['dept']=$row['Department'];
-				$_SESSION['user_type']=$row['role'];
-			 	echo "<script type='text/javascript'> document.location = 'heads/index.php'; </script>";
-		    }
-		}
-
-	} 
-	else{
-			$errorMsg = 'Incorrect Employee ID or Password';
-	/*   echo "<script>alert('Invalid Details');</script>"; */
-	/*   echo "<script type='text/javascript'> document.location = 'index.php'; </script>"; */
-	  
-
+		$errorMsg .= '<p>Employee ID is required</p>';
 	}
-/* 	header('Location: ' . $_SERVER['REQUEST_URI']);
-    exit; // Exit to ensure the page doesn't continue processing
- */
+
+	if(empty($_POST['password']))
+	{
+		$errorMsg .= '<p>Password is required</p>';
+	}
+
+	if ($errorMsg == ""){
+		$username =htmlspecialchars($_POST['username']);
+		$password=md5($_POST['password']);
+
+		$sql ="SELECT * FROM tblemployees where emp_id ='$username' AND Password ='$password'";
+		//echo $sql;
+		$query= mysqli_query($conn, $sql);
+		$count = mysqli_num_rows($query);
+		if($count > 0)
+		{
+			while ($row = mysqli_fetch_assoc($query)) {
+				$user_session_id = session_id();
+				$update = "UPDATE tblemployees set user_session_id = '".$user_session_id."' WHERE emp_id = '".$row['emp_id']."'";
+				$conn->query($update);
+
+				if ($row['role'] == 'Admin') {
+					
+					session_regenerate_id();
+					
+					$_SESSION['alogin']=$row['emp_id'];
+					$_SESSION['authenticated'] = true;
+					$_SESSION['dept']=$row['Department'];
+					$_SESSION['user_type']=$row['role'];
+					$_SESSION['user_session_id'] = $user_session_id;
+
+					echo "<script type='text/javascript'> document.location = 'admin/index.php'; </script>";
+				}
+				elseif ($row['role'] == 'Staff') {
+					$_SESSION['alogin']=$row['emp_id'];
+					$_SESSION['dept']=$row['Department'];
+					$_SESSION['user_type']=$row['role'];
+					$_SESSION['user_session_id'] = $user_session_id;
+					echo "<script type='text/javascript'> document.location = 'staff/index.php'; </script>";
+				}
+				elseif ($row['role'] == 'Cashier') {
+					$_SESSION['alogin']=$row['emp_id'];
+					$_SESSION['dept']=$row['Department'];
+					$_SESSION['user_type']=$row['role'];
+					$_SESSION['user_session_id'] = $user_session_id;
+					echo "<script type='text/javascript'> document.location = 'staff/index.php'; </script>";
+				}
+				else {
+					$_SESSION['alogin']=$row['emp_id'];
+					$_SESSION['dept']=$row['Department'];
+					$_SESSION['user_type']=$row['role'];
+					$_SESSION['user_session_id'] = $user_session_id;
+					echo "<script type='text/javascript'> document.location = 'heads/index.php'; </script>";
+				}
+			}
+
+		} 
+		else{
+				$errorMsg .= 'Incorrect Employee ID or Password';
+		
+		}
+	}
+
 }
 // $_SESSION['alogin']=$_POST['username'];
 // 	echo "<script type='text/javascript'> document.location = 'changepassword.php'; </script>";
