@@ -86,9 +86,9 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                         <th>Check</th>
                         <th>Gcash/Online</th>
                         <th>Discount</th>
+                        <th>Deposit</th>
                         <th>Reference #</th>
                         <th>Encoded by</th>
-                        <th>Action</th>
 					</tr>
 				</thead>
                 <tbody>
@@ -110,6 +110,8 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             c_discount,
                             c_mop,
                             c_ref_no,
+                            c_check_date,
+                            c_branch,
                             c_encoded_by
                         FROM t_utility_accounts x
                         JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
@@ -129,18 +131,31 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
 						<td class="text-center"><?php echo $row['c_account_no'] ?></td>
                         <td class="text-center"><?php echo $row['c_last_name'] ?></td>
                         <td class="text-center"><?php echo $row['c_first_name'] ?></td>
-                        <td class="text-center"><?php echo $row['c_site'] ?></td>
+                        <?php $phase = "SELECT * FROM t_projects where c_code = ".$row['c_site'];
+
+                        $get_phase = odbc_exec($conn2, $phase);
+
+                            if (!$result) {
+                                die("ODBC query execution failed: " . odbc_errormsg());
+                            }
+                            // Fetch and display the results
+                            while ($row2 = odbc_fetch_array($get_phase)) {
+                                $acronym = $row2['c_'];
+                            }
+                        ?>
+                        <td class="text-center"><?php echo $acronym ?></td>
                         <td class="text-center"><?php echo $row['c_block'] ?></td>
                         <td class="text-center"><?php echo $row['c_lot'] ?></td>
-                        <td class="text-center"><?php echo ($row['c_mop'] == '1') ? $row['c_st_amount_paid'] : ''; ?></td>
-                        <td class="text-center"><?php echo ($row['c_mop'] == '2') ? $row['c_st_amount_paid'] : ''; ?></td>
-                        <td class="text-center"><?php echo ($row['c_mop'] == '3') ? $row['c_st_amount_paid'] : ''; ?></td>
-                        <td class="text-center"><?php echo $row['c_discount'] ?></td>
+                        <td class="text-right"><?php echo ($row['c_mop'] == '1') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                        <td class="text-right"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                        <td class="text-right"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                        <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>
+                        <td class="text-center"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
                         <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
                         <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
                    
                         <?php $query = "SELECT * FROM t_utility_logs"?>
-                    <td>
+                   <!--  <td>
                         <div class="dropdown">
                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                             <i class="dw dw-more"></i>
@@ -150,9 +165,86 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
                         </div>
                      </div>
-                     </td>
+                     </td> -->
 					</tr>
 					<?php endwhile; ?>
+
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Bank</th>
+                            <th class="text-center">TOTAL CASH</th>
+                            <th class="text-center">TOTAL CHECK</th>
+                            <th class="text-center">TOTAL ONLINE</th>
+                            <th class="text-center">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        // Assuming you're using PHP to execute the SQL query and fetch the results
+                        $query2 = "SELECT 
+                                CASE
+                                    WHEN c_mop = '1' AND c_branch = '' THEN 'CASH'
+                                    WHEN c_mop = '3' AND c_branch = '' THEN 'ONLINE'
+                                    ELSE c_branch
+                                   END AS Bank,
+                                    SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Total_Cash,
+                                    SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Total_Check,
+                                    SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Total_Online,
+                                    SUM(c_st_amount_paid) AS Total
+                                FROM t_utility_accounts x
+                                JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                                GROUP BY Bank
+                                ORDER BY Bank DESC" ;
+                       $result2 = odbc_exec($conn2, $query2);
+                       if (!$result2) {
+                        die("ODBC query execution failed: " . odbc_errormsg());
+                        }
+                        while ($row2 = odbc_fetch_array($result2)):
+                        ?>
+                           <tr>
+                                <td class="text-center"><?php echo $row2['bank'] ?></td>
+                                <td class="text-right"><?php echo format_num($row2['total_cash']) ?></td>
+                                <td class="text-right"><?php echo format_num($row2['total_check']) ?></td>
+                                <td class="text-right"><?php echo format_num($row2['total_online']) ?></td>
+                                <td class="text-right"><?php echo format_num($row2['total']) ?></td>
+                           </tr>
+                        
+                        <?php     endwhile;
+                        
+
+                        $grandTotal= "SELECT
+                            SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
+                            SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
+                            SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
+                            SUM(c_st_amount_paid) AS Grand_Total
+                            FROM t_utility_accounts x
+                            JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                            WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'";
+                       $result3 = odbc_exec($conn2, $grandTotal);
+                       if (!$result3) {
+                        die("ODBC query execution failed: " . odbc_errormsg());
+                       }
+                       while ($grandTotalRow = odbc_fetch_array($result3)):
+                        ?>
+                        <tr>
+                        <td><b>Grand Total</b></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total']) ?></td>
+ 
+                        </tr>
+                        <?php 
+                       endwhile;
+
+                        ?>
+                    </table>
+
+                    
+                    
+                   
        
 </div>
 </div>

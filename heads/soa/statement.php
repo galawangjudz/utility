@@ -71,9 +71,13 @@ if(isset($_GET['id'])){
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                                WHEN c_st_or_no LIKE 'MTF%' THEN 'GCF Payment'
-                                WHEN c_st_or_no LIKE 'STL%' THEN 'STL Payment'
-                                ELSE 'ADJUSTMENT'
+                                WHEN c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                                WHEN c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
+                                WHEN c_st_or_no LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
+                                WHEN c_st_or_no LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
+                                WHEN c_st_or_no LIKE 'MTF-BA%' THEN 'GCF Bill Adjustment'
+                                WHEN c_st_or_no LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
+                                ELSE 'Others'
                             END AS c_pay_type,
                             c_st_amount_paid + c_discount as c_tot_amt_paid
                         FROM
@@ -178,7 +182,7 @@ function format_num($number){
 	<div class="card-header">
 		
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/admin/soa/print_statement.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>/heads/soa/print_statement.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>

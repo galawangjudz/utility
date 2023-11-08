@@ -9,6 +9,8 @@ function format_num($number){
 ?>
 <?php
 require_once('../../includes/config.php');
+
+
 if(isset($_GET['id'])){
 
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
@@ -317,9 +319,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </table>
             </fieldset>
         </div>
-
-
-
+        <div class="fieldset-container">     
+            <table style="width:100%;">
+                <tr>
+                    <td><label for="total_amount_paid" class="control-label"><b>Total Amount Paid: </b></label></td>
+                    <td><input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
+                </tr>
+            </table>
+        </div>
         <div class="fieldset-container">
             <fieldset class="fieldset">
                 <table style="width:100%;">
@@ -358,50 +365,71 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
-                    <td><label for="total_amount_paid" class="control-label"><b>Total Amount Paid: </b></label></td>
-                    <td><input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
-                </tr>
-            </table>
-        </div>
-        <div class="fieldset-container">     
-            <table style="width:100%;">
-                <tr>
-                    <div class="col-md-4">
+                    <td class="col-md-2">
                         <div class="form-group">
-                            <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
-                            <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border" value ="<?php echo date('Y-m-d'); ?>" required>
-                        </div>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="payment_or" class="control-label"><b>Or No.: </b></label>
-                            <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" placeholder= "ex.CAR153245" value ="" >
-                        </div>
-                    </div>
-                </tr>
-                <tr>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="mode_payment" class="control-label"><b>Mode of Payment: *</b></label>
-                            <select name="mode_payment" id="mode_payment" class="form-control form-control-border" readonly disabled required>
-                                <option value="Cash" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Cash</option>
-                                <option value="Check" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Check</option>
+                            <label for="mode_payment" class="control-label"><b>Mode of Payment:</b></label>
+                            <select name="mode_payment" id="mode_payment" class="form-control form-control-border" style="text-align: center;" required>
+                                <option value="1">Cash</option>
+                                <option value="2">Check</option>
+                                <option value="3">Gcash/Online</option>
                             </select>
                         </div>
-                    </div>
+                    </td>
+                    <td class="col-md-2">
+                        <div class="form-group">
+                            <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
+                            <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border" value="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                    </td>
+                    <td class="col-md-2">
+                        <div class="form-group">
+                            <label for="payment_or" class="control-label"><b>OR #: </b></label>
+                            <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" placeholder="ex.CAR153245" value="">
+                        </div>
+                    </td>
+                </tr>
+                <tr id="check_details" style="display:none;">
+                    <td class="col-md-4">
+                        <div class="form-group">
+                            <label for="check_date" class="control-label"><b>Check Date: </b></label>
+                            <input type="date" name="check_date" id="check_date" class="form-control form-control-border">
+                        </div>
+                    </td>
+                    <td class="col-md-8">
+                        <div class="form-group">
+                            <label for="branch" class="control-label"><b>Branch: </b></label>
+                            <select name="branch" id="branch" class="form-control form-control-border" style="text-align: center;">
+                                <option value="" selected>--SELECT BANK--</option>
+                                <option value="BPI">BPI</option>
+                                <option value="BDO">BDO</option>
+                                <option value="CBS">CBS</option>
+                                <option value="SBC">SBC</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="ref_no_details" style="display:none;">
+                    <td class="col-md-2">
+                        <div class="form-group">
+                            <label for="ref_no" class="control-label"><b>Reference No: </b></label>
+                            <input type="text" name="ref_no" id="ref_no" class="form-control form-control-border">
+                        </div>
+                    </td>
                 </tr>
             </table>
-        </div>
-       <!--  <div class="row">
+
+
+
+        </div>  
+       
+        <div class="row">
             <div class="col-md-12 text-right">
                 <button type="button" id="printDataButton" class="btn btn-primary">
                     <i class="fa fa-print"></i> Preview
                 </button>
             </div>
-        </div> -->
         </div>
+        
     </form>
 </div>
 <style>
@@ -683,4 +711,38 @@ function compute_total_amt_paid(){
             })
         })
     })
+</script>
+
+<script>
+document.getElementById('mode_payment').addEventListener('change', function() {
+    var checkDetails = document.getElementById('check_details');
+    var refNoDetails = document.getElementById('ref_no_details');
+    var checkDateInput = document.getElementById('check_date'); // Get the Check Date input element
+    var branchInput = document.getElementById('branch'); // Get the Branch input element
+
+
+    if (this.value === '1' || this.value === '3') { // '1' represents 'Cash', '3' represents 'Gcash/Online'
+        branchInput.value = null;
+    }
+
+    if (this.value === '2') { // '2' represents 'Check'
+        checkDetails.style.display = 'block';
+        refNoDetails.style.display = 'none';
+            // Set the value to today's date when Check Date is displayed
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+        checkDateInput.value = today;
+    } else if (this.value === '3') { // '3' represents 'Gcash/Online'
+        checkDetails.style.display = 'none';
+        refNoDetails.style.display = 'block';
+        checkDateInput.value = null;
+    } else {
+        checkDetails.style.display = 'none';
+        refNoDetails.style.display = 'none';
+        checkDateInput.value = null;
+    }
+});
 </script>
