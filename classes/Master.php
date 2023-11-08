@@ -174,12 +174,18 @@ Class Master{
 		$l_stl = 0;
 		$acc_no = $_POST['acc_no'];
 		$pay_date = $_POST['pay_date'];
+		$or_no = isset($_POST['payment_or']) ? $_POST['payment_or'] : '';
 		$main_amount_paid = isset($_POST['main_amount_paid']) ? (float)$_POST['main_amount_paid'] : 0;
 		$main_discount = isset($_POST['main_discount']) ? (float)$_POST['main_discount'] : 0;
 		$stl_amount_paid = isset($_POST['stl_amount_paid']) ? (float)$_POST['stl_amount_paid'] : 0;
 		$stl_discount = isset($_POST['stl_discount']) ? (float)$_POST['stl_discount'] : 0;
-		$or_no = $_POST['payment_or'];
-
+		$mode_of_payment = $_POST['mode_payment'];
+		$ref_no = isset($_POST['ref_no']) ? $_POST['ref_no'] : '';
+		$branch = isset($_POST['branch']) ? $_POST['branch'] : '';
+		$check_date = isset($_POST['check_date']) ? $_POST['check_date'] : NULL;
+		require_once('../includes/session.php');
+		$encoded_by = $_SESSION['alogin'];
+		 
 		if ($or_no == ""):
 				$resp['status'] = 'failed';
 				$resp['msg'] = "Please input OR No.";
@@ -203,22 +209,21 @@ Class Master{
 		if (!odbc_fetch_row($check_payment_query)) {
 		
 			if ($l_gcf == 1) {
-				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount'";
-				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount) VALUES ($params)";
-				
+				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by'";
+				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by) VALUES ($params)";
 			}
 			
 			if ($l_stl == 1) {
-				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount'";
-				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount) VALUES ($params2)";
+				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by'";
+				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by) VALUES ($params2)";
 			
 			}
 			
 			if (isset($insert_query_gcf) && isset($insert_query_stl)) {
 				// Both conditions are true, so execute both queries
 				if (odbc_exec($conn2, $insert_query_gcf) && odbc_exec($conn2, $insert_query_stl)) {
-					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount");
-					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount");
+					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount : $mode_of_payment : $ref_no :$branch : $check_date");
+					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$resp['status'] = 'success';
 					$resp['msg'] = "Both payments have been successfully added.";
 				} else {
@@ -229,7 +234,7 @@ Class Master{
 			} elseif (isset($insert_query_gcf)) {
 				// Only $l_gcf is true, so execute the GCF query
 				if (odbc_exec($conn2, $insert_query_gcf)) {
-					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount");
+					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$resp['status'] = 'success';
 					$resp['msg'] = "GCF Payment has been successfully added.";
 				} else {
@@ -240,7 +245,7 @@ Class Master{
 			} elseif (isset($insert_query_stl)) {
 				// Only $l_stl is true, so execute the STL query
 				if (odbc_exec($conn2, $insert_query_stl)) {
-					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount");
+					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$resp['status'] = 'success';
 					$resp['msg'] = "STL Payment has been successfully added.";
 				} else {

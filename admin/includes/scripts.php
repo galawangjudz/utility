@@ -24,7 +24,7 @@
 function check_session_id()
   {
     var session_id = "<?php echo $_SESSION['user_session_id']; ?>";
-    fetch('../includes/session.php').then(function(response){
+    fetch('../includes/check_session.php').then(function(response){
         return response.json();
     }).then(function(responseData){
         if(responseData.output == 'logout')
@@ -37,4 +37,6 @@ function check_session_id()
         check_session_id()
   }, 10000);
 
-  </script>
+  </script> 
+
+

@@ -135,9 +135,13 @@ if(isset($_GET['id'])){
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                                WHEN c_st_or_no LIKE 'MTF%' THEN 'GCF Payment'
+                      /*           WHEN c_st_or_no LIKE 'MTF%' THEN 'GCF Payment'
                                 WHEN c_st_or_no LIKE 'STL%' THEN 'STL Payment'
-                                ELSE 'ADJUSTMENT'
+                                ELSE 'ADJUSTMENT' */
+                                WHEN c_st_or_no LIKE 'MTF%' AND c_st_or_no NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                                WHEN c_st_or_no LIKE 'STL%' AND c_st_or_no NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
+                                WHEN c_st_or_no LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
+                                WHEN c_st_or_no LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
                             END AS c_pay_type,
                             c_st_amount_paid + c_discount as c_tot_amt_paid
                         FROM
