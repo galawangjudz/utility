@@ -422,13 +422,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         </div>  
        
-        <div class="row">
+      <!--   <div class="row">
             <div class="col-md-12 text-right">
                 <button type="button" id="printDataButton" class="btn btn-primary">
                     <i class="fa fa-print"></i> Preview
                 </button>
             </div>
-        </div>
+        </div> -->
         
     </form>
 </div>

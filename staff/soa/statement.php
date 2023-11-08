@@ -77,7 +77,7 @@ if(isset($_GET['id'])){
                                 WHEN c_st_or_no LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
                                 WHEN c_st_or_no LIKE 'MTF-BA%' THEN 'GCF Bill Adjustment'
                                 WHEN c_st_or_no LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
-                                ELSE 'Others'
+                                ELSE 'Unidentified payment'
                             END AS c_pay_type,
                             c_st_amount_paid + c_discount as c_tot_amt_paid
                         FROM
