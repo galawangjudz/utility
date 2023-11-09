@@ -383,8 +383,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </td>
                     <td class="col-md-2">
                         <div class="form-group">
-                            <label for="payment_or" class="control-label"><b>OR #: </b></label>
-                            <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" placeholder="ex.CAR153245" value="">
+                            <label for="payment_or" class="control-label"><b>CAR #: </b></label>
+                            <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" value="" minlength="6" maxlength="6">
+                            <small class="text-danger">Note: 6 digits numbers only without CAR.</small>
                         </div>
                     </td>
                 </tr>

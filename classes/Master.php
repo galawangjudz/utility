@@ -253,13 +253,20 @@ Class Master{
 				exit;
 		endif;
 
+		if (!ctype_digit($or_no) || strlen($or_no) !== 6) {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Please input a 6-digit number for OR No.";
+			echo json_encode($resp);
+			exit;
+		}
+
 		if ($main_amount_paid != 0):
 				$l_gcf = 1;
-				$main_or_no = 'MTF-' . $_POST['payment_or'];
+				$main_or_no = 'MTF-CAR' . $_POST['payment_or'];
 		endif;
 		if  ($stl_amount_paid != 0):
 				$l_stl = 1;
-				$stl_or_no = 'STL-' . $_POST['payment_or'];
+				$stl_or_no = 'STL-CAR' . $_POST['payment_or'];
 		endif;
 
 		$check_payment = "SELECT * FROM t_utility_payments WHERE c_st_or_no ILIKE ?";
