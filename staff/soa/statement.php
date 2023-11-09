@@ -42,6 +42,7 @@ if(isset($_GET['id'])){
    
     $result = odbc_exec($conn2, $load_due_payment_records);
     $due_count = odbc_num_rows($result);
+    $l_due_list = [];
     while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y/m/d", strtotime($due['c_end_date']));
             $l_sdate = date("M j, y", strtotime($due['c_start_date']));
