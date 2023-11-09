@@ -319,14 +319,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </table>
             </fieldset>
         </div>
-        <div class="fieldset-container">     
-            <table style="width:100%;">
-                <tr>
-                    <td><label for="total_amount_paid" class="control-label"><b>Total Amount Paid: </b></label></td>
-                    <td><input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
-                </tr>
-            </table>
-        </div>
+       
         <div class="fieldset-container">
             <fieldset class="fieldset">
                 <table style="width:100%;">
@@ -361,6 +354,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
                 </table>
             </fieldset>
+        </div>
+        <div class="fieldset-container">     
+            <table style="width:100%;">
+                <tr>
+                    <td><label for="total_amount_paid" class="control-label"><b>Total Amount Paid: </b></label></td>
+                    <td><input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
+                </tr>
+            </table>
         </div>
         <div class="fieldset-container">     
             <table style="width:100%;">
