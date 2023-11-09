@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 09, 2023 at 03:02 AM
+-- Generation Time: Nov 09, 2023 at 05:45 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -60,7 +60,9 @@ CREATE TABLE `tbldepartments` (
 
 INSERT INTO `tbldepartments` (`id`, `DepartmentName`, `DepartmentShortName`, `CreationDate`) VALUES
 (2, 'Information Technologies', 'ICT', '2017-11-01 07:19:37'),
-(3, 'Library', 'LIb', '2021-05-21 08:27:45');
+(3, 'Project Admin', 'PA', '2021-05-21 08:27:45'),
+(4, 'Treasury Department', 'TSR', '2021-05-21 08:27:45'),
+(6, 'Cashier Supervisor', 'CSPV', '2021-05-21 08:27:45');
 
 -- --------------------------------------------------------
 
@@ -80,6 +82,7 @@ CREATE TABLE `tblemployees` (
   `Status` int(1) NOT NULL,
   `RegDate` timestamp NOT NULL DEFAULT current_timestamp(),
   `role` varchar(30) NOT NULL,
+  `user_session_id` varchar(100) NOT NULL,
   `location` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -87,10 +90,12 @@ CREATE TABLE `tblemployees` (
 -- Dumping data for table `tblemployees`
 --
 
-INSERT INTO `tblemployees` (`emp_id`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Department`, `Phonenumber`, `Status`, `RegDate`, `role`, `location`) VALUES
-(1, 'Roseann', 'Capule', 'rosea@gmail.com', '0192023a7bbd73250516f069df18b500', 'Female', 'ICT', '0248865955', 1, '2017-11-10 11:29:59', 'Staff', 'NO-IMAGE-AVAILABLE.jpg'),
-(2, 'Jude', 'Dela Cruz', 'jude@gmail.com', '0192023a7bbd73250516f069df18b500', 'Male', 'ICT', '09561305511', 1, '2017-11-10 13:40:02', 'Admin', 'avatar-1.png'),
-(5, 'Elena', 'Millo', 'elena@gmail.com', '0192023a7bbd73250516f069df18b500', 'Female', 'ICT', '587944255', 1, '2017-11-10 13:40:02', 'Cashier', 'photo5.jpg');
+INSERT INTO `tblemployees` (`emp_id`, `FirstName`, `LastName`, `EmailId`, `Password`, `Gender`, `Department`, `Phonenumber`, `Status`, `RegDate`, `role`, `user_session_id`, `location`) VALUES
+(10007, 'Ma. Theresa', 'Rabulan', 'head@gmail.com', '0192023a7bbd73250516f069df18b500', 'Male', 'TSR', '09561305511', 1, '2023-10-20 02:55:01', 'Head', 'tqf9hi2avpapbfb91ao25ia1fm', 'NO-IMAGE-AVAILABLE.jpg'),
+(10093, 'Jude', 'Dela Cruz', 'admin@gmail.com', '0192023a7bbd73250516f069df18b500', 'Male', 'ICT', '09561305511', 1, '2017-11-10 13:40:02', 'Admin', 'o9q47tvt4s9jjql8k3vpbmgm8q', 'avatar-1.png'),
+(10184, 'Joycelyn', 'Aguinaldo', 'head2@gmail.com', '0192023a7bbd73250516f069df18b500', 'Female', 'CSPV', '09561305511', 1, '2023-10-20 02:55:01', 'Head', '485a8t546mi1hdiehel5jne1pe', 'NO-IMAGE-AVAILABLE.jpg'),
+(20008, 'Elena', 'Millo', 'cashier@gmail.com', '0192023a7bbd73250516f069df18b500', 'Female', 'TSR', '587944255', 1, '2017-11-10 13:40:02', 'Cashier', '3adg1jd5rh07h50ggaaegfp35c', 'photo5.jpg'),
+(20160, 'Roseann', 'Capule', 'staff@gmail.com', '0192023a7bbd73250516f069df18b500', 'Female', 'PA', '0248865955', 1, '2017-11-10 11:29:59', 'Staff', 'op3scnj154aj5534h86agstenr', 'DESKTOP 2023 Approved.jpg');
 
 --
 -- Indexes for dumped tables
@@ -128,13 +133,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `tbldepartments`
 --
 ALTER TABLE `tbldepartments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `tblemployees`
---
-ALTER TABLE `tblemployees`
-  MODIFY `emp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
