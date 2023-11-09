@@ -109,15 +109,15 @@ endif;
 							<tr>
 								
                             <?php 
-                                $i = 1;
+                                 $i = 1;
                             
-                                if ($l_find == "100"):
-                                    $l_find = '1';
-                                endif;
-                                
-                                if ($l_find == "00000000"):
-                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active'  ORDER BY c_account_no";
-                                else:
+                                 if ($l_find == "100"):
+                                     $l_find = '1';
+                                 endif;
+                                 
+                                 if ($l_find == "00000000"):
+                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active' ORDER BY c_account_no limit 10 ";
+                                 else:
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_account_no::text ~* '^%s' ORDER BY c_account_no";
                                 endif;
                                 $sql = sprintf($sql, $l_find);

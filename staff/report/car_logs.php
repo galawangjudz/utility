@@ -99,10 +99,10 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                                WHEN c_st_or_no LIKE 'MTF%' AND c_st_or_no NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
-                                WHEN c_st_or_no LIKE 'STL%' AND c_st_or_no NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
-                                WHEN c_st_or_no LIKE 'STL-ADJ%' THEN 'STL Adjustment'
-                                WHEN c_st_or_no LIKE 'MTF-ADJ%' THEN 'GCF Adjustment'
+                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
+                                WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL Payment'
+                                WHEN c_st_or_no LIKE 'STL-ADJ%' or c_st_or_no LIKE 'STL-BA%' THEN 'STL Adjustment'
+                                WHEN c_st_or_no LIKE 'MTF-ADJ%' or c_st_or_no LIKE 'MTF-BA%' THEN 'GCF Adjustment'
                                 ELSE 'Others'
                             END AS c_pay_type,
                             c_st_amount_paid,
@@ -115,7 +115,12 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             c_encoded_by
                         FROM t_utility_accounts x
                         JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                        WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                        WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to' 
+                        AND (
+                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
+                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
+                            )
+                        AND y.c_encoded_by = '$session_id'
                         ORDER BY date(y.c_st_pay_date) ASC";
                     $result = odbc_exec($conn2, $query);
                     if (!$result) {
@@ -195,6 +200,11 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                                 FROM t_utility_accounts x
                                 JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
                                 WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                                AND y.c_encoded_by = '$session_id'
+                                AND (
+                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
+                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
+                            )
                                 GROUP BY Bank
                                 ORDER BY Bank DESC" ;
                        $result2 = odbc_exec($conn2, $query2);
@@ -221,7 +231,12 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'";
+                                            WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                                            AND y.c_encoded_by = '$session_id'
+                                            AND (
+                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
+                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
+                            )";
                        $result3 = odbc_exec($conn2, $grandTotal);
                        if (!$result3) {
                         die("ODBC query execution failed: " . odbc_errormsg());
@@ -270,7 +285,7 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="./?page=report/car_logs&"+$(this).serialize();
+            location.href="<?php echo base_url ?>staff/?page=report/car_logs&"+$(this).serialize();
         })
         $('#print').click(function(){
             start_loader()

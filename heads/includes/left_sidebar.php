@@ -1,6 +1,6 @@
 <div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="<?php echo base_url ?>admin/?page=head_dashboard">
+		<a href="<?php echo base_url ?>admin/?page=head_dashboard">
 				<img src="../vendors/images/deskapp-logo-white-svg.png" alt="" class="dark-logo">
 				<img src="../vendors/images/deskapp-logo-white-svg.png" alt="" class="light-logo">
 			</a>
