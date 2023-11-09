@@ -165,6 +165,66 @@ Class Master{
 		return json_encode($resp);
 	}
 
+	function adjust_bill(){
+		require_once('../includes/config.php');
+		extract($_POST);
+		$acc_no = $_POST['acc_no'];
+		$adjust_date = $_POST['adj_date'];
+		$adjust_type = $_POST['type'];
+		$adjust_for = $_POST['adjust_for'];
+		$amount = (float)$_POST['amount'];
+		require_once('../includes/session.php');
+		$encoded_by = $_SESSION['alogin'];
+		$discount = 0;
+		$notes = $_POST['notes'];
+
+		if ($notes == ""):
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Please provide notes!!";
+			return json_encode($resp);
+			exit;
+		endif;
+
+		if ($amount == 0):
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Please input amount!!!";
+			return json_encode($resp);
+			exit;
+		endif;
+		do {
+			$random_no = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+			$unique_no = $adjust_for . '-' . $adjust_type . $random_no;
+		
+			// Check if the number exists in the database
+			$query = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$unique_no'";
+			/* $result = $mysqli->query($query); */
+			$result = odbc_prepare($conn2, $query);
+			odbc_execute($result);
+			if (!odbc_fetch_row($result)) {
+				break; // The number is unique, exit the loop
+			}
+		} while (true);
+		
+		
+		$params = "'$acc_no', '$unique_no', '$adjust_date', '$amount', '$discount', '$encoded_by'";
+		// Create the INSERT query using parameterized query
+		$insert_query = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params)";
+
+		if (odbc_exec($conn2, $insert_query)) {
+			$this->log_log('Utility Bill Adjustment'," $acc_no | $unique_no | $notes");
+			$resp['status'] = 'success';
+			$resp['msg'] = "Bill Adjustment has been successfully added.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
+		}
+		
+		return json_encode($resp);
+	}
+
+
+
 
 
 	function save_payment(){
@@ -430,9 +490,13 @@ switch ($action) {
 	case 'save_bill':
 		echo $Master->save_bill();
 	break;
+	case 'adjust_bill':
+		echo $Master->adjust_bill();
+	break;	
 	case 'save_user':
 		echo $Master->save_user();
 	break;
+
 	default:
 		break;
 }

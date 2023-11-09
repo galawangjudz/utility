@@ -23,11 +23,17 @@
 						</a>
 					</li>
 
-					<li>
-						<a href="<?php echo base_url ?>admin/?page=adjustments" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-list"></span><span class="mtext">Adjustments</span>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext"> Adjustments </span>
 						</a>
+						<ul class="submenu">
+							<li><a href="<?php echo base_url ?>admin/?page=adjustments">Adjustment Bill</a></li>
+							<li><a href="<?php echo base_url ?>admin/?page=adjustments">Adjustment Payment</a></li>
+							
+						</ul>
 					</li>
+
 
 					<li>
 						<a href="<?php echo base_url ?>admin/?page=get-soa" class="dropdown-toggle no-arrow">

@@ -1,0 +1,179 @@
+<?php
+require_once('../../includes/config.php');
+
+
+if(isset($_GET['id'])){
+
+
+$sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
+    $acc = $_GET['id'];
+
+    $qry = odbc_prepare($conn2, $sql);
+    if (!odbc_execute($qry, array($acc))) {
+        die("Execution of the statement failed: " . odbc_errormsg($conn2));
+    }
+    while ($res = odbc_fetch_array($qry)) {
+    
+        $account_no = $res["c_account_no"];
+        $l_acc_no = $res["c_account_no"];
+        $ctr = $res["c_control_no"];
+        $first_name = $res["c_first_name"];
+        $last_name = $res["c_last_name"];
+        $middle_name = $res["c_middle_name"];
+        $c_location = $res["c_location"];
+        $address = $res["c_address"];
+        $city_prov = $res["c_city_prov"];
+        $zip_code = $res["c_zipcode"];
+        $add = $res["c_address"] . ' ' . $res["c_city_prov"] . ' ' . $res["c_zipcode"];
+        $date_applied = $res["c_date_applied"];
+        $lot_area = $res["c_lot_area"];
+        $mtf_end = $res["c_end_date"];
+        $type = $res["c_types"];
+        $status = $res["c_status"];
+        $remarks = $res["c_remarks"];
+        $remarks = $res["c_remarks"];
+        if ($remarks === '') {
+            $remarks = "N/A";
+        }
+        $full_name = $last_name . ', ' .$first_name . ' ' .$middle_name;
+
+        
+    }
+
+}
+
+$get_payment_records = "SELECT
+                            c_account_no,
+                            RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                            c_st_pay_date,
+                            CASE 
+                                WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
+                                WHEN UPPER(c_st_or_no) LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
+                                WHEN UPPER(c_st_or_no) LIKE 'MTF-BA%' THEN 'GCF Bill Adjustment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
+                                ELSE 'Unidentified payment'
+                            END AS c_pay_type,
+                            c_st_amount_paid + c_discount as c_tot_amt_paid
+                        FROM
+                            t_utility_payments WHERE c_account_no = '$l_acc_no' ORDER BY c_st_pay_date DESC
+            ";
+    $result = odbc_exec($conn2, $get_payment_records);
+
+    while ($payment = odbc_fetch_array($result)) {
+        $l_pdate = date("m/d/Y", strtotime($payment['c_st_pay_date']));
+        $l_or_no = $payment['st_or_no_clear'];
+        $l_pay_type = $payment['c_pay_type'];
+        $l_amount = $payment['c_tot_amt_paid'];
+
+        $l_data2 = array($l_pdate, $l_or_no, $l_pay_type, $l_amount);
+        
+        $l_due_list[] = $l_data2;
+        }
+
+
+?>
+<div class="container-fluid">
+    <form action="" id="bill-form">
+        <h3><?php echo isset($account_no) ? $account_no : '' ?></h3>
+        
+        <input type="hidden" name="acc_no" value="<?php echo isset($account_no) ? $account_no : '' ?>"> 
+        <div class="row">
+            <table class="table table-bordered table-hover table-striped" id="transfer_table" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th width="10">
+                            <a href="#" class="btn btn-flat btn-primary btn-md add-row" style="font-size:14px;margin-left:5px;"><span class="dw dw-plus" aria-hidden="true"></span></a>
+                        </th>
+                        <th width="100">
+                            <label class="control-label">&nbsp;Account #</label>
+                        </th>
+                        <th  width="100">
+                        <label class="control-label">&nbsp;Payment For</label>
+                        </th>
+                        <th width="150">
+                            <label class="control-label">&nbsp;Amount</label>
+                        </th>
+                        <th width="70">
+                            <label class="control-label">&nbsp;Discount</label>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" class="btn btn-danger delete-row" style="font-size:14px;"><span class="dw dw-times" ></span></a>
+                        </td>
+                        
+                        <td style="padding-top:10px;">
+                                <input type="text" class="form-control agent-pos" name="agent_position[]" value="">
+                        </td>
+                        <td style="padding-top:10px;">
+                                <input type="text" class="form-control agent-code" name="agent_code[]" value="">
+                        </td>
+                        <td style="padding-top:10px;">
+                                <input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="">
+                        </td>
+                        <td style="padding-top:10px;">
+                                <input type="text" class="form-control comm-amt" name="comm_amt[]" value="" >
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          
+        </div>
+      
+    </form>
+</div>
+<style>
+textarea.form-control {
+    overflow-y: hidden;
+}
+</style>
+<script>
+    
+    $(function(){
+        $('#uni_modal #bill-form').submit(function(e){
+            e.preventDefault();
+            var _this = $(this)
+            $('.pop-msg').remove()
+            var el = $('<div>')
+                el.addClass("pop-msg alert")
+                el.hide()
+            start_loader();
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=adjust_payment",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					alert("An error occured",'error');
+					end_loader();
+				},
+                success:function(resp){
+                    if(resp.status == 'success'){
+                        alert(resp.msg);
+                        location.reload();
+                    }else if(!!resp.msg){
+                        el.addClass("alert-danger")
+                        el.text(resp.msg)
+                        _this.prepend(el)
+                    }else{
+                        el.addClass("alert-danger")
+                        el.text("An error occurred due to unknown reason.")
+                        _this.prepend(el)
+                    }
+                    el.show('slow')
+                    $('html,body,.modal').animate({scrollTop:0},'fast')
+                    end_loader();
+                }
+            })
+        })
+    })
+</script>

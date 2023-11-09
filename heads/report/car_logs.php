@@ -141,7 +141,7 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             }
                             // Fetch and display the results
                             while ($row2 = odbc_fetch_array($get_phase)) {
-                                $acronym = $row2['c_'];
+                                $acronym = $row2['c_acronym'];
                             }
                         ?>
                         <td class="text-center"><?php echo $acronym ?></td>

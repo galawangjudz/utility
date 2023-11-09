@@ -38,6 +38,12 @@ if (isset($_GET['search'])) {
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto add_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
                             <i class="fa fa-plus"></i> Add New Bill
                         </a>
+                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
+                            <i class="fa fa-plus"></i> Add Adjustment BIll
+                        </a>
+                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
+                            <i class="fa fa-plus"></i> Adjust Payment
+                        </a>
                         <?php }
                         ?>
 				</div>
@@ -119,6 +125,14 @@ if (isset($_GET['search'])) {
 
         $('.add_bill').click(function(){
 			uni_modal("Add New Bill","adjustments/manage_bill.php?id="+$(this).attr('id'))
+		})
+
+        $('.adjust_bill').click(function(){
+			uni_modal("Adjustment Bill","adjustments/adjust_bill.php?id="+$(this).attr('id'))
+		})
+
+        $('.adjust_payment').click(function(){
+			uni_modal("Adjustment Payment","adjustments/adjust_payment.php?id="+$(this).attr('id'))
 		})
     });
     function delete_bill($date,$type,$id){
