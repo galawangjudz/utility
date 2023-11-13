@@ -6,18 +6,24 @@ $l_site = isset($_GET["phase"]) ? $_GET["phase"] : '';
 $l_block = isset($_GET["block"]) ? $_GET["block"] : '';
 $l_lot = isset($_GET["lot"]) ? $_GET["lot"] : '' ;
 
+$l_acct_no = isset($_GET["acct_no"]) ? $_GET["acct_no"] : '' ;
 
-if ($l_block == ''):
-	$l_find = sprintf("%03d", (int)$l_site);
-else:
-	
-	if ($l_lot == ''):
-		$l_find = sprintf("%03d%03d", (int)$l_site, (int)$l_block);	
-	else:
-		$l_find = sprintf("%03d%03d%02d", (int)$l_site, (int)$l_block, (int)$l_lot);
-		
-	endif;
-endif;
+if ($l_acct_no != ''){
+    $l_find = $l_acct_no;
+    
+}else{
+    if ($l_block == ''):
+        $l_find = sprintf("%03d", (int)$l_site);
+    else:
+        
+        if ($l_lot == ''):
+            $l_find = sprintf("%03d%03d", (int)$l_site, (int)$l_block);	
+        else:
+            $l_find = sprintf("%03d%03d%02d", (int)$l_site, (int)$l_block, (int)$l_lot);
+            
+        endif;
+    endif;
+}
 
 ?>
 
@@ -26,14 +32,31 @@ endif;
 			    <div class="card-box mb-30">
                     <div class="pd-20">
                        <!--  <h4 class="text-blue h4">Search</h4> -->
+                       <form action="" id="filter">
+                            <div class="row align-items-end">
+                                <input type="hidden" id="page" name="page" value="accounts" class="form-control form-control-sm rounded-0">
+                            
+                                <div class="col-md-3 form-group">
+                                    <label for="acct_no" class="control-label">Account #</label>
+                                    <input type="text" id="acct_no" name="acct_no" value="<?= $l_acct_no ?>" class="form-control" maxlength="11">
+                                </div>
+
+                                <div class="col-md-3 form-group">
+                                    <button class="btn btn-primary"><i class="dw dw-search"></i> Find Account</button>
+                                    <!-- <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="fa fa-print"></i> Print</button> -->
+                                </div>
+                            </div>
+                        </form>
+
                         <form action="" id="filter">
                         <div class="row align-items-end">
                             <input type="hidden" id="page" name="page" value="accounts" class="form-control form-control-sm rounded-0">
                         
-                            <div class="col-md-4 form-group">
+                       
+                            <div class="col-md-2 form-group">
                                 
                                 <label for="phase" class="control-label">Phase</label>
-                                <select name="phase" id="phase" class="custom-select form-control" required="true" autocomplete="off">
+                                <select name="phase" id="phase" class="custom-select form-control" autocomplete="off">
                                   <?php
                                 
                                     $sql = "SELECT * FROM t_projects ORDER BY c_acronym";
@@ -44,7 +67,8 @@ endif;
 
                                     
                                    
-                                    echo '<option value="100" selected>ALL</option>';
+                                    echo '<option value="" selected>--SELECT--</option>';
+                                    echo '<option value="100">ALL</option>';
                                     while ($row = odbc_fetch_array($results)) {
                                         $optionValue = $row['c_code'];
                                         $optionText = $row['c_acronym'];
@@ -56,16 +80,16 @@ endif;
                                     
                                 ?>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-2 form-group">
                                 <label for="block" class="control-label">Block</label>
                                 <input type="number" id="block" name="block" value="<?= $l_block ?>" class="form-control">
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-2 form-group">
                                 <label for="lot" class="control-label">Lot</label>
                                 <input type="number" id="lot" name="lot" value="<?= $l_lot ?>" class="form-control">
                             </div>
-                            <div class="col-md-4 form-group">
-                                <button class="btn btn-primary"><i class="dw dw-search"></i> Search</button>
+                            <div class="col-md-3 form-group">
+                                <button class="btn btn-primary"><i class="dw dw-search"></i> Search Location</button>
                                 <!-- <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="fa fa-print"></i> Print</button> -->
                             </div>
                         </div>
@@ -103,12 +127,12 @@ endif;
                             <?php 
                                 $i = 1;
                             
-                                if ($l_find == "100"):
+                               /*  if ($l_find == "100"):
                                     $l_find = '1';
-                                endif;
-                                
-                                if ($l_find == "00000000"):
-                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active' ORDER BY c_account_no limit 10 ";
+                                endif; */
+                              
+                                if ($l_find == "00000000" & $l_acct_no == ""):
+                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active' ORDER BY c_date_applied DESC limit 10 ";
                                 else:
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_account_no::text ~* '^%s' ORDER BY c_account_no";
                                 endif;
