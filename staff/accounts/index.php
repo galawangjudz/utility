@@ -196,7 +196,7 @@ endif;
 			uni_modal("Add New Account","accounts/manage_account.php",'large')
 		})
 		$('.soa_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
+			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'),'large');
 		})
         $('.stl_bill_data').click(function(){
 			uni_modal_2("STL Due and Payment Details", "soa/statement_stl.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
@@ -206,7 +206,7 @@ endif;
 			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
         $('.payment_data').click(function(){
-			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
+            uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
 		})
         $('.edit_data').click(function(){
 			uni_modal("Update Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')

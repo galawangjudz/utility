@@ -175,7 +175,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
            
             <div class="col-md-4">
                 <div class="form-group">
-                <label for="mtf_end" class="control-label">MTF End Date </label>
+                <label for="mtf_end" class="control-label">GCF End Date </label>
                 <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('2030-01-01'); ?>" required>
                 </div>
             </div>

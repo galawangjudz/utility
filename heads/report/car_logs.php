@@ -191,7 +191,8 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                                 CASE
                                     WHEN c_mop = '1' AND c_branch = '' THEN 'CASH'
                                     WHEN c_mop = '3' AND c_branch = '' THEN 'ONLINE'
-                                    ELSE c_branch
+                                   /* ELSE c_branch */
+                                   WHEN c_mop = '2' AND c_branch !='' THEN 'CHECK'
                                    END AS Bank,
                                     SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Total_Cash,
                                     SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Total_Check,
@@ -205,7 +206,7 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                                 (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
                                 )
                                 GROUP BY Bank
-                                ORDER BY Bank DESC" ;
+                                ORDER BY Bank ASC" ;
                        $result2 = odbc_exec($conn2, $query2);
                        if (!$result2) {
                         die("ODBC query execution failed: " . odbc_errormsg());

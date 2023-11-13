@@ -1,7 +1,5 @@
 <?php 
 require_once('../includes/config.php');
-session_start(); 
-
 
 
 $sess_id=$_SESSION['user_session_id'];
@@ -25,7 +23,7 @@ foreach ($result as $row)
 
     }
 
-echo json_encode($data);
+return json_encode($data);
 }
 
 ?>

@@ -23,14 +23,9 @@ endif;
 
 	<div class="main-container">
 		<div class="pd-ltr-20">
-			<div class="title pb-20">
-				<h2 class="h3 mb-0">List of Accounts</h2>
-			</div>
-		
-
 			    <div class="card-box mb-30">
                     <div class="pd-20">
-                        <h4 class="text-blue h4">Search</h4>
+                       <!--  <h4 class="text-blue h4">Search</h4> -->
                         <form action="" id="filter">
                         <div class="row align-items-end">
                             <input type="hidden" id="page" name="page" value="accounts" class="form-control form-control-sm rounded-0">
@@ -79,7 +74,7 @@ endif;
 					</div>
 				</div>
                 
-			
+               
 
 			<div class="card-box mb-30">
 				<div class="pd-20">
@@ -227,7 +222,7 @@ endif;
 		})
       
         $('.payment_data').click(function(){
-			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
+			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
 		})
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])

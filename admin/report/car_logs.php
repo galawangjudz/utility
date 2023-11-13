@@ -177,7 +177,7 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
-                            <th class="text-center">Bank</th>
+                            <th class="text-center">MODE OF PAYMENT</th>
                             <th class="text-center">TOTAL CASH</th>
                             <th class="text-center">TOTAL CHECK</th>
                             <th class="text-center">TOTAL ONLINE</th>
@@ -191,6 +191,8 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                                 CASE
                                     WHEN c_mop = '1' AND c_branch = '' THEN 'CASH'
                                     WHEN c_mop = '3' AND c_branch = '' THEN 'ONLINE'
+                                    /* ELSE c_branch */
+                                    WHEN c_mop = '2' AND c_branch !='' THEN 'CHECK'
                                     ELSE c_branch
                                    END AS Bank,
                                     SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Total_Cash,

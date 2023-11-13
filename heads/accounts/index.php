@@ -206,7 +206,7 @@ endif;
 			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
         $('.payment_data').click(function(){
-			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
+            uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
 		})
         $('.edit_data').click(function(){
 			uni_modal("Update Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')

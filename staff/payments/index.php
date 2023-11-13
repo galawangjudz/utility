@@ -337,7 +337,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </tr>
                 </table>
             </fieldset>
-            
             <fieldset class="fieldset">
                 <table style="width:100%;">
                     <tr>
@@ -387,18 +386,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <div class="form-group">
                             <label for="payment_or" class="control-label"><b>CAR #: </b></label>
                             <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" value="" minlength="6" maxlength="6">
-                            <small class="text-danger">Note: 6 digits numbers only without CAR.</small>
+                            
                         </div>
                     </td>
                 </tr>
                 <tr id="check_details" style="display:none;">
-                    <td class="col-md-4">
+                    <td class="col-md-2">
                         <div class="form-group">
                             <label for="check_date" class="control-label"><b>Check Date: </b></label>
                             <input type="date" name="check_date" id="check_date" class="form-control form-control-border">
                         </div>
                     </td>
-                    <td class="col-md-8">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="branch" class="control-label"><b>Branch: </b></label>
                             <select name="branch" id="branch" class="form-control form-control-border" style="text-align: center;">
