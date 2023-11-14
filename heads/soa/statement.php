@@ -72,12 +72,12 @@ if(isset($_GET['id'])){
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                            WHEN c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
-                                WHEN c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
-                                WHEN c_st_or_no LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
-                                WHEN c_st_or_no LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
-                                WHEN c_st_or_no LIKE 'MTF-BA%' THEN 'GCF Bill Adjustment'
-                                WHEN c_st_or_no LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
+                                WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
+                                WHEN UPPER(c_st_or_no) LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
+                                WHEN UPPER(c_st_or_no) LIKE 'MTF-BA%' THEN 'GCF Bill Adjustment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
                                 ELSE 'Unidentified payment'
                             END AS c_pay_type,
                             c_st_amount_paid + c_discount as c_tot_amt_paid
@@ -312,10 +312,16 @@ function format_num($number){
                                 UNION ALL 
                                 SELECT 
                                     c_account_no, 
-                                    0 as c_amount_due,
+                                    CASE 
+                                    WHEN (c_st_or_no ILIKE '%MTF-BA%' OR c_st_or_no ILIKE '%STL-BA%') THEN - c_st_amount_paid
+                                        ELSE 0
+                                    END as c_amount_due,
                                     NULL as c_due_date,
                                     c_st_pay_date, 
-                                    c_st_amount_paid, 
+                                    CASE 
+                                        WHEN (c_st_or_no ILIKE '%MTF-BA%' OR c_st_or_no ILIKE '%STL-BA%') THEN 0
+                                        ELSE c_st_amount_paid
+                                    END as c_st_amount_paid,
                                     c_discount, 
                                     CASE WHEN c_st_or_no ilike '%MTF%' THEN 'MTF' ELSE 'STL' END as c_bill_type
                                 FROM 

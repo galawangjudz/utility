@@ -30,7 +30,8 @@ if(isset($_GET['id'])){
         $type = $res["c_types"];
         $status = $res["c_status"];
         $remarks = $res["c_remarks"];
-        $remarks = $res["c_remarks"];
+        $email = $res["c_email"];
+        $contact_no = $res["c_contact_no"];
         if ($remarks === '') {
             $remarks = "N/A";
         }
@@ -182,13 +183,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="contact_no" class="control-label">Contact No</label>
-                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="">
+                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="<?php echo isset($contact_no) ? $contact_no : '' ?>">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="email_add" class="control-label">Email Address</label>
-                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="">
+                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="<?php echo isset($email) ? $email : 0 ?>">
                 </div>
             </div>
         </div>

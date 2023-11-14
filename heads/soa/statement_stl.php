@@ -159,7 +159,7 @@ function format_num($number){
 <div class="card card-outline card-primary rounded-0 shadow">
 	<div class="card-header">
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/admin/soa/print_statement_stl.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>/heads/soa/print_statement_stl.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>
@@ -254,47 +254,53 @@ function format_num($number){
                 <table style="width:100%;">
                     <tr>
                         <?php 
-                        $summary = "SELECT 
-                            c_account_no, 
-                            SUM(CASE WHEN (c_bill_type = 'MTF') THEN c_amount_due ELSE 0 END) as c_mtf_bill,
-                            SUM(CASE WHEN (c_bill_type = 'DLQ_MTF') THEN c_amount_due ELSE 0 END) as c_mtf_sur,
-                            SUM(CASE WHEN c_bill_type = 'MTF' THEN c_st_amount_paid ELSE 0 END) as c_mtf_amount_paid,
-                            SUM(CASE WHEN c_bill_type = 'MTF' THEN c_discount ELSE 0 END) as c_mtf_discount, 
-                            SUM(CASE WHEN (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_mtf_bal,
-                            SUM(CASE WHEN (c_bill_type = 'STL') THEN c_amount_due ELSE 0 END) as c_stl_bill, 
-                            SUM(CASE WHEN (c_bill_type = 'DLQ_STL') THEN c_amount_due ELSE 0 END) as c_stl_sur, 
-                            SUM(CASE WHEN c_bill_type = 'STL' THEN c_st_amount_paid ELSE 0 END) as c_stl_amount_paid, 
-                            SUM(CASE WHEN c_bill_type = 'STL' THEN c_discount ELSE 0 END) as c_stl_discount, 
-                            SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_stl_bal
-                    FROM 
-                            (
-                                SELECT 
-                                    c_account_no, 
-                                    c_amount_due, 
-                                    c_due_date,
-                                    NULL as c_st_pay_date,
-                                    0 as c_st_amount_paid, 
-                                    0 as c_discount, 
-                                    c_bill_type
-                                FROM 
-                                    t_utility_bill as hed 
-                                WHERE 
-                                    c_bill_type IN ('MTF', 'STL','DLQ_MTF', 'DLQ_STL') 
-                                UNION ALL 
-                                SELECT 
-                                    c_account_no, 
-                                    0 as c_amount_due,
-                                    NULL as c_due_date,
-                                    c_st_pay_date, 
-                                    c_st_amount_paid, 
-                                    c_discount, 
-                                    CASE WHEN c_st_or_no ilike '%MTF%' THEN 'MTF' ELSE 'STL' END as c_bill_type
-                                FROM 
-                                    t_utility_payments 
-                                WHERE 
-                                    (c_st_or_no ilike '%MTF%' OR c_st_or_no ilike '%STL%') 
-                            ) as my_table 
-                        WHERE c_account_no = '$l_acc_no' group by c_account_no";
+                         $summary = "SELECT 
+                         c_account_no, 
+                         SUM(CASE WHEN (c_bill_type = 'MTF') THEN c_amount_due ELSE 0 END) as c_mtf_bill,
+                         SUM(CASE WHEN (c_bill_type = 'DLQ_MTF') THEN c_amount_due ELSE 0 END) as c_mtf_sur,
+                         SUM(CASE WHEN c_bill_type = 'MTF' THEN c_st_amount_paid ELSE 0 END) as c_mtf_amount_paid,
+                         SUM(CASE WHEN c_bill_type = 'MTF' THEN c_discount ELSE 0 END) as c_mtf_discount, 
+                         SUM(CASE WHEN (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_mtf_bal,
+                         SUM(CASE WHEN (c_bill_type = 'STL') THEN c_amount_due ELSE 0 END) as c_stl_bill, 
+                         SUM(CASE WHEN (c_bill_type = 'DLQ_STL') THEN c_amount_due ELSE 0 END) as c_stl_sur, 
+                         SUM(CASE WHEN c_bill_type = 'STL' THEN c_st_amount_paid ELSE 0 END) as c_stl_amount_paid, 
+                         SUM(CASE WHEN c_bill_type = 'STL' THEN c_discount ELSE 0 END) as c_stl_discount, 
+                         SUM(CASE WHEN (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') THEN c_amount_due - c_st_amount_paid - c_discount ELSE 0 END) as c_stl_bal
+                     FROM 
+                         (
+                             SELECT 
+                                 c_account_no, 
+                                 c_amount_due, 
+                                 c_due_date,
+                                 NULL as c_st_pay_date,
+                                 0 as c_st_amount_paid, 
+                                 0 as c_discount, 
+                                 c_bill_type
+                             FROM 
+                                 t_utility_bill as hed 
+                             WHERE 
+                                 c_bill_type IN ('MTF', 'STL','DLQ_MTF', 'DLQ_STL') 
+                             UNION ALL 
+                             SELECT 
+                                 c_account_no, 
+                                 CASE 
+                                 WHEN (c_st_or_no ILIKE '%MTF-BA%' OR c_st_or_no ILIKE '%STL-BA%') THEN - c_st_amount_paid
+                                     ELSE 0
+                                 END as c_amount_due,
+                                 NULL as c_due_date,
+                                 c_st_pay_date, 
+                                 CASE 
+                                     WHEN (c_st_or_no ILIKE '%MTF-BA%' OR c_st_or_no ILIKE '%STL-BA%') THEN 0
+                                     ELSE c_st_amount_paid
+                                 END as c_st_amount_paid,
+                                 c_discount, 
+                                 CASE WHEN c_st_or_no ilike '%MTF%' THEN 'MTF' ELSE 'STL' END as c_bill_type
+                             FROM 
+                                 t_utility_payments 
+                             WHERE 
+                                 (c_st_or_no ilike '%MTF%' OR c_st_or_no ilike '%STL%') 
+                         ) as my_table 
+                     WHERE c_account_no = '$l_acc_no' group by c_account_no";
                          $result2 = odbc_exec($conn2, $summary);
                          $summ_count = odbc_num_rows($result2);
                          if ($summ_count == 0) {
