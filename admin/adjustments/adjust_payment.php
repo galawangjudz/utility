@@ -76,53 +76,57 @@ $get_payment_records = "SELECT
 ?>
 <div class="container-fluid">
     <form action="" id="bill-form">
-        <h3><?php echo isset($account_no) ? $account_no : '' ?></h3>
-        
+    <h3><?php echo isset($account_no) ? $account_no : '' ?></h3>
+        <h3><?php echo isset($last_name) ? $last_name : '' ?></h3>
+        <h3><?php echo isset($first_name) ? $first_name : '' ?></h3>
         <input type="hidden" name="acc_no" value="<?php echo isset($account_no) ? $account_no : '' ?>"> 
         <div class="row">
-            <table class="table table-bordered table-hover table-striped" id="transfer_table" style="width:100%;">
-                <thead>
-                    <tr>
-                        <th width="10">
-                            <a href="#" class="btn btn-flat btn-primary btn-md add-row" style="font-size:14px;margin-left:5px;"><span class="dw dw-plus" aria-hidden="true"></span></a>
-                        </th>
-                        <th width="100">
-                            <label class="control-label">&nbsp;Account #</label>
-                        </th>
-                        <th  width="100">
-                        <label class="control-label">&nbsp;Payment For</label>
-                        </th>
-                        <th width="150">
-                            <label class="control-label">&nbsp;Amount</label>
-                        </th>
-                        <th width="70">
-                            <label class="control-label">&nbsp;Discount</label>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <a href="#" class="btn btn-danger delete-row" style="font-size:14px;"><span class="dw dw-times" ></span></a>
-                        </td>
-                        
-                        <td style="padding-top:10px;">
-                                <input type="text" class="form-control agent-pos" name="agent_position[]" value="">
-                        </td>
-                        <td style="padding-top:10px;">
-                                <input type="text" class="form-control agent-code" name="agent_code[]" value="">
-                        </td>
-                        <td style="padding-top:10px;">
-                                <input type="text" class="form-control calculate agent-rate required" name="agent_rate[]" value="">
-                        </td>
-                        <td style="padding-top:10px;">
-                                <input type="text" class="form-control comm-amt" name="comm_amt[]" value="" >
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="adj_date" class="control-label">TRANSFER DATE</label>
+                    <input type="date" name="adj_date" id="adj_date" class="form-control form-control-border" value ="<?php echo date('Y-m-d'); ?>" required>
+                
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="adjust_from" class="control-label">TRANSFER FROM</label>
+                    <select name="adjust_from" id="adjust_from" class="form-control form-control-border" required>
+                        <option value="MTF">GRASSCUTTING</option>
+                        <option value="STL">STREETLIGHT</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="adjust_to" class="control-label">TRANSFER TO</label>
+                    <select name="adjust_to" id="adjust_to" class="form-control form-control-border" required>
+                        <option value="MTF">GRASSCUTTING</option>
+                        <option value="STL">STREETLIGHT</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="amount" class="control-label">Amount</label>
+                    <input type="number" name="amount" id="amount" class="form-control form-control-border" placeholder="Enter Amount" value ="" required>
+                    <!-- <small class="text-danger">Amount must be higher than 0.</small> -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="notes" class="control-label">Notes</label>
+                    <textarea rows="3" name="notes" id="notes" class="form-control form-control-md rounded-0" required></textarea>
+                    <small class="text-muted">Please provide notes.</small>
+                </div>
+            </div>
+           
+        </div>
           
         </div>
+      
       
     </form>
 </div>

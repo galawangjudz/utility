@@ -145,6 +145,23 @@ if(isset($_GET['id'])){
     
 
 }
+function fetchDataFromOtherTable($content) {
+    $dsn = "pgadmin4"; // Replace with your DSN name
+    $user = "glicelo";    // Replace with your database username
+    $pass = "admin12345";    // Replace with your database password
+
+    $conn2 = odbc_connect($dsn, $user, $pass);
+    $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content'";
+    $result = odbc_prepare($conn2, $sql);
+	odbc_execute($result);
+    if ($result) {  
+        $notes = odbc_result($result, 'c_notes');
+    }else{
+        $notes = "No Notes";
+    }
+
+    return $notes;
+}
 ?>
 <?php 
 
@@ -161,7 +178,7 @@ function format_num($number){
 	<div class="card-header">
 		
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/heads/soa/print_statement_gcf.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>heads/soa/print_statement_gcf.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>
@@ -235,7 +252,19 @@ function format_num($number){
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
+                                <td style="text-align:center; font-size:13px;">
+                                    <?php
+                                    $content = $l_data[9];
+                                    $content = 'MTF-' . $content;
+                                    if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false) {
+                                        echo '<a href="#" class="link-with-hover">' . $l_data[9] . '</a>';
+                                         $queryResult = fetchDataFromOtherTable($content);
+                                        echo '<div class="hover-info">' . $queryResult . '</div>';
+                                    } else {
+                                        echo $l_data[9];
+                                    }
+                                    ?>
+                                </td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
                             </tr>
                             <?php
@@ -339,3 +368,19 @@ function format_num($number){
             </div>
         </div>
 </div>
+
+<style>
+    .hover-info {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        z-index: 1;
+    }
+
+    a:hover + .hover-info {
+        display: block;
+    }
+</style>

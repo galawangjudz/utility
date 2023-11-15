@@ -5,7 +5,7 @@ require_once('../../includes/config.php');
 if(isset($_GET['id'])){
     $l_acc_no = $_GET['id'];
     $bill_type = $_GET['bill_type'];
-    
+
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = '$l_acc_no'";
     $qry = odbc_exec($conn2, $sql);
     while ($res = odbc_fetch_array($qry)) {
@@ -29,11 +29,11 @@ if(isset($_GET['id'])){
         c_start_date,
         c_end_date,
         c_due_date,
-        COALESCE(MAX(CASE WHEN c_bill_type = 'MTF' THEN c_amount_due END), 0) AS MTF,
-        COALESCE(MAX(CASE WHEN c_bill_type = 'DLQ_MTF' THEN c_amount_due END), 0) AS DLQ_MTF,
+        COALESCE(MAX(CASE WHEN c_bill_type = 'STL' THEN c_amount_due END), 0) AS STL,
+        COALESCE(MAX(CASE WHEN c_bill_type = 'DLQ_STL' THEN c_amount_due END), 0) AS DLQ_STL,
         COALESCE(SUM(c_amount_due), 0) AS TotalAmountDue
     FROM
-        t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 AND (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF')
+        t_utility_bill WHERE c_account_no = '$l_acc_no' AND c_amount_due != 0 AND (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL')
     GROUP BY
         c_start_date, c_end_date, c_due_date 
     ORDER BY
@@ -47,15 +47,15 @@ if(isset($_GET['id'])){
             $l_sdate = date("M j, y", strtotime($due['c_start_date']));
             $l_edate = date("M j, y", strtotime($due['c_end_date']));
             $l_ddate = date("M j, y", strtotime($due['c_due_date']));
-            $l_mtf_amount_due = $due['mtf'];
-            $l_mtf_sur = $due['dlq_mtf'];
+            $l_stl_amount_due = $due['stl'];
+            $l_stl_sur = $due['dlq_stl'];
             $l_pdate = '----------';
             $l_or_no = '----------';
-            $mtf_amtpd = 0;
-            $mtf_discount = 0;
+            $stl_amtpd = 0;
+            $stl_discount = 0;
             $l_data = array(
-                $l_edate1, $l_sdate, $l_edate, $l_ddate,  $l_mtf_amount_due, $l_mtf_sur
-                , $l_pdate, $l_or_no, $mtf_amtpd, $mtf_discount, 'bill'
+                $l_edate1, $l_sdate, $l_edate, $l_ddate, $l_stl_amount_due,
+                $l_stl_sur, $l_pdate, $l_or_no, $stl_amtpd, $stl_discount, 'bill'
             );
             $l_due_list[] = $l_data;
         }
@@ -64,11 +64,11 @@ if(isset($_GET['id'])){
                 c_account_no,
                 RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                 c_st_pay_date,
-                SUM(CASE WHEN c_st_or_no LIKE '%MTF%' THEN c_st_amount_paid ELSE 0 END) AS MTF_Payments,
-                SUM(CASE WHEN c_st_or_no LIKE '%MTF%' THEN c_discount ELSE 0 END) AS MTF_Discount
+                SUM(CASE WHEN c_st_or_no LIKE '%STL%' THEN c_st_amount_paid ELSE 0 END) AS STL_Payments,
+                SUM(CASE WHEN c_st_or_no LIKE '%STL%' THEN c_discount ELSE 0 END) AS STL_Discount
             FROM
                 t_utility_payments
-            WHERE c_account_no = '$l_acc_no' and c_st_or_no LIKE '%MTF%'
+            WHERE c_account_no = '$l_acc_no' and c_st_or_no LIKE '%STL%'
             GROUP BY
                 c_account_no, st_or_no_clear, c_st_pay_date
             ORDER BY
@@ -81,14 +81,14 @@ if(isset($_GET['id'])){
         $l_sdate = 'z---------';
         $l_edate = '----------';
         $l_ddate = '----------';
-        $l_mtf_amount_due = 0;
-        $l_mtf_sur = 0;
+        $l_stl_amount_due = 0;
+        $l_stl_sur = 0;
         $l_pdate = date("m/d/Y", strtotime($payment['c_st_pay_date']));
         $l_or_no = $payment['st_or_no_clear'];
-        $mtf_amtpd = $payment['mtf_payments'];
-        $mtf_discount = $payment['mtf_discount'];
-        $l_data2 = array($l_pdate1, $l_sdate, $l_edate, $l_ddate, $l_mtf_amount_due, $l_mtf_sur, 
-        $l_pdate, $l_or_no, $mtf_amtpd, $mtf_discount, 'payment'
+        $stl_amtpd = $payment['stl_payments'];
+        $stl_discount = $payment['stl_discount'];
+        $l_data2 = array($l_pdate1, $l_sdate, $l_edate, $l_ddate, $l_stl_amount_due,
+                $l_stl_sur, $l_pdate, $l_or_no, $stl_amtpd, $stl_discount, 'payment'
         );
         
         $l_due_list[] = $l_data2;
@@ -108,33 +108,32 @@ if(isset($_GET['id'])){
         $l_sdate = str_replace("z---------", "----------", $item[1]);
         $l_edate = $item[2];
         $l_ddate = $item[3];
-        $l_mtf_amount_due = $item[4];
-        $l_mtf_sur = $item[5];
-        $mtf_tot_due = $l_mtf_amount_due + $l_mtf_sur;
+        $l_stl_amount_due = $item[4];
+        $l_stl_sur = $item[5];
+        $stl_tot_due = $l_stl_amount_due + $l_stl_sur;
         $l_pdate = $item[6];
         $l_or_no = $item[7];
-        $mtf_amtpd = $item[8];
-        $mtf_discount = $item[9];
+        $stl_amtpd = $item[8];
+        $stl_discount = $item[9];
         $l_class = $item[10];
         
         if ($l_class == 'bill') {
-            $l_tot_amt_due_mtf = $mtf_tot_due + $l_mtf_prev_bal;
-            $l_mtf_prev_bal = $l_tot_amt_due_mtf;
+            $l_tot_amt_due_stl = $stl_tot_due + $l_stl_prev_bal;
+            $l_stl_prev_bal = $l_tot_amt_due_stl;
             //$l_amount_due = format_num($l_amount_due);
             
         }
         
         if ($l_class == 'payment') {
-            $l_tot_amt_due_mtf -= ($mtf_amtpd + $mtf_discount);
-            $l_mtf_prev_bal = $l_tot_amt_due_mtf;
-         
+            $l_tot_amt_due_stl -= ($stl_amtpd + $stl_discount);
+            $l_stl_prev_bal = $l_tot_amt_due_stl;
            /*  $l_amt_pd = format_num($l_amt_pd); // Assuming ftom() is a custom function for conversion
             $l_discount = format_num($l_discount); // Assuming ftom() is a custom function for conversion */
         }
 
         $l_data = array(
-            $l_dte, $l_sdate, $l_edate, $l_ddate, $l_pdate, format_num($l_mtf_amount_due), format_num($l_mtf_sur),
-             format_num($mtf_amtpd),format_num($mtf_discount),$l_or_no,format_num($l_mtf_prev_bal)
+            $l_dte, $l_sdate, $l_edate, $l_ddate, $l_pdate, format_num($l_stl_amount_due), format_num($l_stl_sur),
+             format_num($stl_amtpd),format_num($stl_discount),$l_or_no,format_num($l_stl_prev_bal)
         );
         $l_return_due_list[] = $l_data;
 
@@ -144,6 +143,24 @@ if(isset($_GET['id'])){
         
     
 
+}
+
+function fetchDataFromOtherTable($content) {
+    $dsn = "pgadmin4"; // Replace with your DSN name
+    $user = "glicelo";    // Replace with your database username
+    $pass = "admin12345";    // Replace with your database password
+
+    $conn2 = odbc_connect($dsn, $user, $pass);
+    $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content'";
+    $result = odbc_prepare($conn2, $sql);
+	odbc_execute($result);
+    if ($result) {  
+        $notes = odbc_result($result, 'c_notes');
+    }else{
+        $notes = "No Notes";
+    }
+
+    return $notes;
 }
 ?>
 <?php 
@@ -159,9 +176,8 @@ function format_num($number){
 
 <div class="card card-outline card-primary rounded-0 shadow">
 	<div class="card-header">
-		
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/staff/soa/print_statement_gcf.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>/staff/soa/print_statement_stl.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>
@@ -179,13 +195,13 @@ function format_num($number){
                 <tr><th style="padding-left:5px; width:150px;">Buyer's Name : </th><td><?php echo $full_name ;?></td>
                 <th style="padding-left:5px; width:150px;">Home Address : </th><td><?php echo $address ;?> <?php echo $city_prov;?> <?php echo $zip_code;?></td></tr>
             </table>
-        <hr>
+         <hr>
         </div>
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
-                <colgroup>
+            <colgroup>
 					<col width="10%">
-                    <col width="5%">
-                    <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">
@@ -198,8 +214,8 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
                         <th style="text-align:center;font-size:13px;">DUE DATE</th>
                         <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                        <th style="text-align:center;font-size:13px;">GCF AMOUNT DUE</th>
-                        <th style="text-align:center;font-size:13px;">GCF SURCHARGE</th>
+                        <th style="text-align:center;font-size:13px;">STL AMOUNT DUE</th>
+                        <th style="text-align:center;font-size:13px;">STL SURCHARGE</th>
                         <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
                         <th style="text-align:center;font-size:13px;">DISCOUNT</th>
                         <th style="text-align:center;font-size:13px;">OR #</th>
@@ -212,8 +228,8 @@ function format_num($number){
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
                 <colgroup>
 					<col width="10%">
-                    <col width="5%">
-                    <col width="5%">
+                    <col width="10%">
+                    <col width="10%">
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">
@@ -235,7 +251,19 @@ function format_num($number){
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
+                                <td style="text-align:center; font-size:13px;">
+                                    <?php
+                                    $content = $l_data[9];
+                                    $content = 'STL-' . $content;
+                                    if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false) {
+                                        echo '<a href="#" class="link-with-hover">' . $l_data[9] . '</a>';
+                                         $queryResult = fetchDataFromOtherTable($content);
+                                        echo '<div class="hover-info">' . $queryResult . '</div>';
+                                    } else {
+                                        echo $l_data[9];
+                                    }
+                                    ?>
+                                </td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
                             </tr>
                             <?php
@@ -324,18 +352,36 @@ function format_num($number){
                         ?> 
                         <hr>
                       
-                        <td style="font-size:12px;"><label for="tot_bill" class="control-label">GCF Total Bill: </label>
-                        <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_mtf_bill) ? format_num($total_mtf_bill): 0; ?>" disabled></td>
-                        <td style="font-size:12px;"><label for="tot_paid" class="control-label">GCF Total Paid: </label>
-                        <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_mtf_paid) ? format_num($total_mtf_paid): 0; ?>" disabled></td>
-                        <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">GCF Total Discount: </label>
-                        <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_mtf_disc) ? format_num($total_mtf_disc): 0; ?>" disabled></td>
-                        <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>GCF Balance:</b></label>
-                        <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_bill" class="control-label">STL Total Due: </label>
+                        <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_sur" class="control-label">STL Total Surcharge: </label>
+                        <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_stl_sur) ? format_num($total_stl_sur): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_paid" class="control-label">STL Total Paid: </label>
+                        <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">STL Total Discount: </label>
+                        <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td>
+                        <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>STL Balance:</b></label>
+                        <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
                   
                     </tr>
-                  
                 </table>
             </div>
         </div>
 </div>
+
+
+<style>
+    .hover-info {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        z-index: 1;
+    }
+
+    a:hover + .hover-info {
+        display: block;
+    }
+</style>

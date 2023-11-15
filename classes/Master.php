@@ -210,6 +210,10 @@ Class Master{
 		// Create the INSERT query using parameterized query
 		$insert_query = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params)";
 
+		$params2 = "'$unique_no','$acc_no', '$adjust_date', 'BILL ADJUSTMENT','$notes'";
+		$insert_adjustment = "INSERT INTO t_adjustment VALUES ($params2)";
+		$adjustment = odbc_exec($conn2, $insert_adjustment);
+
 		if (odbc_exec($conn2, $insert_query)) {
 			$this->log_log('Utility Bill Adjustment'," $acc_no | $unique_no | $notes");
 			$resp['status'] = 'success';
@@ -223,7 +227,77 @@ Class Master{
 		return json_encode($resp);
 	}
 
+	function adjust_payment(){
+		require_once('../includes/config.php');
+		extract($_POST);
+		$acc_no = $_POST['acc_no'];
+		$adjust_date = $_POST['adj_date'];
+		$adjust_type = 'ADJ';
+		$adjust_from = $_POST['adjust_from'];
+		$adjust_to = $_POST['adjust_to'];
+		$amount = (float)$_POST['amount'];
+		require_once('../includes/session.php');
+		$encoded_by = $_SESSION['alogin'];
+		$discount = 0;
+		$notes = $_POST['notes'];
 
+		if ($notes == ""):
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Please provide notes!!";
+			return json_encode($resp);
+			exit;
+		endif;
+
+		if ($amount == 0):
+			$resp['status'] = 'failed';
+			$resp['msg'] = "Please input amount!!!";
+			return json_encode($resp);
+			exit;
+		endif;
+		do {
+			$random_no = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+			$unique_no1 = $adjust_from . '-' . $adjust_type . $random_no;
+			$unique_no2 = $adjust_to . '-' . $adjust_type . $random_no;
+		
+			// Check if the number exists in the database
+			$query = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$unique_no1' or c_st_or_no = '$unique_no2'";
+			/* $result = $mysqli->query($query); */
+			$result = odbc_prepare($conn2, $query);
+			odbc_execute($result);
+			if (!odbc_fetch_row($result)) {
+				break; // The number is unique, exit the loop
+			}
+		} while (true);
+		
+		$amount_from = -$amount;
+		$amount_to = $amount;
+		
+		$params_from = "'$acc_no', '$unique_no1', '$adjust_date', '$amount_from', '$discount', '$encoded_by'";
+		$params_to = "'$acc_no', '$unique_no2', '$adjust_date', '$amount_to', '$discount', '$encoded_by'";
+		// Create the INSERT query using parameterized query
+		$insert_query_from = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params_from)";
+		$insert_query_to = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params_to)";
+
+
+		$params2_from = "'$unique_no1','$acc_no', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
+		$params2_to = "'$unique_no2','$acc_no', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
+		$insert_adjustment_from = "INSERT INTO t_adjustment VALUES ($params2_from)";
+		$insert_adjustment_to = "INSERT INTO t_adjustment VALUES ($params2_to)";
+		$adjustment = odbc_exec($conn2, $insert_adjustment_from);
+		$adjustment = odbc_exec($conn2, $insert_adjustment_to);
+
+		if (odbc_exec($conn2, $insert_query_from) && odbc_exec($conn2, $insert_query_to)) {
+			$this->log_log('Utility Payment Adjustment'," $acc_no | $unique_no1 | $unique_no2 | $notes");
+			$resp['status'] = 'success';
+			$resp['msg'] = "Bill Adjustment has been successfully added.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
+		}
+		
+		return json_encode($resp);
+	}
 
 
 
@@ -500,6 +574,9 @@ switch ($action) {
 	case 'adjust_bill':
 		echo $Master->adjust_bill();
 	break;	
+	case 'adjust_payment':
+		echo $Master->adjust_payment();
+	break;
 	case 'save_user':
 		echo $Master->save_user();
 	break;

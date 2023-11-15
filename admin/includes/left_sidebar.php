@@ -28,8 +28,8 @@
 							<span class="micon dw dw-apartment"></span><span class="mtext"> Adjustments </span>
 						</a>
 						<ul class="submenu">
-							<li><a href="<?php echo base_url ?>admin/?page=adjustments">Adjustment Bill</a></li>
-							<li><a href="<?php echo base_url ?>admin/?page=adjustments">Adjustment Payment</a></li>
+							<li><a href="<?php echo base_url ?>admin/?page=adjustments/add_bill">Add Bill</a></li>
+							<li><a href="<?php echo base_url ?>admin/?page=adjustments/adjust">Adjustment Bill & Payment</a></li>
 							
 						</ul>
 					</li>
