@@ -28,6 +28,8 @@ if (isset($_SESSION['user_session_id'], $_SESSION['alogin'], $_SESSION['dept'], 
 
         
     }
-    echo json_encode($data);
+    
+    
 }
+echo json_encode($data);
 ?>
