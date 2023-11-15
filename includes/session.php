@@ -18,7 +18,7 @@ $session_depart = $_SESSION['dept'];
 $session_role = $_SESSION['user_type'];
 
 
-/* 
+
 $query = " SELECT user_session_id FROM tblemployees where emp_id ='".$_SESSION['alogin']."'";
 
 $result = $conn->query($query);
@@ -34,7 +34,7 @@ foreach ($result as $row)
 
     }
 
-echo json_encode($data);
-} */
+return json_encode($data);
+}
 
 ?>

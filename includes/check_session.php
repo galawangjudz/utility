@@ -2,8 +2,8 @@
 require_once('../includes/config.php');
 
 
-$sess_id=$_SESSION['user_session_id'];
-$session_id=$_SESSION['alogin'];
+$sess_id = $_SESSION['user_session_id'];
+$session_id = $_SESSION['alogin'];
 $session_depart = $_SESSION['dept'];
 $session_role = $_SESSION['user_type'];
 
@@ -23,7 +23,7 @@ foreach ($result as $row)
 
     }
 
-return json_encode($data);
+    return json_encode($data);
 }
 
 ?>

@@ -1,13 +1,12 @@
 <?php
 
 function format_num($number){
-	$decimals = 0;
-	$num_ex = explode('.',$number);
-	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
-	return number_format($number,$decimals);
+       return number_format($number,2);
 }
+
 $from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
 $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
+$category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 ?>
 
 
@@ -24,14 +23,23 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
             <h4 class="text-muted">Filter Date</h4>
             <form action="" id="filter">
             <div class="row align-items-end">
-                <div class="col-md-4 form-group">
+                <div class="col-md-2 form-group">
                     <label for="from" class="control-label">Date From</label>
                     <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-2 form-group">
                     <label for="to" class="control-label">Date To</label>
                     <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
                 </div>
+                <div class="col-md-3 form-group">
+                    <label for="category" class="control-label">Category</label>
+                    <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
+                        <option value="ALL" <?php echo ($category == 'ALL') ? 'selected' : ''; ?>>ALL</option>
+                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASSCUTTING</option>
+                        <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
+                    </select>
+                </div>
+              
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
 			        <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
@@ -51,6 +59,13 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                 </style>
                     
                     <h4 class="text-center"><b>List Of CAR</b></h4>
+                     <?php if($category == 'STL'): ?>
+                    <p class="m-0 text-center">Streetlight Fee</p>
+                     <?php elseif($category == 'GCF'): ?>
+                    <p class="m-0 text-center">Grasscutting Fee</p>
+                    <?php else: ?>
+                    <p class="m-0 text-center">Streetlight & Grasscutting Fee</p>
+                    <?php endif; ?>
                     <?php if($from == $to): ?>
                     <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)) ?></p>
                     <?php else: ?>
@@ -102,8 +117,6 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             CASE 
                                 WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
                                 WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL Payment'
-                                WHEN c_st_or_no LIKE 'STL-ADJ%' or c_st_or_no LIKE 'STL-BA%' THEN 'STL Adjustment'
-                                WHEN c_st_or_no LIKE 'MTF-ADJ%' or c_st_or_no LIKE 'MTF-BA%' THEN 'GCF Adjustment'
                                 ELSE 'Others'
                             END AS c_pay_type,
                             c_st_amount_paid,
@@ -117,9 +130,13 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                         FROM t_utility_accounts x
                         JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
                         WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
-                            AND (
-                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
-                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
+                        AND (
+                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                ('$category' = 'ALL' AND (
+                                    c_st_or_no LIKE 'MTF-CAR%' OR
+                                    c_st_or_no LIKE 'STL-CAR%'
+                                ))
                             )
                         ORDER BY date(y.c_st_pay_date) ASC";
                     $result = odbc_exec($conn2, $query);
@@ -177,53 +194,13 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                     <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
-                            <th class="text-center">MODE OF PAYMENT</th>
                             <th class="text-center">TOTAL CASH</th>
                             <th class="text-center">TOTAL CHECK</th>
                             <th class="text-center">TOTAL ONLINE</th>
                             <th class="text-center">TOTAL</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php
-                        // Assuming you're using PHP to execute the SQL query and fetch the results
-                        $query2 = "SELECT 
-                                CASE
-                                    WHEN c_mop = '1' AND c_branch = '' THEN 'CASH'
-                                    WHEN c_mop = '3' AND c_branch = '' THEN 'ONLINE'
-                                    /* ELSE c_branch */
-                                    WHEN c_mop = '2' AND c_branch !='' THEN 'CHECK'
-                                    ELSE c_branch
-                                   END AS Bank,
-                                    SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Total_Cash,
-                                    SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Total_Check,
-                                    SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Total_Online,
-                                    SUM(c_st_amount_paid) AS Total
-                                FROM t_utility_accounts x
-                                JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
-                                AND (
-                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
-                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
-                            )
-                                GROUP BY Bank
-                                ORDER BY Bank DESC" ;
-                       $result2 = odbc_exec($conn2, $query2);
-                       if (!$result2) {
-                        die("ODBC query execution failed: " . odbc_errormsg());
-                        }
-                        while ($row2 = odbc_fetch_array($result2)):
-                        ?>
-                           <tr>
-                                <td class="text-center"><?php echo $row2['bank'] ?></td>
-                                <td class="text-right"><?php echo format_num($row2['total_cash']) ?></td>
-                                <td class="text-right"><?php echo format_num($row2['total_check']) ?></td>
-                                <td class="text-right"><?php echo format_num($row2['total_online']) ?></td>
-                                <td class="text-right"><?php echo format_num($row2['total']) ?></td>
-                           </tr>
-                        
-                        <?php     endwhile;
-                        
+                    <?php
 
                         $grandTotal= "SELECT
                             SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
@@ -234,8 +211,8 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
                                             WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
                                             AND (
-                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
-                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
+                                (c_st_or_no LIKE 'MTF-CAR%') OR
+                                (c_st_or_no LIKE 'STL-CAR%')
                             )";
                        $result3 = odbc_exec($conn2, $grandTotal);
                        if (!$result3) {
@@ -244,7 +221,6 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                        while ($grandTotalRow = odbc_fetch_array($result3)):
                         ?>
                         <tr>
-                        <td><b>Grand Total</b></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>

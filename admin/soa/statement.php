@@ -190,10 +190,7 @@ function fetchDataFromOtherTable($content) {
 <?php 
 
 function format_num($number){
-	$decimals = 0;
-	$num_ex = explode('.',$number);
-	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
-	return number_format($number,$decimals);
+	return number_format($number,2);
 }
 
 ?>

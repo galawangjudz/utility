@@ -166,10 +166,8 @@ function fetchDataFromOtherTable($content) {
 <?php 
 
 function format_num($number){
-	$decimals = 0;
 	$num_ex = explode('.',$number);
-	$decimals = isset($num_ex[1]) ? strlen($num_ex[1]) : 0 ;
-	return number_format($number,$decimals);
+	return number_format($number,2);
 }
 
 ?>
@@ -178,7 +176,7 @@ function format_num($number){
 	<div class="card-header">
 		
 		<div class="card-tools">
-        <a href="<?php echo base_url ?>/admin/soa/print_statement_gcf.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
+        <a href="<?php echo base_url ?>admin/soa/print_statement_gcf.php?id=<?php echo $l_acc_no; ?>", target="_blank" class="btn btn-flat btn-sm btn-primary"><span class="fas fa-print"></span> Print</a>
 		<!-- <a href="javascript:void(0)" id="print_record" class="btn btn-flat btn-sm btn-primary" data-acc-no="<?php echo $l_acc_no; ?>"><span class="fas fa-print"></span>Print</a>
 	     --></div>
 	</div>
