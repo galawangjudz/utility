@@ -6,6 +6,7 @@ function format_num($number){
 
 $from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
 $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
+$category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 ?>
 
 
@@ -22,14 +23,23 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
             <h4 class="text-muted">Filter Date</h4>
             <form action="" id="filter">
             <div class="row align-items-end">
-                <div class="col-md-4 form-group">
+                <div class="col-md-2 form-group">
                     <label for="from" class="control-label">Date From</label>
                     <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
-                <div class="col-md-4 form-group">
+                <div class="col-md-2 form-group">
                     <label for="to" class="control-label">Date To</label>
                     <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
                 </div>
+                <div class="col-md-3 form-group">
+                    <label for="category" class="control-label">Category</label>
+                    <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
+                        <option value="ALL" <?php echo ($category == 'ALL') ? 'selected' : ''; ?>>ALL</option>
+                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASSCUTTING</option>
+                        <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
+                    </select>
+                </div>
+              
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
 			        <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
@@ -47,8 +57,14 @@ $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
                         padding: 0 !important;
                     }
                 </style>
-                    
                     <h4 class="text-center"><b>List Of CAR</b></h4>
+                    <?php if($category == 'STL'): ?>
+                    <p class="m-0 text-center">Streetlight Fee</p>
+                     <?php elseif($category == 'GCF'): ?>
+                    <p class="m-0 text-center">Grasscutting Fee</p>
+                    <?php else: ?>
+                    <p class="m-0 text-center">Streetlight & Grasscutting Fee</p>
+                    <?php endif; ?>
                     <?php if($from == $to): ?>
                     <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)) ?></p>
                     <?php else: ?>

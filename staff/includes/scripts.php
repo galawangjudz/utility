@@ -20,7 +20,7 @@
 	<script src="../src/plugins/datatables/js/vfs_fonts.js"></script>
 	
 <!-- 	<script src="../vendors/scripts/advanced-components.js"></script> -->
-<script>
+<!-- <script>
 function check_session_id()
   {
     var session_id = "<?php echo $_SESSION['user_session_id']; ?>";
@@ -37,4 +37,4 @@ function check_session_id()
         check_session_id()
   }, 10000);
 
-  </script> 
+  </script>  -->

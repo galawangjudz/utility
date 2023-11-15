@@ -59,7 +59,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 </style>
                     
                     <h4 class="text-center"><b>List Of CAR</b></h4>
-                     <?php if($category == 'STL'): ?>
+                    <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
                      <?php elseif($category == 'GCF'): ?>
                     <p class="m-0 text-center">Grasscutting Fee</p>

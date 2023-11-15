@@ -1,16 +1,24 @@
 <?php 
-if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true || $_SESSION['user_type'] !== 'Admin') {
-   
-   /*  unset($_SESSION['alogin']);
-	session_destroy(); // destroy session */
-    session_id($_SESSION['user_session_id']);
-    session_destroy(); // destroy session
-   /*  header("location:index.php");  */
-        ?> 
+if (!isset($_SESSION['user_session_id'])) { ?>
     <script>
     window.location = "../index.php";
     </script>
     <?php
+    }
+
+if ($_SESSION['user_type'] !== 'Admin') {
+
+    if (isset($_SESSION['user_session_id'])) {
+        session_id($_SESSION['user_session_id']);
+        session_destroy(); // destroy session
+    }
+        ?> 
+    <script>
+    window.location = "../index.php";
+    </script>
+
+    <?php
+   
 }
 
 

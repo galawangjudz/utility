@@ -1,7 +1,7 @@
 <?php require_once('../includes/config.php'); ?>
 <?php
 
- session_start(); 
+session_start(); 
 //Check whether the session variable SESS_MEMBER_ID is present or not
 /* if (!isset($_SESSION['alogin']) || (trim($_SESSION['alogin']) == '')) { ?> */
 if (!isset($_SESSION['user_session_id'])) { ?>
