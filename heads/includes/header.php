@@ -22,6 +22,7 @@
 	<link rel="stylesheet" type="text/css" href="../src/plugins/datatables/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="../src/plugins/datatables/css/responsive.bootstrap4.min.css">
 	<link rel="stylesheet" type="text/css" href="../vendors/styles/style.css">
+	<link rel="stylesheet" type="text/css" href="../vendors/styles/radio-style.css">
 	<!-- <link rel="stylesheet" type="text/css" href="../vendors/styles/adminlte.css"> -->
 	
 

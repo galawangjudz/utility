@@ -33,6 +33,17 @@
 							
 						</ul>
 					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext"> Requests </span>
+						</a>
+						<ul class="submenu">
+							<li><a href="<?php echo base_url ?>admin/?page=service_request/new_request">New Request</a></li>
+							<li><a href="<?php echo base_url ?>admin/?page=service_request">Request Lists</a></li>
+							
+						</ul>
+					</li>
+
 
 
 					<li>
