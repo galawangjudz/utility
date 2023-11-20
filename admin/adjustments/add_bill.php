@@ -4,7 +4,6 @@
 if (isset($_GET['search'])) {
     $l_find = $_GET['search']; 
 }
-//$l_find = isset($_GET["search"]) ? $_GET["search"] : '';
 
 ?>
 
@@ -15,7 +14,7 @@ if (isset($_GET['search'])) {
 			
 			<div class="card-box pd-20 height-1400-p mb-30">
 				<form action="" id="filter">
-					<input type="hidden" id="page" name="page" value="adjustment/add_bill" class="form-control form-control-sm rounded-0">
+					<input type="hidden" id="page" name="page" value="adjustments/add_bill" class="form-control form-control-sm rounded-0">
 					<div class="col-md-4 form-group">
 						<label for="search" class="control-label">Search Account: </label>
 						<input type="text" id="search" name="search" class="form-control">

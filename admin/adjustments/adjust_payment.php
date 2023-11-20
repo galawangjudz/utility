@@ -76,19 +76,30 @@ $get_payment_records = "SELECT
 ?>
 <div class="container-fluid">
     <form action="" id="bill-form">
-    <h3><?php echo isset($account_no) ? $account_no : '' ?></h3>
-        <h3><?php echo isset($last_name) ? $last_name : '' ?></h3>
-        <h3><?php echo isset($first_name) ? $first_name : '' ?></h3>
+        <h3>Account No : <?php echo isset($account_no) ? $account_no : '' ?></h3>
+        <h3>Full Name : <?php echo isset($last_name) ? $last_name . ', ' . $first_name : '' ?></h3>
+        <hr>
         <input type="hidden" name="acc_no" value="<?php echo isset($account_no) ? $account_no : '' ?>"> 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="adj_date" class="control-label">TRANSFER DATE</label>
                     <input type="date" name="adj_date" id="adj_date" class="form-control form-control-border" value ="<?php echo date('Y-m-d'); ?>" required>
                 
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="adj_date" class="control-label">Transfer to Account No: </label>
+                    <input type="text" name="new_acc" id="new_acc" class="form-control form-control-border" value ="<?php echo isset($account_no) ? $account_no : ''  ?>" maxlength = '11' required>
+                
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+           
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="adjust_from" class="control-label">TRANSFER FROM</label>
                     <select name="adjust_from" id="adjust_from" class="form-control form-control-border" required>
@@ -97,7 +108,7 @@ $get_payment_records = "SELECT
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="adjust_to" class="control-label">TRANSFER TO</label>
                     <select name="adjust_to" id="adjust_to" class="form-control form-control-border" required>
@@ -106,7 +117,7 @@ $get_payment_records = "SELECT
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="amount" class="control-label">Amount</label>
                     <input type="number" name="amount" id="amount" class="form-control form-control-border" placeholder="Enter Amount" value ="" required>

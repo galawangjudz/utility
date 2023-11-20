@@ -38,7 +38,10 @@ if (isset($_GET['search'])) {
                             <i class="fa fa-plus"></i> Add Adjustment BIll
                         </a>
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-plus"></i> Adjust Payment
+                            <i class="fa fa-share-square"></i> Transfer Payment
+                        </a>
+                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto refund_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
+                            <i class="fa fa-money"></i> Refund Payments
                         </a>
                         <?php }
                         ?>
@@ -46,15 +49,23 @@ if (isset($_GET['search'])) {
                 
 				<div class="pb-20">
 					<table class="data-table table stripe hover nowrap">
+                    <colgroup>
+                <col width="10%">
+                <col width="15%">
+                <col width="15%">
+                <col width="5%">
+                <col width="20%">
+                <col width="30%">
+                </colgroup>
 						<thead>
 							<tr>
                                 <th class="table-plus">Pay Date</th>
                                 <th>OR #</th>
-                                <th>Amount </th>
+                                <th>Amount</th>
                                 <th>Discount</th>
                                 <th>Adjustment Description</th>
                                 <th>Notes</th>
-								<th class="datatable-nosort">ACTION</th>
+								<!-- <th class="datatable-nosort">ACTION</th> -->
 							</tr>
 						</thead>
 						<tbody>
@@ -124,12 +135,12 @@ if (isset($_GET['search'])) {
                                     <td class=""><?php echo $notes ?></td>
                             
                         
-                                    <td>
+                                   <!--  <td>
                                         <a class="btn btn-link delete_data" data-date="<?php echo $due ?>" data-type="<?php echo $type ?>" data-id="<?php echo $acc ?>" href="javascript:void(0)" role="button">
                                         <i class="dw dw-delete-3"></i>
                                     </a>
 
-                                    </td>
+                                    </td> -->
                                 </tr>
                             <?php endwhile; ?>
 						</tbody>

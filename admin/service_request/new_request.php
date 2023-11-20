@@ -8,6 +8,32 @@
         $result = mysqli_stmt_get_result($stmt);
         $row2 = mysqli_fetch_assoc($result);
     }
+
+    if(isset($_POST['tickets-add']))
+    {
+      $empid=$session_id;
+      $fname=$_POST['fname'];
+      $lname=$_POST['lastname'];   
+      $email=$_POST['email'];  
+      $department=$_POST['department']; 
+      $gender=$_POST['gender'];  
+      $phonenumber=$_POST['phonenumber'];
+
+        $result = mysqli_query($conn,"update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber' where emp_id='$session_id'
+      ")or die(mysqli_error());
+      echo $result;
+        if ($result) {
+          echo "<script>alert('Your records Successfully Updated');</script>";
+        echo "<script>location.replace(_base_url_+'heads/?page=head_profile');</script>";
+        
+      } else{
+        die(mysqli_error());
+      }
+
+      
+
+    }
+
 ?>
 
 <div class="main-container"> 
@@ -31,17 +57,18 @@
                             <label for="pbl" class="block">Proj/Block/Lot</label>
                         </div>
                         <div class="col-sm-12">
-                            <input type="text" id="pbl" name="pbl"autocomplete="off" class="form-control" placeholder="" value="">
+                            <input type="text" id="pbl" name="pbl"autocomplete="off" class="form-control" placeholder="" value=""<?php echo isset($row2['bname']) ? $row2['bname'] : ''; ?>"">
                         </div>
                         <div class="col-sm-12">
                             <label for="pbl" class="block">Request for</label>
                         </div>
                         <div class="col-sm-12">
                             <select class="form-control form-control-border" name="request" id="request" required>
-                                <option value="" selected>1</option>
-                                <option value="" selected>2</option>
-                                <option value="" selected>3</option>
-
+                                <option value="BA" selected>BILL ADJUSTMENT</option>
+                                <option value="PA" selected>PAYMENT ADJUSTMENT</option>
+                                <option value="PTO" selected>PERMIT TO OCCUPIED</option>
+                                <option value="PTC" selected>PERMIT TO CONSTRUCT</option>
+                                <option value="ATC" selected>AUTHORITY TO CONSTRUCT</option>
                             </select>
                         </div>
                         
@@ -110,50 +137,134 @@
 			
 		</div>
 	</div>
+<script>
+  $('#tickets-update').click(function(event){
+      event.preventDefault(); // prevent the default form submission
+      (async () => {
+          var data = {
+              id: <?php echo isset($_GET['id']) ? $_GET['id'] : 'null'; ?>,
+              subject: $('#subject').val(),
+              description: $('#summernote').summernote('code'), // get the HTML content of Summernote
+              department: $('#department').val(),
+              customer: $('#customer').val(),
+              action: "tickets-update",
+          };
 
-    <script>
+          if (data.subject.trim() === '' || data.description.trim() === '' || 
+              data.department.trim() === '' || data.customer.trim() === '') {
+              Swal.fire({
+                  icon: 'warning',
+                  text: 'Please all fieds are required. Kindly fill all',
+                  confirmButtonColor: '#ffc107',
+                  confirmButtonText: 'OK'
+              });
+              return;
+          }
+          console.log('Data HERE: ' + JSON.stringify(data));
+          $.ajax({
+              url: 'ticket_functions.php',
+              type: 'post',
+              data: data,
+              success:function(response){
+                  console.log('success function called');
+                  response = JSON.parse(response);
+                  console.log('RESPONSE HERE: ' + response.status)
+                  console.log(`RESPONSE HERE: ${response.message}`);
+                  if (response.status == 'success') {
+                      Swal.fire({
+                          icon: 'success',
+                          html: response.message,
+                          confirmButtonColor: '#01a9ac',
+                          confirmButtonText: 'OK'
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              window.location.href = "ticket_list.php";
+                              // location.reload();
+                          }
+                      });
+                  } else {
+                      Swal.fire({
+                          icon: 'error',
+                          text: response.message,
+                          confirmButtonColor: '#eb3422',
+                          confirmButtonText: 'OK'
+                      });
+                  }
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                  console.log('AJAX Data HERE: ' + JSON.stringify(data));
+                  console.log("Response from server: " + jqXHR.responseText);
+                  console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+              }
+          });
+      })()
+  })
+</script>
+<script>
+    $('#tickets-add').click(function(event){
+        event.preventDefault(); // prevent the default form submission
+        (async () => {
+            var data = {
+                subject: $('#subject').val(),
+                description: $('#summernote').summernote('code'), // get the HTML content of Summernote
+                priority: $('input[name="priority"]:checked').val(),
+                department: $('#department').val(),
+                customer: $('#customer').val(),
+                status: 0, // set initial status to 0
+                action: "tickets-add",
+            };
 
-    $(document).ready(function(){
-
-        $('.delete_data').click(function(){
-            _conf("Are you sure to delete from Bill List permanently?","delete_bill",["'" +$(this).attr('data-date')+ "'","'" + $(this).attr('data-type') + "'",$(this).attr('data-id')])
-        })
-
-        $('.add_bill').click(function(){
-			uni_modal("Add New Bill","adjustments/manage_bill.php?id="+$(this).attr('id'))
-		})
-
-        $('.adjust_bill').click(function(){
-			uni_modal("Adjustment Bill","adjustments/adjust_bill.php?id="+$(this).attr('id'))
-		})
-
-        $('.adjust_payment').click(function(){
-			uni_modal("Adjustment Payment","adjustments/adjust_payment.php?id="+$(this).attr('id'))
-		})
-    });
-    function delete_bill($date,$type,$id){
-        start_loader();
-        $.ajax({
-            url:_base_url_+"classes/Master.php?f=delete_bill",
-            method:"POST",
-            data:{date : $date,type: $type,id: $id},
-            dataType:"json",
-            error:err=>{
-                console.log(err)
-                alert("An error occured.");
-                end_loader();
-            },
-            success:function(resp){
-                if(typeof resp== 'object' && resp.status == 'success'){
-                    alert(resp.msg);
-                    location.reload();
-                }else{
-                    alert("An error occured.");
-                    end_loader();
-                }
+            if (data.subject === '' || data.description === '' || 
+                data.priority === '' || data.department === '' || 
+                data.customer === '') {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Please all fieds are required. Kindly fill all',
+                    confirmButtonColor: '#ffc107',
+                    confirmButtonText: 'OK'
+                });
+                return;
             }
-        })
-    }
+            console.log('Data HERE: ' + JSON.stringify(data));
+            $.ajax({
+                url: 'ticket_functions.php',
+                type: 'post',
+                data: data,
+                success:function(response){
+                    console.log('success function called');
+                    response = JSON.parse(response);
+                    console.log('RESPONSE HERE: ' + response.status)
+                    console.log(`RESPONSE HERE: ${response.message}`);
+                    if (response.status == 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            html: response.message,
+                            confirmButtonColor: '#01a9ac',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            text: response.message,
+                            confirmButtonColor: '#eb3422',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('AJAX Data HERE: ' + JSON.stringify(data));
+                    console.log("Response from server: " + jqXHR.responseText);
+                    console.log("Status:", status);
+                    console.log("Error:", error);
+                    console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
+                }
+            });
+        })()
+    })
 </script>
 
 <style>

@@ -169,13 +169,13 @@ if(isset($_GET['id'])){
 }
 
 
-function fetchDataFromOtherTable($content) {
+function fetchDataFromOtherTable($content, $l_acc_no) {
     $dsn = "pgadmin4"; // Replace with your DSN name
     $user = "glicelo";    // Replace with your database username
     $pass = "admin12345";    // Replace with your database password
 
     $conn2 = odbc_connect($dsn, $user, $pass);
-    $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content'";
+    $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content' and c_account_no = '$l_acc_no'";
     $result = odbc_prepare($conn2, $sql);
 	odbc_execute($result);
     if ($result) {  
@@ -290,7 +290,7 @@ function format_num($number){
                                    
                                     if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false) {
                                         echo '<a href="#" class="link-with-hover">' . $l_data[8] . '</a>';
-                                         $queryResult = fetchDataFromOtherTable($content);
+                                         $queryResult = fetchDataFromOtherTable($content, $l_acc_no);
                                         echo '<div class="hover-info">' . $queryResult . '</div>';
                                     } else {
                                         echo $l_data[8];
@@ -312,7 +312,7 @@ function format_num($number){
         
 
         
-    </div>
+        </div>
     </div>
 
     <div class="col-md-12">
@@ -473,6 +473,8 @@ function format_num($number){
         border: 1px solid #ccc;
         border-radius: 5px;
         z-index: 1;
+        max-height: 200px; /* Set the maximum height for the tooltip */
+        overflow-y: auto; 
     }
 
     a:hover + .hover-info {

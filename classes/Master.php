@@ -231,6 +231,7 @@ Class Master{
 		require_once('../includes/config.php');
 		extract($_POST);
 		$acc_no = $_POST['acc_no'];
+		$new_acc = $_POST['new_acc'];
 		$adjust_date = $_POST['adj_date'];
 		$adjust_type = 'ADJ';
 		$adjust_from = $_POST['adjust_from'];
@@ -273,21 +274,21 @@ Class Master{
 		$amount_to = $amount;
 		
 		$params_from = "'$acc_no', '$unique_no1', '$adjust_date', '$amount_from', '$discount', '$encoded_by'";
-		$params_to = "'$acc_no', '$unique_no2', '$adjust_date', '$amount_to', '$discount', '$encoded_by'";
+		$params_to = "'$new_acc', '$unique_no2', '$adjust_date', '$amount_to', '$discount', '$encoded_by'";
 		// Create the INSERT query using parameterized query
 		$insert_query_from = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params_from)";
 		$insert_query_to = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params_to)";
 
 
 		$params2_from = "'$unique_no1','$acc_no', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
-		$params2_to = "'$unique_no2','$acc_no', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
+		$params2_to = "'$unique_no2','$new_acc', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
 		$insert_adjustment_from = "INSERT INTO t_adjustment VALUES ($params2_from)";
 		$insert_adjustment_to = "INSERT INTO t_adjustment VALUES ($params2_to)";
 		$adjustment = odbc_exec($conn2, $insert_adjustment_from);
 		$adjustment = odbc_exec($conn2, $insert_adjustment_to);
 
 		if (odbc_exec($conn2, $insert_query_from) && odbc_exec($conn2, $insert_query_to)) {
-			$this->log_log('Utility Payment Adjustment'," $acc_no | $unique_no1 | $unique_no2 | $notes");
+			$this->log_log('Utility Payment Adjustment'," $acc_no | $new_acc| $unique_no1 | $unique_no2 | $notes");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Bill Adjustment has been successfully added.";
 		} else {
