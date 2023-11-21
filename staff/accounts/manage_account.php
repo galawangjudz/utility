@@ -29,7 +29,8 @@ if(isset($_GET['id'])){
         $type = $res["c_types"];
         $status = $res["c_status"];
         $remarks = $res["c_remarks"];
-        $remarks = $res["c_remarks"];
+        $email = $res["c_email"];
+        $contact_no = $res["c_contact_no"];
         if ($remarks === '') {
             $remarks = "N/A";
         }
@@ -55,7 +56,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 ?>
 <div class="container-fluid">
-<h3><?php echo isset($c_location) ? $c_location : '' ?></h3>
+        <h3><?php echo isset($c_location) ? $c_location : '' ?></h3>
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="row">
 			<div class="col-md-6">
@@ -82,14 +83,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $newNumeric = sprintf('%06d', $numeric + 1);
 
                 // Combine the prefix and incremented numeric part
-                $ctr = $prefix . $newNumeric;
+                $ctrl_no = $prefix . $newNumeric;
 
 			}
             ?>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="ctr" class="control-label">Control No</label>
-                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" placeholder="ex. STL-12345" value ="<?php echo isset($ctr) ? $ctr : '' ?>"<?php if ($ctrfield) echo ' readonly'; ?> readonly required>
+                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" value ="<?php echo isset($ctr) ? $ctr : $ctrl_no ?>"<?php if ($ctrfield) echo ' readonly'; ?> readonly required>
                 </div>
             </div>
             <div class="col-md-3">
@@ -180,13 +181,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="contact_no" class="control-label">Contact No</label>
-                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="" readonly>
+                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="<?php echo isset($contact_no) ? $contact_no : '' ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="email_add" class="control-label">Email Address</label>
-                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="" readonly>
+                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="<?php echo isset($email) ? $email : '' ?>" readonly>
                 </div>
             </div>
         </div>

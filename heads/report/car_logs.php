@@ -164,7 +164,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-center"><?php echo $acronym ?></td>
                         <td class="text-center"><?php echo $row['c_block'] ?></td>
                         <td class="text-center"><?php echo $row['c_lot'] ?></td>
-                        <td class="text-right"><?php echo ($row['c_mop'] == '1') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                        <td class="text-right"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
                         <td class="text-right"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
                         <td class="text-right"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
                         <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>

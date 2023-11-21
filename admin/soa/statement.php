@@ -465,19 +465,29 @@ function format_num($number){
 </div>
 
 <style>
-    .hover-info {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        z-index: 1;
-        max-height: 200px; /* Set the maximum height for the tooltip */
-        overflow-y: auto; 
-    }
-
-    a:hover + .hover-info {
-        display: block;
-    }
+.table2 tbody tr {
+    position: relative;
+}
+.hover-info {
+    display: none;
+    position: absolute;
+    top: -10px; 
+    left: 0;
+    background-color: #CBC3E3;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease, transform 0.3s ease;
+    transform: translateY(-10px);
+    z-index: 1;
+    opacity: 0;
+    padding: 5px;
+}
+.table2 tbody tr:hover .hover-info {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    margin-left:70%;
+}
+   
 </style>

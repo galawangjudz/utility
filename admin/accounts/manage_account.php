@@ -85,14 +85,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $newNumeric = sprintf('%06d', $numeric + 1);
 
                 // Combine the prefix and incremented numeric part
-                $ctr = $prefix . $newNumeric;
+                $ctrl_no = $prefix . $newNumeric;
 
 			}
             ?>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="ctr" class="control-label">Control No</label>
-                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" placeholder="ex. STL-12345" value ="<?php echo isset($ctr) ? $ctr : '' ?>"<?php if ($ctrfield) echo ' readonly'; ?> readonly required>
+                    <input type="text" name="ctr" id="ctr" class="form-control form-control-border" value ="<?php echo isset($ctr) ? $ctr : $ctrl_no ?>"<?php if ($ctrfield) echo ' readonly'; ?> readonly required>
                 </div>
             </div>
             <div class="col-md-3">
@@ -189,7 +189,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="email_add" class="control-label">Email Address</label>
-                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="<?php echo isset($email) ? $email : 0 ?>">
+                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="<?php echo isset($email) ? $email : '' ?>">
                 </div>
             </div>
         </div>

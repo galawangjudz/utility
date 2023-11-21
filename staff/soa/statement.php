@@ -169,13 +169,13 @@ if(isset($_GET['id'])){
 }
 
 
-function fetchDataFromOtherTable($content) {
+function fetchDataFromOtherTable($content, $l_acc_no) {
     $dsn = "pgadmin4"; // Replace with your DSN name
     $user = "glicelo";    // Replace with your database username
     $pass = "admin12345";    // Replace with your database password
 
     $conn2 = odbc_connect($dsn, $user, $pass);
-    $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content'";
+    $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content' and c_account_no = '$l_acc_no'";
     $result = odbc_prepare($conn2, $sql);
 	odbc_execute($result);
     if ($result) {  
@@ -190,9 +190,8 @@ function fetchDataFromOtherTable($content) {
 <?php 
 
 function format_num($number){
-       return number_format($number,2);
+	return number_format($number,2);
 }
-
 
 ?>
 
@@ -291,7 +290,7 @@ function format_num($number){
                                    
                                     if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false) {
                                         echo '<a href="#" class="link-with-hover">' . $l_data[8] . '</a>';
-                                         $queryResult = fetchDataFromOtherTable($content);
+                                         $queryResult = fetchDataFromOtherTable($content, $l_acc_no);
                                         echo '<div class="hover-info">' . $queryResult . '</div>';
                                     } else {
                                         echo $l_data[8];
@@ -313,7 +312,7 @@ function format_num($number){
         
 
         
-    </div>
+        </div>
     </div>
 
     <div class="col-md-12">
@@ -466,17 +465,29 @@ function format_num($number){
 </div>
 
 <style>
-    .hover-info {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        z-index: 1;
-    }
-
-    a:hover + .hover-info {
-        display: block;
-    }
+.table2 tbody tr {
+    position: relative;
+}
+.hover-info {
+    display: none;
+    position: absolute;
+    top: -10px; 
+    left: 0;
+    background-color: #CBC3E3;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease, transform 0.3s ease;
+    transform: translateY(-10px);
+    z-index: 1;
+    opacity: 0;
+    padding: 5px;
+}
+.table2 tbody tr:hover .hover-info {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    margin-left:70%;
+}
+   
 </style>

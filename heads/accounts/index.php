@@ -103,9 +103,7 @@ if ($l_acct_no != ''){
 			<div class="card-box mb-30">
 				<div class="pd-20">
 						<h2 class="text-blue h4">List of Accounts</h2>
-                        <div class="card-tools">
-                            <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-sm btn-primary"><i class="dw dw-add"></i> Add New</a>
-                        </div>
+                      
 					</div>
 				<div class="pb-20">
 					<table class="data-table table stripe hover nowrap">
