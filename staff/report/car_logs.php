@@ -35,7 +35,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <label for="category" class="control-label">Category</label>
                     <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
                         <option value="ALL" <?php echo ($category == 'ALL') ? 'selected' : ''; ?>>ALL</option>
-                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASSCUTTING</option>
+                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>Grass-Cutting</option>
                         <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
                     </select>
                 </div>
@@ -61,9 +61,9 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
                      <?php elseif($category == 'GCF'): ?>
-                    <p class="m-0 text-center">Grasscutting Fee</p>
+                    <p class="m-0 text-center">Grass-Cutting Fee</p>
                     <?php else: ?>
-                    <p class="m-0 text-center">Streetlight & Grasscutting Fee</p>
+                    <p class="m-0 text-center">Streetlight & Grass-Cutting Fee</p>
                     <?php endif; ?>
                     <?php if($from == $to): ?>
                     <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)) ?></p>

@@ -72,7 +72,7 @@ $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
                 <div class="form-group">
                     <label for="adjust_for" class="control-label">ADJUSTMENT FOR</label>
                     <select name="adjust_for" id="adjust_for" class="form-control form-control-border" required>
-                        <option value="MTF">GRASSCUTTING</option>
+                        <option value="MTF">Grass-Cutting</option>
                         <option value="STL">STREETLIGHT</option>
                     </select>
                 </div>

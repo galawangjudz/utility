@@ -292,7 +292,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </table>
             </fieldset>
             <fieldset class="fieldset">
-                <legend style="text-align:center;font-weight:bold;font-size:16px;">GCF (GrassCutting) Details</legend>
+                <legend style="text-align:center;font-weight:bold;font-size:16px;">GCF (Grass-Cutting) Details</legend>
             
                 <table style="width:100%;">
                     <tr>
@@ -339,7 +339,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <fieldset class="fieldset">
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_amount_paid" class="control-label"><b>Payment for Grasscutting Amount: </b></label></td>
+                        <td><label for="main_amount_paid" class="control-label"><b>Payment for Grass-Cutting Amount: </b></label></td>
                         <td><input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="0" required></td>
                     </tr>
                     <tr>

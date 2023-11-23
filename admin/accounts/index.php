@@ -185,7 +185,7 @@ if ($l_acct_no != ''){
                                             <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
                                             <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> GCF & STL Records</a>
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
-                                            <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> GrassCutting Records</a>
+                                            <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> Grass-Cutting Records</a>
                                               <a class="dropdown-item payment_data" id ="<?php echo $acc ?>"><i class="dw dw-wallet"></i> Payment Window</a>
                                            <!--  <a class="dropdown-item edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><i class="dw dw-edit2"></i> Edit</a> -->
                                             <?php if ($status == "Inactive"):?>
