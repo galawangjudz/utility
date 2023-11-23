@@ -155,7 +155,7 @@ if(isset($_GET['id'])){
         }
 
         $l_data = array(
-            $l_dte, $l_sdate, $l_edate, $l_ddate, $l_pdate, format_num($mtf_tot_due), format_num($stl_tot_due),
+            $l_dte, $l_sdate, $l_edate, $l_ddate, $l_pdate, format_num($l_mtf_amount_due), format_num($l_mtf_sur), format_num($l_stl_amount_due),format_num($l_stl_sur),
              $l_amount_paid, $l_or_no, $l_pay_type, format_num($l_tot_amt_due)
         );
         $l_return_due_list[] = $l_data;
@@ -230,6 +230,8 @@ function format_num($number){
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">
+                    <col width="10%">
+                    <col width="10%">
                     <col width="15%">
                     
 			
@@ -239,8 +241,10 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
                         <th style="text-align:center;font-size:13px;">DUE DATE</th>
                         <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                        <th style="text-align:center;font-size:13px;">GCF + CHARGES</th>
-                        <th style="text-align:center;font-size:13px;">STL + CHARGES</th>
+                        <th style="text-align:center;font-size:13px;">GCF FEE</th>
+                        <th style="text-align:center;font-size:13px;">GCF SUR.</th>
+                        <th style="text-align:center;font-size:13px;">STL FEE</th>
+                        <th style="text-align:center;font-size:13px;">STL SUR.</th>
                         <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
                         <th style="text-align:center;font-size:13px;">OR #</th>
                         <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
@@ -253,6 +257,8 @@ function format_num($number){
         <table class="table2 table-bordered table-stripped" style="width: 100%; table-layout: fixed;" id="myTable">
                 <colgroup>
 					<col width="10%">
+                    <col width="10%">
+                    <col width="10%">
                     <col width="10%">
                     <col width="10%">
                     <col width="10%">
@@ -277,11 +283,13 @@ function format_num($number){
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[5]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[6]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[7]; ?></td>
-                      <!--           <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td> -->
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
+                      <!--           <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td> -->
                                 <td style="text-align:center; font-size:13px;">
                                     <?php
-                                    $content = $l_data[8];
-                                    $type = $l_data[9];
+                                    $content = $l_data[10];
+                                    $type = $l_data[11];
                                     if (strpos($type, 'STL') !== false) {
                                         $content = 'STL-' . $content;
                                     } elseif (strpos($type, 'GCF') !== false) {
@@ -289,18 +297,18 @@ function format_num($number){
                                     }
                                    
                                     if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false) {
-                                        echo '<a href="#" class="link-with-hover">' . $l_data[8] . '</a>';
+                                        echo '<a href="#" class="link-with-hover">' . $l_data[10] . '</a>';
                                          $queryResult = fetchDataFromOtherTable($content, $l_acc_no);
                                         echo '<div class="hover-info">' . $queryResult . '</div>';
                                     } else {
-                                        echo $l_data[8];
+                                        echo $l_data[10];
                                     }
                                     ?>
                                 </td>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
                              
                                                         
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[12]; ?></td>
                             </tr>
                             <?php
                         endforeach;

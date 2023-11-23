@@ -26,6 +26,7 @@ Class Master{
 	public function save_account(){
 		require_once('../includes/config.php');
 		extract($_POST);
+		
 		$site = substr($acc_no, 0, 3);
 		$blk = substr($acc_no, 3, 3);
 		$lot = substr($acc_no, 6, 2);

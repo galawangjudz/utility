@@ -40,9 +40,6 @@ if (isset($_GET['search'])) {
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
                             <i class="fa fa-share-square"></i> Transfer Payment
                         </a>
-                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto refund_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-money"></i> Refund Payments
-                        </a>
                         <?php }
                         ?>
 				</div>
