@@ -1,6 +1,55 @@
 <?php
 
 Class Master{
+	private $conn2;
+
+    public function __construct() {
+        require_once('../includes/config.php');
+        $this->conn2 = odbc_connect($dsn, $user, $pass);
+    }
+
+	function add_ticket(){
+		extract($_POST);
+		$subject=$_POST['subject'];  
+		$dept=$_POST['department'];  
+		$request=$_POST['request']; 
+		$priority=$_POST['priority'];  
+		$purpose=$_POST['purpose'];
+
+		if (empty($subject) || empty($purpose) || empty($priority) || empty($dept)) {
+			$resp['status'] = 'error';
+			$resp['msg'] = "Please fill in all required fields";
+			return json_encode($resp);
+			exit;
+		}
+
+		$status = 0; // Set initial status to 0
+		$date_created = date('Y-m-d H:i:s');
+		require_once('../includes/session.php');
+		$loginID = $_SESSION['alogin'];
+		
+		
+		$params = "'$subject', '$dept', '$request', '$priority', '$purpose','$loginID',,'$status', '$date_created'";
+		if (empty($id)) {
+			$ticket_query = "INSERT INTO tickets (subject, department_id, request, priority, description, employee_id,status, date_created) VALUES ($params)";
+		}else{
+			$data ="subject,department_id,request,priority,description";
+			$values = "'$subject','$dept','$request','$priority','$purpose'";
+			$ticket_query = "UPDATE tickets SET ($data) = ($values) WHERE id = ".$id;
+		}
+		if (odbc_exec($this->conn2, $ticket_query)) {
+			/* $this->log_log('Utility Bill', "DELETE - $date : $type : $id "); */
+			$resp['status'] = 'success';
+			$resp['msg'] = "Utility Ticket has been successfully saved.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$ticket_query]";
+		}
+		
+		return json_encode($resp);
+	}
+	
 
 	public function log_log($module, $notes){
 		$dsn = "pgadmin4"; 
@@ -414,86 +463,6 @@ Class Master{
 		return json_encode($resp);
 	}
 
-	function save_mtf_payment(){
-		require_once('../includes/config.php');
-		extract($_POST);
-		$acc_no = $_POST['acc_no'];
-		$main_pay_date = $_POST['main_pay_date'];
-		$main_amount_paid = (float)$_POST['main_amount_paid'];
-		$main_discount = (float)$_POST['main_discount'];
-		$main_or_no = 'MTF-' . $_POST['gcf_or'];
-
-		$check_payment = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$main_or_no'";
-		$check_payment_query = odbc_prepare($conn2, $check_payment);
-		odbc_execute($check_payment_query);
-
-		if (!odbc_fetch_row($check_payment_query)) {
-		
-			$params = "'$acc_no', '$main_or_no', '$main_pay_date', '$main_amount_paid', '$main_discount'";
-			// Create the INSERT query using parameterized query
-			$insert_query = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount) VALUES ($params)";
-
-			if (odbc_exec($conn2, $insert_query)) {
-				$resp['status'] = 'success';
-				$resp['msg'] = "Grasscutting Payment has been successfully added.";
-			} else {
-				$resp['status'] = 'failed';
-				$resp['msg'] = "An error occurred.";
-				$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
-			}
-
-		} else {
-			$resp['status'] = 'failed';
-			$resp['msg'] = "OR number already exists!";
-			return json_encode($resp);
-			exit;
-		}
-		
-		return json_encode($resp);
-	}
-
-
-
-	function save_stl_payment(){
-		require_once('../includes/config.php');
-		extract($_POST);
-		$acc_no = $_POST['acc_no'];
-		$stl_pay_date = $_POST['stl_pay_date'];
-		$stl_amount_paid = (float)$_POST['stl_amount_paid'];
-		$stl_discount = (float)$_POST['stl_discount'];
-		$stl_or_no = 'STL-' . $_POST['stl_or_no'];
-
-		$check_payment = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$stl_or_no'";
-		$check_payment_query = odbc_prepare($conn2, $check_payment);
-		odbc_execute($check_payment_query);
-
-		if (!odbc_fetch_row($check_payment_query)) {
-		
-			$params = "'$acc_no', '$stl_or_no', '$stl_pay_date', '$stl_amount_paid', '$stl_discount'";
-			// Create the INSERT query using parameterized query
-			$insert_query = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount) VALUES ($params)";
-
-			if (odbc_exec($conn2, $insert_query)) {
-				$resp['status'] = 'success';
-				$resp['msg'] = "Streetlight Payment has been successfully added.";
-			} else {
-				$resp['status'] = 'failed';
-				$resp['msg'] = "An error occurred.";
-				$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
-			}
-
-		} else {
-			$resp['status'] = 'failed';
-			$resp['msg'] = "OR number already exists!";
-			return json_encode($resp);
-			exit;
-		}
-		
-		
-		return json_encode($resp);
-	}
-
-
 	function delete_bill(){
 		require_once('../includes/config.php');
 		extract($_POST);
@@ -526,7 +495,7 @@ Class Master{
 		$params = "'$acc_no', '$start_date', '$end_date', '$due_date', '$bill_type', '$amount_due', '$prev_bal'";
 		$insert_query = "INSERT INTO t_utility_bill VALUES ($params)";
 		if (odbc_exec($conn2, $insert_query)) {
-			$this->log_log('Utility Bill', "DELETE - $date : $type : $id ");
+			$this->log_log('Utility Bill', "SAVE - $acc_no : $start_date : $bill_Type : $amount_due : $prev_bal ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Utility Bill has been successfully added.";
 		} else {
@@ -537,7 +506,10 @@ Class Master{
 		
 		return json_encode($resp);
 	}
-
+	public function __destruct() {
+        // Close the database connection when the object is destroyed
+        odbc_close($this->conn2);
+    }
 
 }
 
@@ -581,6 +553,9 @@ switch ($action) {
 	break;
 	case 'save_user':
 		echo $Master->save_user();
+	break;
+	case 'add_ticket':
+		echo $Master->add_ticket();
 	break;
 
 	default:

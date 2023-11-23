@@ -1,270 +1,182 @@
 <?php
-    // Check if the edit parameter is set and fetch the record from the database
-    if(isset($_GET['edit']) && $_GET['edit'] == 1 && isset($_GET['id'])) {
+require_once('../../includes/config.php');
+
+    if(isset($_GET['id'])) {
         $id = $_GET['id'];
-        $stmt = mysqli_prepare($conn, "SELECT * FROM tickets WHERE id = ?");
-        mysqli_stmt_bind_param($stmt, "i", $id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $row2 = mysqli_fetch_assoc($result);
-    }
-
-    if(isset($_POST['tickets-add']))
-    {
-      $empid=$session_id;
-      $fname=$_POST['fname'];
-      $lname=$_POST['lastname'];   
-      $email=$_POST['email'];  
-      $department=$_POST['department']; 
-      $gender=$_POST['gender'];  
-      $phonenumber=$_POST['phonenumber'];
-
-        $result = mysqli_query($conn,"update tblemployees set FirstName='$fname', LastName='$lname', EmailId='$email', Gender='$gender', Department='$department', Phonenumber='$phonenumber' where emp_id='$session_id'
-      ")or die(mysqli_error());
-      echo $result;
-        if ($result) {
-          echo "<script>alert('Your records Successfully Updated');</script>";
-        echo "<script>location.replace(_base_url_+'heads/?page=head_profile');</script>";
         
-      } else{
-        die(mysqli_error());
-      }
+        $sql = "SELECT * FROM tickets WHERE id = ?";
+        $ticket_id = $_GET['id'];
+
+        $qry = odbc_prepare($conn2, $sql);
+        if (!odbc_execute($qry, array($ticket_id))) {
+            die("Execution of the statement failed: " . odbc_errormsg($conn2));
+        }
+        while ($row2 = odbc_fetch_array($qry)) {
+            $employeeID= $row2['employee_id'];
+            $subject=$row2['subject'];  
+            $dept= $row2['department_id'];  
+            $request= $row2['request']; 
+            $priority=$row2['priority'];  
+            $purpose=$row2['description'];
+        }
 
       
-
     }
 
 ?>
 
-<div class="main-container"> 
-	<div class="">
-		<div class="pd-ltr-20">
-			<div class="title pb-20">
-                <h2 class="h3 mb-0">New Request</h2>
-            </div>
-	
-			<div class="card-box mb-30">
-				<div class="pd-20">
-                <form>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <label for="buyer_name" class="block">Buyer's Name</label>
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="text" id="buyer_name" name="buyer_name"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($row2['bname']) ? $row2['bname'] : ''; ?>">
-                        </div>
-                        <div class="col-sm-12">
-                            <label for="pbl" class="block">Proj/Block/Lot</label>
-                        </div>
-                        <div class="col-sm-12">
-                            <input type="text" id="pbl" name="pbl"autocomplete="off" class="form-control" placeholder="" value=""<?php echo isset($row2['bname']) ? $row2['bname'] : ''; ?>"">
-                        </div>
-                        <div class="col-sm-12">
-                            <label for="pbl" class="block">Request for</label>
-                        </div>
-                        <div class="col-sm-12">
-                            <select class="form-control form-control-border" name="request" id="request" required>
-                                <option value="BA" selected>BILL ADJUSTMENT</option>
-                                <option value="PA" selected>PAYMENT ADJUSTMENT</option>
-                                <option value="PTO" selected>PERMIT TO OCCUPIED</option>
-                                <option value="PTC" selected>PERMIT TO CONSTRUCT</option>
-                                <option value="ATC" selected>AUTHORITY TO CONSTRUCT</option>
-                            </select>
-                        </div>
-                        
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                                <label for="pbl" class="block">Priority</label>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-radio">
-                                <div class="radio radiofill radio-inline">
-                                    <label>
-                                        <input type="radio" name="priority" value="Highest" checked="checked">
-                                        <i class="helper"></i>Highest
-                                    </label>
-                                </div>
-                                <div class="radio radiofill radio-inline">
-                                    <label>
-                                        <input type="radio" name="priority" value="High">
-                                        <i class="helper"></i>High
-                                    </label>
-                                </div>
-                                <div class="radio radiofill radio-inline">
-                                    <label>
-                                        <input type="radio" name="priority" value="Normal">
-                                        <i class="helper"></i>Normal
-                                    </label>
-                                </div>
-                                <div class="radio radiofill radio-inline">
-                                    <label>
-                                        <input type="radio" name="priority" value="Low">
-                                        <i class="helper"></i>Low
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-sm-12">
-                            <label for="purpose" class="block">Purpose</label>
-                        </div>
-                        <div class="col-sm-12">
-                             <textarea rows="3" name="purpose" id="purpose" class="form-control form-control-md rounded-0" required><?php echo isset($remarks) ? html_entity_decode($remarks) : '' ?></textarea>
-     
-                        </div>
-
-
-                    
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5"></label>
-                        <div class="col-sm-5">
-                            <?php if(isset($row2) && !empty($row2)): ?>
-                                <button id="tickets-update" type="submit" class="btn btn-primary m-b-0">Update</button>
-                            <?php else: ?>
-                                <button id="tickets-add" type="submit" class="btn btn-primary m-b-0">Submit</button>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-
-
-                </form>
-                       
-				
-			   </div>
-			</div>
-			
-		</div>
-	</div>
-<script>
-  $('#tickets-update').click(function(event){
-      event.preventDefault(); // prevent the default form submission
-      (async () => {
-          var data = {
-              id: <?php echo isset($_GET['id']) ? $_GET['id'] : 'null'; ?>,
-              subject: $('#subject').val(),
-              description: $('#summernote').summernote('code'), // get the HTML content of Summernote
-              department: $('#department').val(),
-              customer: $('#customer').val(),
-              action: "tickets-update",
-          };
-
-          if (data.subject.trim() === '' || data.description.trim() === '' || 
-              data.department.trim() === '' || data.customer.trim() === '') {
-              Swal.fire({
-                  icon: 'warning',
-                  text: 'Please all fieds are required. Kindly fill all',
-                  confirmButtonColor: '#ffc107',
-                  confirmButtonText: 'OK'
-              });
-              return;
-          }
-          console.log('Data HERE: ' + JSON.stringify(data));
-          $.ajax({
-              url: 'ticket_functions.php',
-              type: 'post',
-              data: data,
-              success:function(response){
-                  console.log('success function called');
-                  response = JSON.parse(response);
-                  console.log('RESPONSE HERE: ' + response.status)
-                  console.log(`RESPONSE HERE: ${response.message}`);
-                  if (response.status == 'success') {
-                      Swal.fire({
-                          icon: 'success',
-                          html: response.message,
-                          confirmButtonColor: '#01a9ac',
-                          confirmButtonText: 'OK'
-                      }).then((result) => {
-                          if (result.isConfirmed) {
-                              window.location.href = "ticket_list.php";
-                              // location.reload();
-                          }
-                      });
-                  } else {
-                      Swal.fire({
-                          icon: 'error',
-                          text: response.message,
-                          confirmButtonColor: '#eb3422',
-                          confirmButtonText: 'OK'
-                      });
+<div class="container-fluid">
+  <form action="" id="request-form"> 
+      <input type="hidden" name="id" value="<?php echo isset($ticket_id) ? $ticket_id : '' ?>">
+      <div class="form-group row">
+          <div class="col-sm-12">
+              <label for="subject" class="block">Subject</label>
+          </div>
+          <div class="col-sm-12">
+              <input type="text" id="subject" name="subject"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($subject) ? $subject : ''; ?>">
+          </div>
+          <div class="col-sm-12">
+              <label for="department" class="block">Department</label>
+          </div>
+         
+          <div class="col-sm-12">
+              <select name="department" class="custom-select form-control" required="true" autocomplete="off">
+                <?php
+                if (!empty($dept)) {
+                  $query = "select * from tbldepartments where id =" .$dept; 
+                  $result = odbc_exec($conn2, $query);
+                  while ($row4 = odbc_fetch_array($result))  {
+                    ?>
+                        <option value="<?php echo $row4['id']; ?>" $selected><?php echo $row4['departmentname']; ?></option>
+                 <?php
                   }
-              },
-              error: function(jqXHR, textStatus, errorThrown) {
-                  console.log('AJAX Data HERE: ' + JSON.stringify(data));
-                  console.log("Response from server: " + jqXHR.responseText);
-                  console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
-              }
-          });
-      })()
-  })
-</script>
-<script>
-    $('#tickets-add').click(function(event){
-        event.preventDefault(); // prevent the default form submission
-        (async () => {
-            var data = {
-                subject: $('#subject').val(),
-                description: $('#summernote').summernote('code'), // get the HTML content of Summernote
-                priority: $('input[name="priority"]:checked').val(),
-                department: $('#department').val(),
-                customer: $('#customer').val(),
-                status: 0, // set initial status to 0
-                action: "tickets-add",
-            };
-
-            if (data.subject === '' || data.description === '' || 
-                data.priority === '' || data.department === '' || 
-                data.customer === '') {
-                Swal.fire({
-                    icon: 'warning',
-                    text: 'Please all fieds are required. Kindly fill all',
-                    confirmButtonColor: '#ffc107',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-            console.log('Data HERE: ' + JSON.stringify(data));
-            $.ajax({
-                url: 'ticket_functions.php',
-                type: 'post',
-                data: data,
-                success:function(response){
-                    console.log('success function called');
-                    response = JSON.parse(response);
-                    console.log('RESPONSE HERE: ' + response.status)
-                    console.log(`RESPONSE HERE: ${response.message}`);
-                    if (response.status == 'success') {
-                        Swal.fire({
-                            icon: 'success',
-                            html: response.message,
-                            confirmButtonColor: '#01a9ac',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                location.reload();
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            text: response.message,
-                            confirmButtonColor: '#eb3422',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log('AJAX Data HERE: ' + JSON.stringify(data));
-                    console.log("Response from server: " + jqXHR.responseText);
-                    console.log("Status:", status);
-                    console.log("Error:", error);
-                    console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
                 }
-            });
-        })()
+                else
+                    {
+                      echo '<option value="" readonly selected>Select Department</option>';
+                    } 
+                $query = "select * from tbldepartments";
+                $result = odbc_exec($conn2, $query);
+                while ($row2 = odbc_fetch_array($result))  {
+                  ?>
+                  <option value="<?php echo $row2['id']; ?>"><?php echo $row2['departmentname']; ?></option>
+                  <?php
+                }?> 
+                  
+              </select>      
+          </div>
+          <div class="col-sm-12">
+              <label for="request" class="block">Request for</label>
+          </div>
+          <div class="col-sm-12">
+              <select class="form-control form-control-border" name="request" id="request" required>
+                <option value="BA" <?php echo (isset($request) && $request == 'BA') ? 'selected' : ''; ?>>BILL ADJUSTMENT</option>
+                <option value="ADJ" <?php echo (isset($request) &&  $request == 'ADJ') ? 'selected' : ''; ?>>PAYMENT ADJUSTMENT</option>
+                <option value="PTO" <?php echo (isset($request) &&  $request == 'PTO') ? 'selected' : ''; ?>>PERMIT TO OCCUPY</option>
+                <option value="PTC" <?php echo (isset($request) &&  $request == 'PTC') ? 'selected' : ''; ?>>PERMIT TO CONSTRUCT</option>
+                <option value="ATC" <?php echo (isset($request) &&  $request == 'ATC') ? 'selected' : ''; ?>>AUTHORITY TO CONSTRUCT</option>
+              </select>
+          </div>
+          
+      </div>
+     
+      <div class="form-group row">
+          <div class="col-sm-12">
+                  <label for="pbl" class="block">Priority</label>
+          </div>
+          <div class="col-sm-12">
+          <div class="form-radio">
+           
+              <input type="hidden" name="priority" value="<?php echo isset($row['priority']) ? $row['priority'] : ''; ?>">
+
+              <div class="radio radiofill radio-inline">
+                  <label>
+                      <input type="radio" name="priority" value="Highest" <?php echo (isset($priority) && $priority == 'Highest') ? 'checked' : ''; ?>>
+                      <i class="helper"></i>Highest
+                  </label>
+              </div>
+              <div class="radio radiofill radio-inline">
+                  <label>
+                      <input type="radio" name="priority" value="High" <?php echo (isset($priority) && $priority == 'High') ? 'checked' : ''; ?>>
+                      <i class="helper"></i>High
+                  </label>
+              </div>
+              <div class="radio radiofill radio-inline">
+                  <label>
+                      <input type="radio" name="priority" value="Normal" <?php echo (isset($priority) &&  $priority == 'Normal') ? 'checked' : ''; ?>>
+                      <i class="helper"></i>Normal
+                  </label>
+              </div>
+              <div class="radio radiofill radio-inline">
+                  <label>
+                      <input type="radio" name="priority" value="Low" <?php echo (isset($priority) &&  $priority == 'Low') ? 'checked' : ''; ?>>
+                      <i class="helper"></i>Low
+                  </label>
+              </div>
+          </div>
+
+          </div>
+          <div class="col-sm-12">
+              <label for="purpose" class="block">Purpose</label>
+          </div>
+          <div class="col-sm-12">
+                <textarea rows="3" name="purpose" id="purpose" class="form-control form-control-md rounded-0" required><?php echo isset($purpose) ? html_entity_decode($purpose) : '' ?></textarea>
+
+          </div>
+
+
+      
+      </div>
+    
+
+  </form>
+</div>
+<script>
+ $(function(){
+        $('#uni_modal #request-form').submit(function(e){
+            e.preventDefault();
+            var _this = $(this)
+            $('.pop-msg').remove()
+            var el = $('<div>')
+                el.addClass("pop-msg alert")
+                el.hide()
+            start_loader();
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=add_ticket",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					alert("An error occured",'error');
+					end_loader();
+				},
+                success:function(resp){
+                    if(resp.status == 'success'){
+                        alert(resp.msg);
+                        location.reload();
+                    }else if(!!resp.msg){
+                        el.addClass("alert-danger")
+                        el.text(resp.msg)
+                        _this.prepend(el)
+                    }else{
+                        el.addClass("alert-danger")
+                        el.text("An error occurred due to unknown reason.")
+                        _this.prepend(el)
+                    }
+                    el.show('slow')
+                    $('html,body,.modal').animate({scrollTop:0},'fast')
+                    end_loader();
+                }
+            })
+        })
     })
+
+
 </script>
 
 <style>

@@ -153,7 +153,13 @@ if ($l_acct_no != ''){
                                     <td class=""><?php echo $acc ?></td>
                                     <td class=""><?php echo $loc ?></td>
                                     <td class=""><?php echo $lname . ','. $fname ?></td>
-                                    <td class=""><?php echo $types ?></td>
+                                    <td class=""><?php
+                                        if ($types == 'STL and MTF') {
+                                            echo 'STL and GCF';
+                                        } else {
+                                            echo $types;
+                                        }
+                                    ?></td>
                             
                                     <td class="text-center">
                                         <?php 
@@ -232,15 +238,11 @@ if ($l_acct_no != ''){
         $('.soa_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
 		})
-		/* $('.stl_bill_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/stl_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
-		}) */
+		
         $('.stl_bill_data').click(function(){
 			uni_modal_2("STL Due and Payment Details", "soa/statement_stl.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
-		/* $('.mtf_bill_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/mtf_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
-		}) */
+		
         $('.mtf_bill_data').click(function(){
 			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
@@ -253,6 +255,10 @@ if ($l_acct_no != ''){
 		})
 		$('.view_data').click(function(){
 			uni_modal("Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')
+		})
+
+        $('.new_soa').click(function(){
+			uni_modal("Bill Details - "+ $(this).attr('id'),"accounts/new_soa.php?id="+$(this).attr('id'),'large')
 		})
 
     })
