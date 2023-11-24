@@ -151,7 +151,13 @@ if ($l_acct_no != ''){
                                     <td class=""><?php echo $acc ?></td>
                                     <td class=""><?php echo $loc ?></td>
                                     <td class=""><?php echo $lname . ','. $fname ?></td>
-                                    <td class=""><?php echo $types ?></td>
+                                    <td class=""><?php
+                                        if ($types == 'STL and MTF') {
+                                            echo 'STL and GCF';
+                                        } else {
+                                            echo $types;
+                                        }
+                                    ?></td>
                             
                                     <td class="text-center">
                                         <?php 
