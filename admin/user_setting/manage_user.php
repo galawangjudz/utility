@@ -14,7 +14,8 @@ if(isset($_GET['id'])){
 	<div class="card-body">
 		<div class="container-fluid">
 			<div id="msg"></div>
-			<form method="post" enctype="multipart/form-data" action="<?php echo base_url ?>admin/?page=user_setting">	
+			<!-- <form method="post" enctype="multipart/form-data" action="<?php echo base_url ?>admin/?page=user_setting">	 -->
+			<form action="" id="user-form">
 			<input type="hidden" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>" required>
 				<div class="form-group">
 					<label for="name">Employee ID: </label>
@@ -94,3 +95,50 @@ if(isset($_GET['id'])){
 		</div>
 	</div>
 </div>
+
+<script>
+    
+    $(function(){
+        $('#uni_modal #user-form').submit(function(e){
+            e.preventDefault();
+            var _this = $(this)
+            $('.pop-msg').remove()
+            var el = $('<div>')
+                el.addClass("pop-msg alert")
+                el.hide()
+            start_loader();
+            $.ajax({
+                url:_base_url_+"classes/Master.php?f=save_user",
+				data: new FormData($(this)[0]),
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                dataType: 'json',
+				error:err=>{
+					console.log(err)
+					alert("An error occured",'error');
+					end_loader();
+				},
+                success:function(resp){
+                    if(resp.status == 'success'){
+                        alert(resp.msg);
+                        location.reload();
+                    }else if(!!resp.msg){
+                        el.addClass("alert-danger")
+                        el.text(resp.msg)
+                        _this.prepend(el)
+                    }else{
+                        el.addClass("alert-danger")
+                        el.text("An error occurred due to unknown reason.")
+                        _this.prepend(el)
+                    }
+                    el.show('slow')
+                    $('html,body,.modal').animate({scrollTop:0},'fast')
+                    end_loader();
+                }
+            })
+        })
+    })
+</script>
