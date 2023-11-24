@@ -14,8 +14,8 @@ if(isset($_GET['id'])){
 	<div class="card-body">
 		<div class="container-fluid">
 			<div id="msg"></div>
-			<!-- <form method="post" enctype="multipart/form-data" action="<?php echo base_url ?>admin/?page=user_setting">	 -->
-			<form action="" id="user-form">
+			<form method="post" enctype="multipart/form-data" action="<?php echo base_url ?>admin/?page=user_setting">	
+			<!-- <form action="" id="user-form"> -->
 			<input type="hidden" name="emp_id" id="emp_id" value="<?php echo isset($meta['emp_id']) ? $meta['emp_id']: '' ?>" required>
 				<div class="form-group">
 					<label for="name">Employee ID: </label>
