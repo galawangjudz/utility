@@ -52,28 +52,28 @@ Class Master{
 	
 
 	public function log_log($module, $notes){
-		$dsn = "pgadmin4"; 
+/* 		$dsn = "pgadmin4"; 
 		$user = "glicelo";   
 		$pass = "admin12345";   
-		$conn2 = odbc_connect($dsn, $user, $pass);
+		$conn2 = odbc_connect($dsn, $user, $pass); */
 		require_once('../includes/session.php');
 		$employee_id = $_SESSION['alogin'];
 		$date = date('Y-m-d');
 		$time = date('H:i:s');
 		$values = "'$employee_id', '$date','$time','$module','$notes'";
 		$insert = "INSERT INTO t_utility_logs (c_username, c_date, c_time, c_module, c_notes) VALUES ($values)";
-		$save = odbc_exec($conn2, $insert);
+		$save = odbc_exec($this->conn2, $insert);
 		if ($save) {
 				$resp['status'] = 'success';
 				$resp['msg'] = "Logs has been successfully inserted.";
 		} else {
 				$resp['status'] = 'failed';
-				$resp['err'] = odbc_errormsg($conn2) . " [$insert]";
+				$resp['err'] = odbc_errormsg($this->conn2) . " [$insert]";
 		}
 	}
 
 	public function save_account(){
-		require_once('../includes/config.php');
+	
 		extract($_POST);
 		
 		$site = substr($acc_no, 0, 3);
@@ -83,7 +83,7 @@ Class Master{
 
 		$check = "SELECT * FROM t_projects where c_code = $site";
 
-		$result = odbc_exec($conn2, $check);
+		$result = odbc_exec($this->conn2, $check);
 
 			if (!$result) {
 				die("ODBC query execution failed: " . odbc_errormsg());
@@ -104,15 +104,15 @@ Class Master{
 			$sql = "INSERT INTO t_utility_accounts ($data) VALUES ($values)";
 			$sql2 = "INSERT INTO t_utility_flags ($data2) VALUES ($values2)";
 			$sql3 = "INSERT INTO t_utility_bill VALUES ($values3),($values4)";
-			$save = odbc_exec($conn2, $sql);
-			$save2 = odbc_exec($conn2, $sql2);
-			$save3 = odbc_exec($conn2, $sql3);
+			$save = odbc_exec($this->conn2, $sql);
+			$save2 = odbc_exec($this->conn2, $sql2);
+			$save3 = odbc_exec($this->conn2, $sql3);
 		} else {
 			$sql = "UPDATE t_utility_accounts SET ($data) = ($values) WHERE c_account_no = '$acc_no'";
-			$save = odbc_exec($conn2, $sql);
+			$save = odbc_exec($this->conn2, $sql);
 		}
 		if ($save) {
-				#$rid = !empty($id) ? $id : odbc_insert_id($conn2);
+				#$rid = !empty($id) ? $id : odbc_insert_id($this->conn2);
 				$resp['status'] = 'success';
 				if (empty($id)) {
 					$this->log_log('Customer Account', "ADD - $id : $lname $fname ");
@@ -125,20 +125,20 @@ Class Master{
 		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = "An error occurred.";
-			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
 		}
 
 		return json_encode($resp);
 	}
 
 	function delete_account(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$sql = "DELETE FROM t_utility_accounts where c_account_no ='$id'";
 /* 		$sql2 = "DELETE FROM t_utility_flags where c_account_no ='$id'";
 		$sql3 = "DELETE FROM t_utility_bills where c_account_no ='$id'";
 		$sql4 = "DELETE FROM t_utility_payments where c_account_no ='$id'"; */
-		$del = odbc_exec($conn2, $sql);
+		$del = odbc_exec($this->conn2, $sql);
 		if ($del) {
 			$this->log_log('Customer Account', "DELETE - $id ");
 			$resp['status'] = 'success';
@@ -146,12 +146,12 @@ Class Master{
 			
 		} else {
 			$resp['status'] = 'failed';
-			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
 		}
 		return json_encode($resp);
 	}
 	function update_payment(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$acc_no = $_POST['acc_no'];
 		$car_no = $_POST['car_no'];
@@ -160,7 +160,7 @@ Class Master{
 
 		if ($car_no != $or_no) {
 			$checking = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$or_no'";
-			$check = odbc_exec($conn2, $checking);
+			$check = odbc_exec($this->conn2, $checking);
 			if (odbc_fetch_row($check)) {
 			/* 	echo "The payment OR number exists in the database."; */
 				$resp['status'] = 'failed';
@@ -173,7 +173,7 @@ Class Master{
 		$pay_discount = isset($_POST['pay_discount']) ? (float)$_POST['pay_discount'] : 0;
 
 		$sql = "UPDATE t_utility_payments SET c_st_or_no = '$or_no', c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$car_no'";
-		$update = odbc_exec($conn2, $sql);
+		$update = odbc_exec($this->conn2, $sql);
 		//echo $sql;
 		if ($update) {
 			$this->log_log('Utility Payment', "UPDATE - $acc_no : $car_no : $pay_date : $pay_amount_paid : $pay_discount");
@@ -181,16 +181,16 @@ Class Master{
 			$resp['msg'] = "CAR has been updated successfully.";
 		} else {
 			$resp['status'] = 'failed';
-			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
 		}
 		return json_encode($resp);
 	}
 
 	function delete_payment(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$del_details = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$id'";
-		$result = odbc_exec($conn2, $del_details);
+		$result = odbc_exec($this->conn2, $del_details);
 		if (!$result) {
 			die("ODBC query execution failed: " . odbc_errormsg());
 		}
@@ -202,7 +202,7 @@ Class Master{
 			$pay_discount = $row['c_discount'];
 		}
 		$sql = "DELETE FROM t_utility_payments WHERE c_st_or_no = '$id'";
-		$delete = odbc_exec($conn2, $sql);
+		$delete = odbc_exec($this->conn2, $sql);
 		//echo $sql;
 		if ($delete) {
 			$this->log_log('Utility Payment', "DELETE - $acc_no : $or_no : $pay_date : $pay_amount_paid : $pay_discount");
@@ -210,13 +210,13 @@ Class Master{
 			$resp['msg'] = "CAR has been deleted successfully.";
 		} else {
 			$resp['status'] = 'failed';
-			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
 		}
 		return json_encode($resp);
 	}
 
 	function adjust_bill(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$acc_no = $_POST['acc_no'];
 		$adjust_date = $_POST['adj_date'];
@@ -248,7 +248,7 @@ Class Master{
 			// Check if the number exists in the database
 			$query = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$unique_no'";
 			/* $result = $mysqli->query($query); */
-			$result = odbc_prepare($conn2, $query);
+			$result = odbc_prepare($this->conn2, $query);
 			odbc_execute($result);
 			if (!odbc_fetch_row($result)) {
 				break; // The number is unique, exit the loop
@@ -262,23 +262,23 @@ Class Master{
 
 		$params2 = "'$unique_no','$acc_no', '$adjust_date', 'BILL ADJUSTMENT','$notes'";
 		$insert_adjustment = "INSERT INTO t_adjustment VALUES ($params2)";
-		$adjustment = odbc_exec($conn2, $insert_adjustment);
+		$adjustment = odbc_exec($this->conn2, $insert_adjustment);
 
-		if (odbc_exec($conn2, $insert_query)) {
+		if (odbc_exec($this->conn2, $insert_query)) {
 			$this->log_log('Utility Bill Adjustment'," $acc_no | $unique_no | $notes");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Bill Adjustment has been successfully added.";
 		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = "An error occurred.";
-			$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$insert_query]";
 		}
 		
 		return json_encode($resp);
 	}
 
 	function adjust_payment(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$acc_no = $_POST['acc_no'];
 		$new_acc = $_POST['new_acc'];
@@ -313,7 +313,7 @@ Class Master{
 			// Check if the number exists in the database
 			$query = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$unique_no1' or c_st_or_no = '$unique_no2'";
 			/* $result = $mysqli->query($query); */
-			$result = odbc_prepare($conn2, $query);
+			$result = odbc_prepare($this->conn2, $query);
 			odbc_execute($result);
 			if (!odbc_fetch_row($result)) {
 				break; // The number is unique, exit the loop
@@ -334,17 +334,17 @@ Class Master{
 		$params2_to = "'$unique_no2','$new_acc', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
 		$insert_adjustment_from = "INSERT INTO t_adjustment VALUES ($params2_from)";
 		$insert_adjustment_to = "INSERT INTO t_adjustment VALUES ($params2_to)";
-		$adjustment = odbc_exec($conn2, $insert_adjustment_from);
-		$adjustment = odbc_exec($conn2, $insert_adjustment_to);
+		$adjustment = odbc_exec($this->conn2, $insert_adjustment_from);
+		$adjustment = odbc_exec($this->conn2, $insert_adjustment_to);
 
-		if (odbc_exec($conn2, $insert_query_from) && odbc_exec($conn2, $insert_query_to)) {
+		if (odbc_exec($this->conn2, $insert_query_from) && odbc_exec($this->conn2, $insert_query_to)) {
 			$this->log_log('Utility Payment Adjustment'," $acc_no | $new_acc| $unique_no1 | $unique_no2 | $notes");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Bill Adjustment has been successfully added.";
 		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = "An error occurred.";
-			$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$insert_query]";
 		}
 		
 		return json_encode($resp);
@@ -353,7 +353,7 @@ Class Master{
 
 
 	function save_payment(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$l_gcf = 0;
 		$l_stl = 0;
@@ -395,7 +395,7 @@ Class Master{
 		endif;
 
 		$check_payment = "SELECT * FROM t_utility_payments WHERE c_st_or_no ILIKE ?";
-		$check_payment_query = odbc_prepare($conn2, $check_payment);
+		$check_payment_query = odbc_prepare($this->conn2, $check_payment);
 		odbc_execute($check_payment_query, array('%' . $or_no . '%'));
 
 		if (!odbc_fetch_row($check_payment_query)) {
@@ -413,7 +413,7 @@ Class Master{
 			
 			if (isset($insert_query_gcf) && isset($insert_query_stl)) {
 				// Both conditions are true, so execute both queries
-				if (odbc_exec($conn2, $insert_query_gcf) && odbc_exec($conn2, $insert_query_stl)) {
+				if (odbc_exec($this->conn2, $insert_query_gcf) && odbc_exec($this->conn2, $insert_query_stl)) {
 					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$resp['status'] = 'success';
@@ -421,29 +421,29 @@ Class Master{
 				} else {
 					$resp['status'] = 'failed';
 					$resp['msg'] = "An error occurred.";
-					$resp['err'] = odbc_errormsg($conn2);
+					$resp['err'] = odbc_errormsg($this->conn2);
 				}
 			} elseif (isset($insert_query_gcf)) {
 				// Only $l_gcf is true, so execute the GCF query
-				if (odbc_exec($conn2, $insert_query_gcf)) {
+				if (odbc_exec($this->conn2, $insert_query_gcf)) {
 					$this->log_log('Utility Payment', "SAVE GCF - $acc_no : $main_or_no : $pay_date : $main_amount_paid : $main_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$resp['status'] = 'success';
 					$resp['msg'] = "GCF Payment has been successfully added.";
 				} else {
 					$resp['status'] = 'failed';
 					$resp['msg'] = "An error occurred.";
-					$resp['err'] = odbc_errormsg($conn2);
+					$resp['err'] = odbc_errormsg($this->conn2);
 				}
 			} elseif (isset($insert_query_stl)) {
 				// Only $l_stl is true, so execute the STL query
-				if (odbc_exec($conn2, $insert_query_stl)) {
+				if (odbc_exec($this->conn2, $insert_query_stl)) {
 					$this->log_log('Utility Payment', "SAVE STL - $acc_no : $stl_or_no : $pay_date : $stl_amount_paid : $stl_discount : $mode_of_payment : $ref_no :$branch : $check_date");
 					$resp['status'] = 'success';
 					$resp['msg'] = "STL Payment has been successfully added.";
 				} else {
 					$resp['status'] = 'failed';
 					$resp['msg'] = "An error occurred.";
-					$resp['err'] = odbc_errormsg($conn2);
+					$resp['err'] = odbc_errormsg($this->conn2);
 				}
 			} else {
 				$resp['status'] = 'failed';
@@ -464,10 +464,10 @@ Class Master{
 	}
 
 	function delete_bill(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$sql = "DELETE FROM t_utility_bill WHERE c_due_date = '$date' and c_bill_type = '$type' and c_account_no = '$id'";
-		$delete = odbc_exec($conn2, $sql);
+		$delete = odbc_exec($this->conn2, $sql);
 		//echo $sql;
 		if ($delete) {
 			$this->log_log('Utility Bill', "DELETE - $date : $type : $id ");
@@ -475,14 +475,14 @@ Class Master{
 			$resp['msg'] = "BILL has been deleted successfully.";
 		} else {
 			$resp['status'] = 'failed';
-			$resp['err'] = odbc_errormsg($conn2) . " [$sql]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
 		}
 		return json_encode($resp);
 	}
 
 
 	function save_bill(){
-		require_once('../includes/config.php');
+		
 		extract($_POST);
 		$acc_no = $_POST['acc_no'];
 		$start_date = $_POST['start_date'];
@@ -494,14 +494,14 @@ Class Master{
 		
 		$params = "'$acc_no', '$start_date', '$end_date', '$due_date', '$bill_type', '$amount_due', '$prev_bal'";
 		$insert_query = "INSERT INTO t_utility_bill VALUES ($params)";
-		if (odbc_exec($conn2, $insert_query)) {
+		if (odbc_exec($this->conn2, $insert_query)) {
 			$this->log_log('Utility Bill', "SAVE - $acc_no : $start_date : $bill_Type : $amount_due : $prev_bal ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Utility Bill has been successfully added.";
 		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = "An error occurred.";
-			$resp['err'] = odbc_errormsg($conn2) . " [$insert_query]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$insert_query]";
 		}
 		
 		return json_encode($resp);
