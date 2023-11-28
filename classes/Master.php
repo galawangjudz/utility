@@ -29,7 +29,7 @@ Class Master{
 		$loginID = $_SESSION['alogin'];
 		
 		
-		$params = "'$subject', '$dept', '$request', '$priority', '$purpose','$loginID',,'$status', '$date_created'";
+		$params = "'$subject', '$dept', '$request', '$priority', '$purpose','$loginID','$status', '$date_created'";
 		if (empty($id)) {
 			$ticket_query = "INSERT INTO tickets (subject, department_id, request, priority, description, employee_id,status, date_created) VALUES ($params)";
 		}else{

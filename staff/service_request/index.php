@@ -272,15 +272,10 @@ $user_type = $_SESSION['user_type'];
                                         <?php echo $result['priority']; ?>
                                     </div>
                                     <div class="dropdown-secondary dropdown">
-                                        <button id="status-dropdown" class="btn btn-default btn-mini dropdown-toggle waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button id="status-dropdown" class="btn btn-default btn-mini waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <?php echo $result['status'] == 0 ? 'Open' : ($result['status'] == 1 ? 'Processing' : ($result['status'] == 2 ? 'Resolved' : 'Closed')); ?>
                                         </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdown2" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
-                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 0 ? 'active' : ''; ?>" href="#!" data-status="0" data-ticket-id="<?php echo $result['id']; ?>">Open</a>
-                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 1 ? 'active' : ''; ?>" href="#!" data-status="1" data-ticket-id="<?php echo $result['id']; ?>">Processing</a>
-                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 2 ? 'active' : ''; ?>" href="#!" data-status="2" data-ticket-id="<?php echo $result['id']; ?>">Resolved</a>
-                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 3 ? 'active' : ''; ?>" href="#!" data-status="3" data-ticket-id="<?php echo $result['id']; ?>">Closed</a>
-                                        </div>
+                                        <!-- end of dropdown menu -->
                                     </div>
                                     <!-- end of dropdown-secondary -->
                                     <div class="dropdown">
@@ -326,38 +321,6 @@ $user_type = $_SESSION['user_type'];
         $('.edit-ticket').click(function(){
 			uni_modal("Request Details","service_request/new_request.php?id="+$(this).attr('id'))
 		})
-
-       /*  $('.dropdown-status').click(function(){
-			uni_modal("Request Details","service_request/new_request.php?id="+$(this).attr('id'))
-		}) */
-
-        $('.dropdown-status').click(function(){
-			_conf("Are you sure to update ?","update_request",[$(this).attr('data-status')])
-		})
-
-    function update_request($id){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=update_request",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-                    alert(resp.msg);
-					location.reload();
-				}else{
-					alert("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
-	}
 
     })
 </script>

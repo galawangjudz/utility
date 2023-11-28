@@ -12,6 +12,12 @@ window.location = "../index.php";
 }
 
 
+/* if (isset($_SESSION['user_session_id']) && $_SESSION['user_type'] == 'Admin'){
+    redirect('admin/index.php');
+}
+     */
+
+
 $sess_id=$_SESSION['user_session_id'];
 $session_id=$_SESSION['alogin'];
 $session_depart = $_SESSION['dept'];

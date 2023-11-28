@@ -33,7 +33,7 @@
 							
 						</ul>
 					</li>
-					<li class="dropdown">
+				<!-- 	<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-apartment"></span><span class="mtext"> Requests </span>
 						</a>
@@ -43,8 +43,12 @@
 							
 						</ul>
 					</li>
-
-
+ -->
+					<li>
+						<a href="<?php echo base_url ?>admin/?page=service_request" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-right-arrow"></span><span class="mtext">Service Request</span>
+						</a>
+					</li>
 
 					<li>
 						<a href="<?php echo base_url ?>admin/?page=get-soa" class="dropdown-toggle no-arrow">

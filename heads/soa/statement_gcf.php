@@ -338,7 +338,9 @@ function format_num($number){
                          }else{
                              while ($summ = odbc_fetch_array($result2)) {
                                     $total_mtf_bill = $summ['c_mtf_bill'];
+                                    $total_mtf_sur = $summ['c_mtf_sur'];
                                     $total_stl_bill = $summ['c_stl_bill'];
+                                    $total_stl_sur = $summ['c_stl_sur'];
                                     $total_mtf_paid = $summ['c_mtf_amount_paid'];
                                     $total_mtf_disc =  $summ['c_mtf_discount'];
                                     $total_stl_paid = $summ['c_stl_amount_paid'];

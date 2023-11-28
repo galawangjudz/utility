@@ -5,8 +5,6 @@ $errorMsg = '';
 
 
 
-
-
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 {
 	if(empty($_POST['username']))
@@ -151,9 +149,20 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 								</div>
 							</div>
 							<div class="row pb-30">
-								
 								<div class="col-6">
-									<div class="forgot-password"><a href="forgot-password.html">Forgot Password</a></div>
+									<div class="checkbox-fade fade-in-primary d-">
+										<label>
+											<input type="checkbox" value="">
+											<span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+											<span class="text-inverse">Remember me</span>
+										</label>
+									</div>
+								
+								</div>
+								<div class="col-6">
+									<div class="forgot-phone text-right f-right">
+										<a href="auth-reset-password.htm" class="text-right f-w-600"> Forgot Password?</a>
+									</div>
 								</div>
 							</div>
 							<div class="row">
