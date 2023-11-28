@@ -94,6 +94,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 	<link rel="icon" type="image/png" sizes="16x16" href="vendors/images/favicon-16x16.png">
 
 	<!-- Mobile Specific Metas -->
+
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 	<!-- Google Font -->

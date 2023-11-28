@@ -171,8 +171,10 @@ Class Master{
 		}
 		$pay_amount_paid = isset($_POST['pay_amount_paid']) ? (float)$_POST['pay_amount_paid'] : 0;
 		$pay_discount = isset($_POST['pay_discount']) ? (float)$_POST['pay_discount'] : 0;
+		$date_updated = date('Y-m-d H:i:s');
 
-		$sql = "UPDATE t_utility_payments SET c_st_or_no = '$or_no', c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$car_no'";
+
+		$sql = "UPDATE t_utility_payments SET date_updated = '$date_updated', c_st_or_no = '$or_no', c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$car_no'";
 		$update = odbc_exec($this->conn2, $sql);
 		//echo $sql;
 		if ($update) {
@@ -370,7 +372,9 @@ Class Master{
 		$check_date = isset($_POST['check_date']) ? $_POST['check_date'] : NULL;
 		require_once('../includes/session.php');
 		$encoded_by = $_SESSION['alogin'];
-		 
+		$date_encoded = date('Y-m-d H:i:s');
+		$date_updated = date('Y-m-d H:i:s');
+
 		if ($or_no == ""):
 				$resp['status'] = 'failed';
 				$resp['msg'] = "Please input OR No.";
@@ -401,13 +405,13 @@ Class Master{
 		if (!odbc_fetch_row($check_payment_query)) {
 		
 			if ($l_gcf == 1) {
-				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by'";
-				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by) VALUES ($params)";
+				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by','$date_encoded','$date_updated'";
+				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by, date_encoded, date_updated) VALUES ($params)";
 			}
 			
 			if ($l_stl == 1) {
-				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by'";
-				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by) VALUES ($params2)";
+				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by','$date_encoded','$date_updated'";
+				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by, date_encoded, date_updated) VALUES ($params2)";
 			
 			}
 			

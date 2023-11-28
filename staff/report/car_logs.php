@@ -4,8 +4,13 @@ function format_num($number){
        return number_format($number,2);
 }
 
-$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
-$to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
+// Set default date and time range
+$defaultFromTime = '08:00:00';
+$defaultToTime = '16:00:00';
+
+$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d"). " " . $defaultFromTime;
+$to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d"). " " . $defaultToTime;
+
 $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 ?>
 
@@ -25,11 +30,11 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
             <div class="row align-items-end">
                 <div class="col-md-2 form-group">
                     <label for="from" class="control-label">Date From</label>
-                    <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
+                    <input type="datetime-local" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
                 <div class="col-md-2 form-group">
                     <label for="to" class="control-label">Date To</label>
-                    <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
+                    <input type="datetime-local" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
                 </div>
                 <div class="col-md-3 form-group">
                     <label for="category" class="control-label">Category</label>
@@ -57,6 +62,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         padding: 0 !important;
                     }
                 </style>
+                    
                     <h4 class="text-center"><b>List Of CAR</b></h4>
                     <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
@@ -65,10 +71,10 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php else: ?>
                     <p class="m-0 text-center">Streetlight & Grass-Cutting Fee</p>
                     <?php endif; ?>
-                    <?php if($from == $to): ?>
-                    <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)) ?></p>
+                    <?php if ($from == $to): ?>
+                        <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) ?></p>
                     <?php else: ?>
-                    <p class="m-0 text-center"><?= date("M d, Y" , strtotime($from)). ' - '.date("M d, Y" , strtotime($to)) ?></p>
+                        <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) . ' - ' . date("M d, Y g:i A", strtotime($to)) ?></p>
                     <?php endif; ?>
                     <hr>
 
@@ -86,7 +92,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 				</colgroup> -->
 				<thead>
 					<tr>
-                        
+                        <th>Date Encoded</th>
 						<th>Pay Date</th>
                         <th>CAR # </th>
 						<th>Category</th>
@@ -103,6 +109,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <th>Deposit</th>
                         <th>Reference #</th>
                         <th>Encoded by</th>
+                        <th>Action</th>
 					</tr>
 				</thead>
                 <tbody>
@@ -113,10 +120,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
+                                WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
                                 WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL Payment'
-                                WHEN c_st_or_no LIKE 'STL-ADJ%' or c_st_or_no LIKE 'STL-BA%' THEN 'STL Adjustment'
-                                WHEN c_st_or_no LIKE 'MTF-ADJ%' or c_st_or_no LIKE 'MTF-BA%' THEN 'GCF Adjustment'
                                 ELSE 'Others'
                             END AS c_pay_type,
                             c_st_amount_paid,
@@ -126,15 +131,20 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             c_ref_no,
                             c_check_date,
                             c_branch,
-                            c_encoded_by
+                            c_encoded_by,
+                            date_encoded,
+                            date_updated
                         FROM t_utility_accounts x
                         JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                        WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to' 
+                        WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
                         AND (
-                                (c_st_or_no LIKE 'MTF-CAR%' AND c_st_or_no NOT LIKE 'MTF-BA%') OR
-                                (c_st_or_no LIKE 'STL-CAR%' AND c_st_or_no NOT LIKE 'STL-BA%')
+                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                ('$category' = 'ALL' AND (
+                                    c_st_or_no LIKE 'MTF-CAR%' OR
+                                    c_st_or_no LIKE 'STL-CAR%'
+                                ))
                             )
-                        AND y.c_encoded_by = '$session_id'
                         ORDER BY date(y.c_st_pay_date) ASC";
                     $result = odbc_exec($conn2, $query);
                     if (!$result) {
@@ -143,7 +153,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     while ($row = odbc_fetch_array($result)):
 					?>
 					<tr>
-                        
+                        <td class="text-center"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
 						<td class="text-center"><?= date("M d, Y", strtotime($row['c_st_pay_date'])) ?></td>
                         <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
                         <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
@@ -173,8 +183,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
                         <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
                    
-                        <?php $query = "SELECT * FROM t_utility_logs"?>
-                   <!--  <td>
+                       <!--  <?php $query = "SELECT * FROM t_utility_logs"?>
+                    <td>
                         <div class="dropdown">
                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                             <i class="dw dw-more"></i>
@@ -183,8 +193,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
                         </div>
-                     </div>
-                     </td> -->
+                     </div> -->
+                     </td>
 					</tr>
 					<?php endwhile; ?>
 

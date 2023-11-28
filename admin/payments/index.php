@@ -424,13 +424,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         </div>  
        
-      <!--   <div class="row">
+        <div class="row">
             <div class="col-md-12 text-right">
                 <button type="button" id="printDataButton" class="btn btn-primary">
                     <i class="fa fa-print"></i> Preview
                 </button>
             </div>
-        </div> -->
+        </div>
         
     </form>
 </div>
@@ -555,8 +555,16 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
-        printWindow.document.write('<p class="full-name">' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value + ' / ' + document.getElementById("acc_no").value + '</p>');
-        printWindow.document.write('<p class="add">' + document.getElementById("address").value + '</p>');
+        var fullName = document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value;
+        var accNo = document.getElementById("acc_no").value;
+
+        // Limit the full name to 50 characters
+        var limitedFullName = fullName.length > 25 ? fullName.substring(0, 25) : fullName;
+
+        // Print the formatted string
+        printWindow.document.write('<p class="full-name">' + limitedFullName + ' / ' + accNo + '</p>');
+
+        //printWindow.document.write('<p class="add">' + document.getElementById("address").value + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');

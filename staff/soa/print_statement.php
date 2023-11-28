@@ -118,13 +118,14 @@ if(isset($_GET['id'])){
             $l_or_no = '----------';
             $l_pay_type = '----------';
             $l_amount = 0;
+            $l_discount = 0;
           /*   $mtf_amtpd = 0;
             $mtf_discount = 0;
             $stl_amtpd = 0;
             $stl_discount = 0; */
             $l_data = array(
                 $l_edate1, $l_sdate, $l_edate, $l_ddate,  $l_mtf_amount_due, $l_mtf_sur, $l_stl_amount_due,
-                $l_stl_sur, $l_pdate, $l_or_no, $l_pay_type, $l_amount, 'bill'
+                $l_stl_sur, $l_pdate, $l_or_no, $l_pay_type, $l_amount,$l_discount, 'bill'
             );
             $l_due_list[] = $l_data;
         }
@@ -142,7 +143,8 @@ if(isset($_GET['id'])){
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
                                 ELSE 'Unidentified payment'
                             END AS c_pay_type,
-                            c_st_amount_paid + c_discount as c_tot_amt_paid
+                            c_st_amount_paid as c_tot_amt_paid,
+                            c_discount
                         FROM
                             t_utility_payments WHERE c_account_no = '$l_acc_no'
             ";
@@ -161,12 +163,13 @@ if(isset($_GET['id'])){
         $l_or_no = $payment['st_or_no_clear'];
         $l_pay_type = $payment['c_pay_type'];
         $l_amount = $payment['c_tot_amt_paid'];
+        $l_discount = $payment['c_discount'];
       /*   $mtf_amtpd = $payment['mtf_payments'];
         $mtf_discount = $payment['mtf_discount'];
         $stl_amtpd = $payment['stl_payments'];
         $stl_discount = $payment['stl_discount']; */
         $l_data2 = array($l_pdate1, $l_sdate, $l_edate, $l_ddate, $l_mtf_amount_due, $l_mtf_sur, $l_stl_amount_due,
-                $l_stl_sur, $l_pdate, $l_or_no, $l_pay_type, $l_amount, 'payment'
+                $l_stl_sur, $l_pdate, $l_or_no, $l_pay_type, $l_amount,$l_discount, 'payment'
         );
         
         $l_due_list[] = $l_data2;
@@ -194,11 +197,12 @@ if(isset($_GET['id'])){
         $l_or_no = $item[9];
         $l_pay_type = $item[10];
         $l_amount_paid = $item[11];
+        $l_discount = $item[12];
        /*  $mtf_amtpd = $item[10];
         $mtf_discount = $item[11];
         $stl_amtpd = $item[12];
         $stl_discount = $item[13]; */
-        $l_class = $item[12];
+        $l_class = $item[13];
         
         if ($l_class == 'bill') {
             $l_tot_amt_due = $mtf_tot_due + $stl_tot_due + $l_prev_bal;
@@ -209,7 +213,7 @@ if(isset($_GET['id'])){
         }
         
         if ($l_class == 'payment') {
-            $l_tot_amt_due -= ($l_amount_paid);
+            $l_tot_amt_due -= ($l_amount_paid + $l_discount);
             $l_prev_bal = $l_tot_amt_due;
           
            /*  $l_amt_pd = format_num($l_amt_pd); // Assuming ftom() is a custom function for conversion
@@ -218,7 +222,7 @@ if(isset($_GET['id'])){
 
         $l_data = array(
             $l_dte, $l_sdate, $l_edate, $l_ddate, $l_pdate, format_num($l_mtf_amount_due), format_num($l_mtf_sur), format_num($l_stl_amount_due),format_num($l_stl_sur),
-             $l_amount_paid, $l_or_no, $l_pay_type, format_num($l_tot_amt_due)
+             format_num($l_amount_paid), $l_or_no, $l_pay_type, format_num($l_tot_amt_due), format_num($l_discount)
         );
         $l_return_due_list[] = $l_data;
 
@@ -269,12 +273,13 @@ if(isset($_GET['id'])){
                         <colgroup>
                             <col width="13%">
                             <col width="7%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
-                            <col width="10%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
+                            <col width="7%">
                             <col width="10%">
                             <col width="10%">
                             <col width="15%">
@@ -289,6 +294,7 @@ if(isset($_GET['id'])){
                                 <th style="text-align:center;font-size:13px;">STL FEE</th>
                                 <th style="text-align:center;font-size:13px;">STL SUR.</th>
                                 <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
+                                <th style="text-align:center;font-size:13px;">DISCOUNT</th>
                                 <th style="text-align:center;font-size:13px;">OR #</th>
                                 <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
                                 <th style="text-align:center;font-size:13px;">BALANCE</th>
@@ -321,6 +327,7 @@ if(isset($_GET['id'])){
                                         <td class="<?php echo $rowClass; ?>"><?php echo $l_data[7]; ?></td>
                                         <td class="<?php echo $rowClass; ?>"><?php echo $l_data[8]; ?></td>
                                         <td class="<?php echo $rowClass; ?>"><?php echo $l_data[9]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[13]; ?></td>
                                         <td class="<?php echo $rowClass; ?>"><?php echo $l_data[10]; ?></td>
                                         <td class="<?php echo $rowClass; ?>"><?php echo $l_data[11]; ?></td>
                                         <td class="<?php echo $rowClass; ?>"><?php echo $l_data[12]; ?></td>

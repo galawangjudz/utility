@@ -3,7 +3,6 @@
 <?php include('../includes/session.php');?>
 <?php include('includes/admin_session.php');?>
 
-
 <body>
 	<!-- <div class="pre-loader">
 		<div class="pre-loader-box">
