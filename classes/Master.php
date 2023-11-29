@@ -366,6 +366,13 @@ Class Master{
 		$main_discount = isset($_POST['main_discount']) ? (float)$_POST['main_discount'] : 0;
 		$stl_amount_paid = isset($_POST['stl_amount_paid']) ? (float)$_POST['stl_amount_paid'] : 0;
 		$stl_discount = isset($_POST['stl_discount']) ? (float)$_POST['stl_discount'] : 0;
+
+		// If the value is an empty string, set it to 0
+		$main_amount_paid = ($main_amount_paid === '') ? 0 : $main_amount_paid;
+		$main_discount = ($main_discount === '') ? 0 : $main_discount;
+		$stl_amount_paid = ($stl_amount_paid === '') ? 0 : $stl_amount_paid;
+		$stl_discount = ($stl_discount === '') ? 0 : $stl_discount;
+
 		$mode_of_payment = $_POST['mode_payment'];
 		$ref_no = isset($_POST['ref_no']) ? $_POST['ref_no'] : '';
 		$branch = isset($_POST['branch']) ? $_POST['branch'] : '';
@@ -499,7 +506,7 @@ Class Master{
 		$params = "'$acc_no', '$start_date', '$end_date', '$due_date', '$bill_type', '$amount_due', '$prev_bal'";
 		$insert_query = "INSERT INTO t_utility_bill VALUES ($params)";
 		if (odbc_exec($this->conn2, $insert_query)) {
-			$this->log_log('Utility Bill', "SAVE - $acc_no : $start_date : $bill_Type : $amount_due : $prev_bal ");
+			$this->log_log('Utility Bill', "SAVE - $acc_no : $start_date : $bill_type : $amount_due : $prev_bal ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Utility Bill has been successfully added.";
 		} else {

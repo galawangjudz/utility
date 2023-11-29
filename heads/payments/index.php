@@ -218,6 +218,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $ctrfield = false;
     $pblfield = false;
 }
+
+
+
 ?>
 <style>
     .control-label{
@@ -233,6 +236,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         padding:0;
     }
 </style>
+
+
 <div class="container-fluid">
 <form action="" id="pay-form">
 <img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
@@ -275,19 +280,19 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </tr>
                     <tr>
                         <td><label for="stl_last_bal" class="control-label">STL Prev. Bal: </label></td>
-                        <td><input type="number" name="stl_last_bal" id="stl_last_bal" class="form-control" value ="<?php echo isset($stl_prev) ? $stl_prev : '0.00' ?>"readonly required></td>
+                        <td><input type="text" name="stl_last_bal" id="stl_last_bal" class="form-control" value ="<?php echo isset($stl_prev) ? format_num($stl_prev) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
-                        <td><label for="stl_due" class="control-label">STL Curr. Due: </label></td>
-                        <td><input type="number" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($l_stl_cur) ? $l_stl_cur : '0.00' ?>"readonly required></td>
+                        <td><label for="stl_cur" class="control-label">STL Curr. Due: </label></td>
+                        <td><input type="text" name="stl_cur" id="stl_cur" class="form-control" value ="<?php echo isset($l_stl_cur) ? format_num($l_stl_cur) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="stl_sur" class="control-label">STL Curr. Sur: </label></td>
-                        <td><input type="number" name="stl_sur" id="stl_sur" class="form-control" value ="<?php echo isset($l_stl_sur) ? $l_stl_sur : '0.00' ?>"readonly required></td>
+                        <td><input type="text" name="stl_sur" id="stl_sur" class="form-control" value ="<?php echo isset($l_stl_sur) ? format_num($l_stl_sur) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="stl_balance" class="control-label">STL Total Due: </label></td>
-                        <td><input type="number" name="stl_balance" id="stl_balance" class="form-control" value ="<?php echo isset($stl_bal) ? $stl_bal : '0.00' ?>"readonly required></td>
+                        <td><input type="text" name="stl_balance" id="stl_balance" class="form-control" value ="<?php echo isset($stl_bal) ? format_num($stl_bal) : '0.00' ?>"readonly required></td>
                     </tr>
                 </table>
             </fieldset>
@@ -301,19 +306,19 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </tr>
                     <tr>
                         <td><label for="main_last_bal" class="control-label">GCF Prev. Bal: </label></td>
-                        <td><input type="number" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? $mainte_prev : 0 ?>"readonly required></td>
+                        <td><input type="text" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? format_num($mainte_prev) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="main_due" class="control-label">GCF Curr. Due: </label></td>
-                        <td><input type="number" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? $l_mtf_cur : 0 ?>"readonly required></td>
+                        <td><input type="text" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? format_num($l_mtf_cur) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="main_sur" class="control-label">GCF Curr. Sur: </label></td>
-                        <td><input type="number" name="main_sur" id="main_sur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_sur) ? $l_mtf_sur : 0 ?>"readonly required></td>
+                        <td><input type="text" name="main_sur" id="main_sur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_sur) ? format_num($l_mtf_sur) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="main_balance" class="control-label">GCF Total Due: </label></td>
-                        <td><input type="number" name="main_balance" id="main_balance" class="form-control form-control-border" value ="<?php echo isset($mainte_bal) ? $mainte_bal : 0 ?>"readonly required></td>
+                        <td><input type="text" name="main_balance" id="main_balance" class="form-control form-control-border" value ="<?php echo isset($mainte_bal) ? format_num($mainte_bal) : '0.00' ?>"readonly required></td>
                     </tr>
                 </table>
             </fieldset>
@@ -324,11 +329,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <table style="width:100%;">
                     <tr>
                         <td><label for="stl_amount_pay" class="control-label"><b>Payment for Streetlight Amount: </b></label></td>
-                        <td><input type="number" name="stl_amount_pay" id="stl_amount_pay" class="form-control form-control-border stl_amount_pay" value ="0" required></td>
+                        <td><input type="number" name="stl_amount_pay" id="stl_amount_pay" class="form-control form-control-border stl_amount_pay" value ="" required></td>
                     </tr>
                     <tr>
                         <td><label for="stl_discount" class="control-label"><b>STL Discount:</b></label></td>
-                        <td><input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border stl_discount" value ="0" required></td>
+                        <td><input type="number" name="stl_discount" id="stl_discount" class="form-control form-control-border stl_discount" value ="" required></td>
                     </tr>
                     <tr>
                         <td><label for="stl_amount_paid" class="control-label"><b>STL Amount Paid: </b></label></td>
@@ -340,11 +345,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <table style="width:100%;">
                     <tr>
                         <td><label for="main_amount_paid" class="control-label"><b>Payment for Grass-Cutting Amount: </b></label></td>
-                        <td><input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="0" required></td>
+                        <td><input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="" required></td>
                     </tr>
                     <tr>
                         <td><label for="main_discount" class="control-label"><b>GCF Discount:</b></label></td>
-                        <td><input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="0" required></td>
+                        <td><input type="number" name="main_discount" id="main_discount" class="form-control form-control-border main_discount" value ="" required></td>
                     </tr>
                     <tr>
                         <td><label for="main_amount_paid" class="control-label"><b>GCF Amount Paid: </b></label></td>
@@ -486,6 +491,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
 
     function formatNumberWithCommas(number) {
+        number = isNaN(parseFloat(number)) ? 0 : parseFloat(number);
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     
