@@ -59,7 +59,7 @@ if (isset($_POST["update_image"])) {
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
 								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="admin_dashboard">Dashboard</a></li>
+									<li class="breadcrumb-item"><a href="<?php echo base_url ?>admin/?page=home">Dashboard</a></li>
 									<li class="breadcrumb-item active" aria-current="page">Profile</li>
 								</ol>
 							</nav>

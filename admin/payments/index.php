@@ -189,7 +189,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
                     c_bill_type IN ('DLQ_STL', 'STL')  
                     AND  c_due_date = ' $street_due' AND c_account_no = '$l_acc_no'";
     $ssur_details = odbc_exec($conn2, $get_ssur);
-    if ($msur_details) {
+    if ($ssur_details) {
         $row2 = odbc_fetch_array($ssur_details);
     
         if ($row2) {
@@ -275,8 +275,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="stl_due" class="control-label">STL Due Date: </label></td>
-                        <td><input type="date" name="stl_due" id="stl_due" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
+                        <td><label for="stl_date" class="control-label">STL Due Date: </label></td>
+                        <td><input type="date" name="stl_date" id="stl_date" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="stl_last_bal" class="control-label">STL Prev. Bal: </label></td>
@@ -309,8 +309,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <td><input type="text" name="main_last_bal" id="main_last_bal" class="form-control form-control-border" value ="<?php echo isset($mainte_prev) ? format_num($mainte_prev) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
-                        <td><label for="main_due" class="control-label">GCF Curr. Due: </label></td>
-                        <td><input type="text" name="main_due" id="main_due" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? format_num($l_mtf_cur) : '0.00' ?>"readonly required></td>
+                        <td><label for="main_cur" class="control-label">GCF Curr. Due: </label></td>
+                        <td><input type="text" name="main_cur" id="main_cur" class="form-control form-control-border" value ="<?php echo isset($l_mtf_cur) ? format_num($l_mtf_cur) : '0.00' ?>"readonly required></td>
                     </tr>
                     <tr>
                         <td><label for="main_sur" class="control-label">GCF Curr. Sur: </label></td>
@@ -384,7 +384,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <td class="col-md-2">
                         <div class="form-group">
                             <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
-                            <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border" value="<?php echo date('Y-m-d'); ?>" required>
+                            <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border pay-date" value="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                     </td>
                     <td class="col-md-2">
@@ -622,6 +622,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <script>
 $(document).ready(function() {
+/*     $(document).on('keyup', ".pay-date", function(e) {
+		e.preventDefault();
+
+		compute_pay_date();
+        
+
+	});	 */
+
+
     $(document).on('keyup', ".stl_amount_pay", function(e) {
 		e.preventDefault();
      
@@ -655,6 +664,47 @@ $(document).ready(function() {
 	});
 
 });
+function compute_pay_date(){
+
+    const gcf_due_date = new Date($('#main_date').val());
+    const gcf_cur = $('#main_cur').val();
+    const gcf_bal = $('#main_balance').val();
+    const stl_due_date = new Date($('#stl_date').val());
+    const stl_cur = $('#stl_cur').val();
+    const stl_bal = $('#stl_balance').val();
+    const pay_date = new Date($('.pay-date').val());
+
+    if (pay_date > gcf_due_date){
+        const timeDiff = Math.abs(pay_date.getTime() - gcf_due_date.getTime());
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        if (diffDays <= 2) {
+            l_sur = 0;
+        }
+        gcf_surcharge = gcf_cur * .05;
+        $('#main_sur').val(gcf_surcharge);
+        gcf_balance = parseFloat(gcf_bal) + parseFloat(gcf_surcharge);
+        console.log(gcf_balance);
+        $('#main_balance').val(gcf_balance);
+    }
+
+    if (pay_date > stl_due_date){
+        const timeDiff = Math.abs(pay_date.getTime() - stl_due_date.getTime());
+        const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        if (diffDays <= 2) {
+            l_sur = 0;
+        }
+        stl_surcharge = stl_cur * .05;
+        //console.log(stl_surcharge);
+
+       
+        $('#stl_sur').val(stl_surcharge);
+        stl_balance = parseFloat(stl_bal) + parseFloat(stl_surcharge);
+        console.log(stl_balance);
+        $('#stl_balance').val(stl_balance);
+    }
+
+}
+
 function compute_total_amt_paid(){
 
     var stl_pay = $('.stl_amount_pay').val();
