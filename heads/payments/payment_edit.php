@@ -69,7 +69,7 @@ function format_num($number){
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="pay_amount_paid" class="control-label">Amount </label>
-                    <input type="number" name="pay_amount_paid" id="pay_amount_paid" class="form-control form-control-border" value ="<?php echo isset($amount) ? number_format($amount, 2) : '' ?>" required>
+                    <input type="number" name="pay_amount_paid" id="pay_amount_paid" class="form-control form-control-border" value ="<?php echo isset($amount) ? $amount : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">

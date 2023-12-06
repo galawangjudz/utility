@@ -753,7 +753,7 @@ function compute_total_amt_paid(){
                 success:function(resp){
                     if(resp.status == 'success'){
                         setTimeout(()=>{
-                            printInputData()
+                            //printInputData()
                             end_loader();
                             location.reload();
                             /*  location.replace('./?page=admin/index.php&id='+resp.id_encrypt) */
