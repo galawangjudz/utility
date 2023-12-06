@@ -33,6 +33,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $ctrfield = false;
     $pblfield = false;
 }
+
+function format_num($number){
+    $decimals = 2; // Set the number of decimal places
+    return number_format($number, $decimals);
+}
 ?>
 <div class="container-fluid">
 <form action="" id="pay-form">
@@ -64,7 +69,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="pay_amount_paid" class="control-label">Amount </label>
-                    <input type="number" name="pay_amount_paid" id="pay_amount_paid" class="form-control form-control-border" value ="<?php echo isset($amount) ? $amount : '' ?>" required>
+                    <input type="number" name="pay_amount_paid" id="pay_amount_paid" class="form-control form-control-border" value ="<?php echo isset($amount) ? format_num($amount) : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">

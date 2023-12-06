@@ -145,7 +145,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                     c_st_or_no LIKE 'STL-CAR%'
                                 ))
                             )
-                        ORDER BY date(y.c_st_pay_date) ASC";
+                        ORDER BY date(y.date_encoded) ASC";
                     $result = odbc_exec($conn2, $query);
                     if (!$result) {
                         die("ODBC query execution failed: " . odbc_errormsg());
@@ -210,13 +210,13 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php
 
                         $grandTotal= "SELECT
-                            SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
+                            SUM(CASE WHEN c_mop = '1' or c_mop is NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
                             SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
                             SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
                                             AND (
                                 (c_st_or_no LIKE 'MTF-CAR%') OR
                                 (c_st_or_no LIKE 'STL-CAR%')

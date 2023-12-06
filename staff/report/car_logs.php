@@ -145,7 +145,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                     c_st_or_no LIKE 'STL-CAR%'
                                 ))
                             )
-                        ORDER BY date(y.c_st_pay_date) ASC";
+                        ORDER BY date(y.date_encoded) ASC";
                     $result = odbc_exec($conn2, $query);
                     if (!$result) {
                         die("ODBC query execution failed: " . odbc_errormsg());
@@ -183,7 +183,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
                         <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
                    
-                       <!--  <?php $query = "SELECT * FROM t_utility_logs"?>
+                        <?php $query = "SELECT * FROM t_utility_logs"?>
                     <td>
                         <div class="dropdown">
                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -193,7 +193,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
                         <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
                         </div>
-                     </div> -->
+                     </div>
                      </td>
 					</tr>
 					<?php endwhile; ?>
@@ -210,13 +210,13 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php
 
                         $grandTotal= "SELECT
-                            SUM(CASE WHEN c_mop = '1' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
+                            SUM(CASE WHEN c_mop = '1' or c_mop is NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
                             SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
                             SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.c_st_pay_date) BETWEEN '$from' AND '$to'
+                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
                                             AND (
                                 (c_st_or_no LIKE 'MTF-CAR%') OR
                                 (c_st_or_no LIKE 'STL-CAR%')

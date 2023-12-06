@@ -5,7 +5,10 @@ if (isset($_GET['search'])) {
     $l_find = $_GET['search']; 
 }
 //$l_find = isset($_GET["search"]) ? $_GET["search"] : '';
-
+function format_num($number){
+    $decimals = 2; // Set the number of decimal places
+    return number_format($number, $decimals);
+}
 ?>
 
 
