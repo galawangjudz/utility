@@ -51,6 +51,7 @@ Class Master{
 	}
 	
 
+	
 	public function log_log($module, $notes){
 /* 		$dsn = "pgadmin4"; 
 		$user = "glicelo";   
@@ -71,6 +72,28 @@ Class Master{
 				$resp['err'] = odbc_errormsg($this->conn2) . " [$insert]";
 		}
 	}
+
+	public function update_request(){
+		extract($_POST);
+	
+		require_once('../includes/session.php');
+		$loginID = $_SESSION['alogin'];
+		
+		$ticket_query = "UPDATE tickets SET status = '" .$ticket_status. "' WHERE id = ".$id;
+		
+		if (odbc_exec($this->conn2, $ticket_query)) {
+			/* $this->log_log('Utility Bill', "DELETE - $date : $type : $id "); */
+			$resp['status'] = 'success';
+			$resp['msg'] = "Utility Ticket has been successfully updated.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$ticket_query]";
+		}
+		
+		return json_encode($resp);
+	}
+
 
 	public function save_account(){
 	
@@ -567,6 +590,10 @@ switch ($action) {
 	break;
 	case 'add_ticket':
 		echo $Master->add_ticket();
+	break;
+
+	case 'update_request':
+		echo $Master->update_request();
 	break;
 
 	default:

@@ -22,11 +22,11 @@
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Accounts</span>
 						</a>
 					</li>
-					<!-- <li>
+					<li>
 						<a href="<?php echo base_url ?>staff/?page=service_request" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-right-arrow"></span><span class="mtext">Service Request</span>
 						</a>
-					</li> -->
+					</li>
 			<!-- 		<li>
 						<a href="<?php echo base_url ?>staff/?page=get-soa" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-calendar1"></span><span class="mtext">Bill Report</span>

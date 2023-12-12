@@ -21,10 +21,7 @@ if(isset($_GET['id'])){
         $prev_bal =  $prev_bal + $amount_due;
     }
 }
-function format_num($number){
-    $decimals = 2; // Set the number of decimal places
-    return number_format($number, $decimals);
-}
+
 ?>
 <div class="container-fluid">
     <form action="" id="bill-form">

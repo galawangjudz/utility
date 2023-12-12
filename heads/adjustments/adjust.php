@@ -12,12 +12,10 @@ if (isset($_GET['search'])) {
 <div class="main-container"> 
 	<div class="">
 		<div class="pd-ltr-20">
-			<div class="title pb-20">
-                <h2 class="h3 mb-0">Adjustment of Accounts</h2>
-            </div>
+			
 			<div class="card-box pd-20 height-1400-p mb-30">
 				<form action="" id="filter">
-					<input type="hidden" id="page" name="page" value="adjustments" class="form-control form-control-sm rounded-0">
+					<input type="hidden" id="page" name="page" value="adjustments/adjust" class="form-control form-control-sm rounded-0">
 					<div class="col-md-4 form-group">
 						<label for="search" class="control-label">Search Account: </label>
 						<input type="text" id="search" name="search" class="form-control">
@@ -30,19 +28,17 @@ if (isset($_GET['search'])) {
 
 			<div class="card-box mb-30">
 				<div class="pd-20">
-						<h2 class="text-blue h4">Bill of Accounts</h2>
+						<h2 class="text-blue h4">Payments of Account</h2>
                         <?php 
                         if (isset($_GET['search'])) {
                             $l_find = $_GET['search']; 
                         ?>
-                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto add_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-plus"></i> Add New Bill
-                        </a>
+                    
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
                             <i class="fa fa-plus"></i> Add Adjustment BIll
                         </a>
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-plus"></i> Adjust Payment
+                            <i class="fa fa-share-square"></i> Transfer Payment
                         </a>
                         <?php }
                         ?>
@@ -50,14 +46,23 @@ if (isset($_GET['search'])) {
                 
 				<div class="pb-20">
 					<table class="data-table table stripe hover nowrap">
+                    <colgroup>
+                <col width="10%">
+                <col width="15%">
+                <col width="15%">
+                <col width="5%">
+                <col width="20%">
+                <col width="30%">
+                </colgroup>
 						<thead>
 							<tr>
-                                <th class="table-plus">Start Date</th>
-                                <th>End Date</th>
-                                <th>Due Date</th>
-                                <th>Description</th>
-                                <th>Amount Due</th>
-								<th class="datatable-nosort">ACTION</th>
+                                <th class="table-plus">Pay Date</th>
+                                <th>OR #</th>
+                                <th>Amount</th>
+                                <th>Discount</th>
+                                <th>Adjustment Description</th>
+                                <th>Notes</th>
+								<!-- <th class="datatable-nosort">ACTION</th> -->
 							</tr>
 						</thead>
 						<tbody>
@@ -67,11 +72,42 @@ if (isset($_GET['search'])) {
                             <?php 
 							
 								if(isset($_GET['search']) && $_GET['search']){
-									$sql = "SELECT c_account_no, c_start_date, c_end_date, c_due_date, c_bill_type, c_amount_due FROM t_utility_bill WHERE c_account_no = '%s' ORDER BY c_due_date DESC";
+									$sql = "SELECT 
+                                    p.c_account_no, 
+                                    p.c_st_pay_date, 
+                                    p.c_st_or_no, 
+                                    p.c_st_amount_paid, 
+                                    p.c_discount,
+                                    a.c_adjustment_type,
+                                    a.c_notes  -- Add other columns from t_adjustments as needed
+                                FROM 
+                                    t_utility_payments p
+                                LEFT JOIN 
+                                    t_adjustment a ON p.c_st_or_no = a.c_or_no
+                                WHERE 
+                                    p.c_account_no = '%s'
+                                ORDER BY 
+                                    p.c_st_pay_date DESC";
 									$sql = sprintf($sql, $l_find);
 								}else{
-									$sql = "SELECT c_account_no, c_start_date, c_end_date, c_due_date, c_bill_type, c_amount_due FROM t_utility_bill WHERE c_account_no = '1' ORDER BY c_due_date DESC";
-								}
+                                    $sql = "SELECT 
+                                    p.c_account_no, 
+                                    p.c_st_pay_date, 
+                                    p.c_st_or_no, 
+                                    p.c_st_amount_paid, 
+                                    p.c_discount,
+                                    a.c_adjustment_type,
+                                    a.c_notes  -- Add other columns from t_adjustments as needed
+                                FROM 
+                                    t_utility_payments p
+                                LEFT JOIN 
+                                    t_adjustment a ON p.c_st_or_no = a.c_or_no
+                                WHERE 
+                                    p.c_account_no = '1'
+                                ORDER BY 
+                                    p.c_st_pay_date DESC";
+
+									}
                                
 			                    
                                 $qry = odbc_exec($conn2,$sql);
@@ -79,32 +115,29 @@ if (isset($_GET['search'])) {
 
                                 while(odbc_fetch_row($qry)):
 									$acc = odbc_result($qry, "c_account_no");
-                                    $start = odbc_result($qry, "c_start_date");
-                                    $end = odbc_result($qry, "c_end_date");
-                                    $due = odbc_result($qry, "c_due_date");
-                                    $type = odbc_result($qry, "c_bill_type");
-                                    $amount = odbc_result($qry, "c_amount_due");
+                                    $pay_date = odbc_result($qry, "c_st_pay_date");
+                                    $or_no = odbc_result($qry, "c_st_or_no");
+                                    $amount = odbc_result($qry, "c_st_amount_paid"); 
+                                    $discount = odbc_result($qry, "c_discount");
+                                    $adjust_type = odbc_result($qry, "c_adjustment_type");
+                                    $notes = odbc_result($qry, "c_notes");
                
                             ?>
                                 <tr>
-                                    <td class=""><?php echo $start; ?></td>
-                                    <td class=""><?php echo $end ?></td>
-                                    <td class=""><?php echo $due ?></td>
-                                    <td class=""><?php
-                                                echo ($type == 'MTF') ? 'GCF Fee' :
-                                                    (($type == 'DLQ_MTF') ? 'GCF Surcharge' :
-                                                    (($type == 'STL') ? 'STL Fee' :
-                                                    (($type == 'DLQ_STL') ? 'STL Surcharge' : $type)));
-                                                ?></td>
+                                    <td class=""><?php echo $pay_date; ?></td>
+                                    <td class=""><?php echo $or_no ?></td>
                                     <td class=""><?php echo $amount ?></td>
+                                    <td class=""><?php echo $discount ?></td>
+                                    <td class=""><?php echo $adjust_type ?></td>
+                                    <td class=""><?php echo $notes ?></td>
                             
                         
-                                    <td>
+                                   <!--  <td>
                                         <a class="btn btn-link delete_data" data-date="<?php echo $due ?>" data-type="<?php echo $type ?>" data-id="<?php echo $acc ?>" href="javascript:void(0)" role="button">
                                         <i class="dw dw-delete-3"></i>
                                     </a>
 
-                                    </td>
+                                    </td> -->
                                 </tr>
                             <?php endwhile; ?>
 						</tbody>

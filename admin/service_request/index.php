@@ -1,6 +1,28 @@
 <?php
 
 $user_type = $_SESSION['user_type'];
+$user_dept = $_SESSION['dept'];
+
+echo $user_dept;
+
+$qry = "SELECT * FROM tbldepartments WHERE DepartmentShortName = ?";
+$result = odbc_prepare($conn2, $qry);
+
+if (!$result) {
+    die('Error preparing statement: ' . odbc_errormsg($conn2));
+}
+
+$success = odbc_execute($result, array($user_dept));
+
+if (!$success) {
+    die('Error executing statement: ' . odbc_errormsg($conn2));
+}
+
+while ($row = odbc_fetch_array($result)) {
+    $dept_id = $row['id'];
+    echo $dept_id;
+}
+
 ?>
 <link rel="stylesheet" type="text/css" href="../admin/service_request/style.css">
 <style>
@@ -75,13 +97,13 @@ $user_type = $_SESSION['user_type'];
                                 echo $status;
                                 $timeRange = isset($_GET['timeRange']) ? $_GET['timeRange'] : null;
 
-                                $query = "SELECT t.id, t.subject, t.description, t.status, t.priority, t.date_created, c.firstname, c.lastname, d.DepartmentName
+                                $query = "SELECT t.id, t.subject, t.description, t.status, t.priority, t.date_created, t.request, c.firstname, c.lastname, d.DepartmentName
                                             FROM tickets t
                                             JOIN tblemployees c ON t.employee_id = c.emp_id
                                             JOIN tbldepartments d ON t.department_id = d.id ";
 
-                                $where = "WHERE t.employee_id =" .$_SESSION['alogin']; // Add condition for customer ID
-
+                                $where = "WHERE t.department_id =" .$dept_id; // Add condition for customer ID
+                                //$where = "";
                                 $params = array($_SESSION['alogin']); // Parameters for prepared statement
 
                                 if (isset($timeRange)) {
@@ -107,8 +129,8 @@ $user_type = $_SESSION['user_type'];
                                             break;
                                     }
                                 }
-
-                                if ($status !== null) {
+                                if (isset($status)){
+                               /*  if ($status !== null) { */
                                     switch ($status) {
                                         case 'open':
                                             $where .= " AND t.status = 0";
@@ -152,6 +174,7 @@ $user_type = $_SESSION['user_type'];
                                             'id' => $row['id'],
                                             'subject' => $row['subject'],
                                             'description' => $row['description'],
+                                            'request' => $row['request'],
                                             'status' => $row['status'],
                                             'priority' => $row['priority'],
                                             'date_created' => $row['date_created'],
@@ -198,7 +221,7 @@ $user_type = $_SESSION['user_type'];
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#!" id="bystatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="dw dw-analytics-11"></i> By Status</a>
                                             <div class="dropdown-menu" aria-labelledby="bystatus">
-                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="?">Show all</a>
+                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request">Show all</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=open">Open</a>
                                                 <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=processing">Processing</a>
@@ -243,7 +266,7 @@ $user_type = $_SESSION['user_type'];
                         
                         <div class="card-box <?php echo $color_class; ?>">
                             <div class="card-header">
-                                <a href="#" class="card-title">#<?php echo $result['id']; ?>. <?php echo $result['subject']; ?> </a>
+                                <a href="#" class="card-title">#<?php echo $result['id']; ?>. <?php echo $result['subject']; ?> | <?php echo $result['request']; ?> </a>
                                 <span class="label label-primary f-right"><?php echo date('d F, Y', strtotime($result['date_created'])); ?> </span>
                             </div>
                             <div class="card-block">
@@ -332,15 +355,21 @@ $user_type = $_SESSION['user_type'];
 		}) */
 
         $('.dropdown-status').click(function(){
-			_conf("Are you sure to update ?","update_request",[$(this).attr('data-status')])
+            var id = $(this).attr('data-ticket-id');
+            var ticket_status = $(this).attr('data-status');
+    
+            //_conf("Are you sure to update?", "update_request", [id, ticket_status]);
+            _conf("Are you sure to update?","update_request",["'" +$(this).attr('data-ticket-id')+ "'","'" + $(this).attr('data-status') + "'"])
 		})
 
-    function update_request($id){
+    })
+
+    function update_request(id, ticket_status){
 		start_loader();
 		$.ajax({
 			url:_base_url_+"classes/Master.php?f=update_request",
 			method:"POST",
-			data:{id: $id},
+			data:{id: id, ticket_status: ticket_status},
 			dataType:"json",
 			error:err=>{
 				console.log(err)
@@ -358,8 +387,6 @@ $user_type = $_SESSION['user_type'];
 			}
 		})
 	}
-
-    })
 </script>
 <style>
 

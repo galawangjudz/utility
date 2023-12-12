@@ -1,8 +1,30 @@
 <?php
 
 $user_type = $_SESSION['user_type'];
+$user_dept = $_SESSION['dept'];
+
+echo $user_dept;
+
+$qry = "SELECT * FROM tbldepartments WHERE DepartmentShortName = ?";
+$result = odbc_prepare($conn2, $qry);
+
+if (!$result) {
+    die('Error preparing statement: ' . odbc_errormsg($conn2));
+}
+
+$success = odbc_execute($result, array($user_dept));
+
+if (!$success) {
+    die('Error executing statement: ' . odbc_errormsg($conn2));
+}
+
+while ($row = odbc_fetch_array($result)) {
+    $dept_id = $row['id'];
+    echo $dept_id;
+}
+
 ?>
-<link rel="stylesheet" type="text/css" href="../staff/service_request/style.css">
+<link rel="stylesheet" type="text/css" href="../heads/service_request/style.css">
 <style>
     /*======= Card-Border-Top-color css starts  ======= */
 .card-border-primary {
@@ -75,13 +97,13 @@ $user_type = $_SESSION['user_type'];
                                 echo $status;
                                 $timeRange = isset($_GET['timeRange']) ? $_GET['timeRange'] : null;
 
-                                $query = "SELECT t.id, t.subject, t.description, t.status, t.priority, t.date_created, c.firstname, c.lastname, d.DepartmentName
+                                $query = "SELECT t.id, t.subject, t.description, t.status, t.priority, t.date_created, t.request, c.firstname, c.lastname, d.DepartmentName
                                             FROM tickets t
                                             JOIN tblemployees c ON t.employee_id = c.emp_id
                                             JOIN tbldepartments d ON t.department_id = d.id ";
 
-                                $where = "WHERE t.employee_id =" .$_SESSION['alogin']; // Add condition for customer ID
-
+                                $where = "WHERE t.department_id =" .$dept_id; // Add condition for customer ID
+                                //$where = "";
                                 $params = array($_SESSION['alogin']); // Parameters for prepared statement
 
                                 if (isset($timeRange)) {
@@ -107,8 +129,8 @@ $user_type = $_SESSION['user_type'];
                                             break;
                                     }
                                 }
-
-                                if ($status !== null) {
+                                if (isset($status)){
+                               /*  if ($status !== null) { */
                                     switch ($status) {
                                         case 'open':
                                             $where .= " AND t.status = 0";
@@ -152,6 +174,7 @@ $user_type = $_SESSION['user_type'];
                                             'id' => $row['id'],
                                             'subject' => $row['subject'],
                                             'description' => $row['description'],
+                                            'request' => $row['request'],
                                             'status' => $row['status'],
                                             'priority' => $row['priority'],
                                             'date_created' => $row['date_created'],
@@ -184,26 +207,26 @@ $user_type = $_SESSION['user_type'];
                                                 <?php if (!$timeRange): ?>
                                                     <a class="dropdown-item active" href="#">Show all</a>
                                                 <?php else: ?>
-                                                    <a class="dropdown-item <?php echo (!$timeRange) ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request">Show all</a>
+                                                    <a class="dropdown-item <?php echo (!$timeRange) ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request">Show all</a>
                                                 <?php endif; ?>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item <?php echo $timeRange === 'today' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=today">Today</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'yesterday' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=yesterday">Yesterday</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-week' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-week">This week</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-month' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-month">This month</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-year' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-year">This year</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'today' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&timeRange=today">Today</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'yesterday' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&timeRange=yesterday">Yesterday</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-week' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&timeRange=this-week">This week</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-month' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&timeRange=this-month">This month</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-year' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&timeRange=this-year">This year</a>
                                             </div>
                                         </li>
                                         <!-- end of by date dropdown -->
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#!" id="bystatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="dw dw-analytics-11"></i> By Status</a>
                                             <div class="dropdown-menu" aria-labelledby="bystatus">
-                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request">>Show all</a>
+                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request">Show all</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=open">Open</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=processing">Processing</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'resolved' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=resolved">Resolved</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'closed' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=closed">Closed</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&status=open">Open</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&status=processing">Processing</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'resolved' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&status=resolved">Resolved</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'closed' ? 'active' : ''; ?>" href="<?php echo base_url?>heads/?page=service_request&status=closed">Closed</a>
                                             </div>
                                         </li>
                                         <!-- end of by status dropdown -->
@@ -243,7 +266,7 @@ $user_type = $_SESSION['user_type'];
                         
                         <div class="card-box <?php echo $color_class; ?>">
                             <div class="card-header">
-                                <a href="#" class="card-title">#<?php echo $result['id']; ?>. <?php echo $result['subject']; ?> </a>
+                                <a href="#" class="card-title">#<?php echo $result['id']; ?>. <?php echo $result['subject']; ?> | <?php echo $result['request']; ?> </a>
                                 <span class="label label-primary f-right"><?php echo date('d F, Y', strtotime($result['date_created'])); ?> </span>
                             </div>
                             <div class="card-block">
@@ -272,10 +295,15 @@ $user_type = $_SESSION['user_type'];
                                         <?php echo $result['priority']; ?>
                                     </div>
                                     <div class="dropdown-secondary dropdown">
-                                        <button id="status-dropdown" class="btn btn-default btn-mini waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button id="status-dropdown" class="btn btn-default btn-mini dropdown-toggle waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <?php echo $result['status'] == 0 ? 'Open' : ($result['status'] == 1 ? 'Processing' : ($result['status'] == 2 ? 'Resolved' : 'Closed')); ?>
                                         </button>
-                                        <!-- end of dropdown menu -->
+                                        <div class="dropdown-menu" aria-labelledby="dropdown2" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 0 ? 'active' : ''; ?>" href="#!" data-status="0" data-ticket-id="<?php echo $result['id']; ?>">Open</a>
+                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 1 ? 'active' : ''; ?>" href="#!" data-status="1" data-ticket-id="<?php echo $result['id']; ?>">Processing</a>
+                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 2 ? 'active' : ''; ?>" href="#!" data-status="2" data-ticket-id="<?php echo $result['id']; ?>">Resolved</a>
+                                            <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 3 ? 'active' : ''; ?>" href="#!" data-status="3" data-ticket-id="<?php echo $result['id']; ?>">Closed</a>
+                                        </div>
                                     </div>
                                     <!-- end of dropdown-secondary -->
                                     <div class="dropdown">
@@ -322,7 +350,43 @@ $user_type = $_SESSION['user_type'];
 			uni_modal("Request Details","service_request/new_request.php?id="+$(this).attr('id'))
 		})
 
+       /*  $('.dropdown-status').click(function(){
+			uni_modal("Request Details","service_request/new_request.php?id="+$(this).attr('id'))
+		}) */
+
+        $('.dropdown-status').click(function(){
+            var id = $(this).attr('data-ticket-id');
+            var ticket_status = $(this).attr('data-status');
+    
+            //_conf("Are you sure to update?", "update_request", [id, ticket_status]);
+            _conf("Are you sure to update?","update_request",["'" +$(this).attr('data-ticket-id')+ "'","'" + $(this).attr('data-status') + "'"])
+		})
+
     })
+
+    function update_request(id, ticket_status){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=update_request",
+			method:"POST",
+			data:{id: id, ticket_status: ticket_status},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+                    alert(resp.msg);
+					location.reload();
+				}else{
+					alert("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
 </script>
 <style>
 

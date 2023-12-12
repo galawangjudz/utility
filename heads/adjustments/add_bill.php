@@ -4,7 +4,6 @@
 if (isset($_GET['search'])) {
     $l_find = $_GET['search']; 
 }
-//$l_find = isset($_GET["search"]) ? $_GET["search"] : '';
 
 ?>
 
@@ -12,12 +11,10 @@ if (isset($_GET['search'])) {
 <div class="main-container"> 
 	<div class="">
 		<div class="pd-ltr-20">
-			<div class="title pb-20">
-                <h2 class="h3 mb-0">Adjustment of Accounts</h2>
-            </div>
+			
 			<div class="card-box pd-20 height-1400-p mb-30">
 				<form action="" id="filter">
-					<input type="hidden" id="page" name="page" value="adjustments" class="form-control form-control-sm rounded-0">
+					<input type="hidden" id="page" name="page" value="adjustments/add_bill" class="form-control form-control-sm rounded-0">
 					<div class="col-md-4 form-group">
 						<label for="search" class="control-label">Search Account: </label>
 						<input type="text" id="search" name="search" class="form-control">
@@ -38,12 +35,7 @@ if (isset($_GET['search'])) {
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto add_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
                             <i class="fa fa-plus"></i> Add New Bill
                         </a>
-                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-plus"></i> Add Adjustment BIll
-                        </a>
-                        <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-plus"></i> Adjust Payment
-                        </a>
+                      
                         <?php }
                         ?>
 				</div>

@@ -240,7 +240,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <div class="container-fluid">
 <form action="" id="pay-form">
-<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
+<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-30px;display:none;" alt="">
 
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="fieldset-container">
@@ -560,7 +560,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('</style>');
 
-        printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
+        printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-30px;background-repeat:no-repeat;">');
         var fullName = document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value;
         var accNo = document.getElementById("acc_no").value;
 

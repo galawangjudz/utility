@@ -22,11 +22,21 @@
 							<span class="micon dw dw-user-13"></span><span class="mtext">Accounts</span>
 						</a>
 					</li>
-					<!-- <li>
-						<a href="<?php echo base_url ?>heads/?page=adjustments" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-list"></span><span class="mtext">Adjustments</span>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext"> Adjustments </span>
 						</a>
-					</li> -->
+						<ul class="submenu">
+							<li><a href="<?php echo base_url ?>heads/?page=adjustments/add_bill">Add Bill</a></li>
+							<li><a href="<?php echo base_url ?>heads/?page=adjustments/adjust">Adjustment Bill & Payment</a></li>
+							
+						</ul>
+					</li>
+					<li>
+						<a href="<?php echo base_url ?>heads/?page=service_request" class="dropdown-toggle no-arrow">
+							<span class="micon dw dw-right-arrow"></span><span class="mtext">Service Request</span>
+						</a>
+					</li>
 					<li>
 						<a href="<?php echo base_url ?>heads/?page=get-soa" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-newspaper"></span><span class="mtext">Bill Report</span>
