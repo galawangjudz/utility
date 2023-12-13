@@ -45,6 +45,18 @@ $user_type = $_SESSION['user_type'];
         font-weight: bold;
         font-size: 12px; /* Adjust font size for size */
     }
+
+    .status-label {
+    padding: 3px 5px;
+    border-radius: 2px;
+    font-weight: bold;
+    }
+
+    .open { background: #28a745; color: #fff; }
+    .processing { background: #ffc107; color: #000; }
+    .resolved { background: #007bff; color: #fff; }
+    .closed { background: #dc3545; color: #fff; }
+
 </style>
 <?php
     function get_priority_color($priority) {
@@ -61,6 +73,19 @@ $user_type = $_SESSION['user_type'];
                 return '#000000'; // Default color
         }
     }
+
+    
+    function getStatusClass($status) {
+        $classes = ['open', 'processing', 'resolved', 'closed'];
+        return $classes[$status] ?? 'closed';
+    }
+
+    function getStatusText($status) {
+        $texts = ['Open', 'Processing', 'Resolved', 'Closed'];
+        return $texts[$status] ?? 'Closed';
+    }
+
+
     ?>
  
  <div class="main-container">
@@ -266,17 +291,15 @@ $user_type = $_SESSION['user_type'];
                                 <div class="task-list-table">
                                         <p class="task-due" style="margin-top: 10px;"><strong> Due : </strong><?php echo $result['due_label']; ?></p>
                                 </div>
-                                <div class="task-board">
-                                  
-                                    <div class="priority-badge" style="background-color: <?php echo get_priority_color($result['priority']); ?>;">
+                                <div class="priority-badge" style="background-color: <?php echo get_priority_color($result['priority']); ?>;">
                                         <?php echo $result['priority']; ?>
-                                    </div>
-                                    <div class="dropdown-secondary dropdown">
-                                        <button id="status-dropdown" class="btn btn-default btn-mini waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <?php echo $result['status'] == 0 ? 'Open' : ($result['status'] == 1 ? 'Processing' : ($result['status'] == 2 ? 'Resolved' : 'Closed')); ?>
-                                        </button>
-                                        <!-- end of dropdown menu -->
-                                    </div>
+                                </div>
+                                <div class="task-board">
+                                       
+                                    <span class="status-label <?php echo getStatusClass($result['status']); ?>">
+                                        <?php echo getStatusText($result['status']); ?>
+                                    </span>
+                              
                                     <!-- end of dropdown-secondary -->
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">

@@ -67,8 +67,35 @@ while ($row = odbc_fetch_array($result)) {
         font-weight: bold;
         font-size: 12px; /* Adjust font size for size */
     }
+    .dropdown-status.active {
+    background-color: #007bff; /* Change this to the desired color for the active status */
+    color: #fff; /* Change this to the desired text color for the active status */
+    }
+
+    .status-label {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    }
+
+    .open { background: #28a745; color: #fff; }
+    .processing { background: #ffc107; color: #000; }
+    .resolved { background: #007bff; color: #fff; }
+    .closed { background: #dc3545; color: #fff; }
+
 </style>
 <?php
+    function getStatusClass($status) {
+        $classes = ['open', 'processing', 'resolved', 'closed'];
+        return $classes[$status] ?? 'closed';
+    }
+
+    function getStatusText($status) {
+        $texts = ['Open', 'Processing', 'Resolved', 'Closed'];
+        return $texts[$status] ?? 'Closed';
+    }
+
+
     function get_priority_color($priority) {
         switch ($priority) {
             case 'Highest':
@@ -289,11 +316,12 @@ while ($row = odbc_fetch_array($result)) {
                                 <div class="task-list-table">
                                         <p class="task-due" style="margin-top: 10px;"><strong> Due : </strong><?php echo $result['due_label']; ?></p>
                                 </div>
+                                <div class="priority-badge" style="background-color: <?php echo get_priority_color($result['priority']); ?>;">
+                                        <?php echo $result['priority']; ?>
+                                </div>
                                 <div class="task-board">
                                   
-                                    <div class="priority-badge" style="background-color: <?php echo get_priority_color($result['priority']); ?>;">
-                                        <?php echo $result['priority']; ?>
-                                    </div>
+                                   
                                     <div class="dropdown-secondary dropdown">
                                         <button id="status-dropdown" class="btn btn-default btn-mini dropdown-toggle waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <?php echo $result['status'] == 0 ? 'Open' : ($result['status'] == 1 ? 'Processing' : ($result['status'] == 2 ? 'Resolved' : 'Closed')); ?>
