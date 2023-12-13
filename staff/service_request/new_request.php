@@ -55,7 +55,7 @@ require_once('../../includes/config.php');
                     {
                       echo '<option value="" readonly selected>Select Department</option>';
                     } 
-                $query = "select * from tbldepartments";
+                $query = "select * from tbldepartments where id = '1' or id = '2'";
                 $result = odbc_exec($conn2, $query);
                 while ($row2 = odbc_fetch_array($result))  {
                   ?>

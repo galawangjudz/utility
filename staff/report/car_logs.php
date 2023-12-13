@@ -109,7 +109,6 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <th>Deposit</th>
                         <th>Reference #</th>
                         <th>Encoded by</th>
-                        <th>Action</th>
 					</tr>
 				</thead>
                 <tbody>
@@ -184,17 +183,6 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
                    
                         <?php $query = "SELECT * FROM t_utility_logs"?>
-                    <td>
-                        <div class="dropdown">
-                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                            <i class="dw dw-more"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                        <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
-                        </div>
-                     </div>
-                     </td>
 					</tr>
 					<?php endwhile; ?>
 

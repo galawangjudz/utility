@@ -52,7 +52,8 @@ if (isset($_GET['search'])) {
                 <col width="15%">
                 <col width="5%">
                 <col width="20%">
-                <col width="30%">
+                <col width="20%">
+                <col width="5%">
                 </colgroup>
 						<thead>
 							<tr>
@@ -62,7 +63,7 @@ if (isset($_GET['search'])) {
                                 <th>Discount</th>
                                 <th>Adjustment Description</th>
                                 <th>Notes</th>
-								<!-- <th class="datatable-nosort">ACTION</th> -->
+								<th class="datatable-nosort">ACTION</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -132,12 +133,12 @@ if (isset($_GET['search'])) {
                                     <td class=""><?php echo $notes ?></td>
                             
                         
-                                   <!--  <td>
-                                        <a class="btn btn-link delete_data" data-date="<?php echo $due ?>" data-type="<?php echo $type ?>" data-id="<?php echo $acc ?>" href="javascript:void(0)" role="button">
+                                    <td>
+                                        <a class="btn btn-link delete_data" data-paydate="<?php echo $pay_date ?>" data-or-no="<?php echo $or_no ?>" data-id="<?php echo $acc ?>" href="javascript:void(0)" role="button">
                                         <i class="dw dw-delete-3"></i>
                                     </a>
 
-                                    </td> -->
+                                    </td>
                                 </tr>
                             <?php endwhile; ?>
 						</tbody>
@@ -153,7 +154,7 @@ if (isset($_GET['search'])) {
     $(document).ready(function(){
 
         $('.delete_data').click(function(){
-            _conf("Are you sure to delete from Bill List permanently?","delete_bill",["'" +$(this).attr('data-date')+ "'","'" + $(this).attr('data-type') + "'",$(this).attr('data-id')])
+            _conf("Are you sure to delete from Payment List permanently?","delete_adjustment",["'" +$(this).attr('data-paydate')+ "'","'" + $(this).attr('data-or-no') + "'","'" + $(this).attr('data-id') + "'"])
         })
 
         $('.add_bill').click(function(){
@@ -168,12 +169,12 @@ if (isset($_GET['search'])) {
 			uni_modal("Adjustment Payment","adjustments/adjust_payment.php?id="+$(this).attr('id'))
 		})
     });
-    function delete_bill($date,$type,$id){
+    function delete_adjustment($paydate,$or_no,$id){
         start_loader();
         $.ajax({
-            url:_base_url_+"classes/Master.php?f=delete_bill",
+            url:_base_url_+"classes/Master.php?f=delete_adjustment",
             method:"POST",
-            data:{date : $date,type: $type,id: $id},
+            data:{paydate : $paydate, or_no: $or_no, id: $id},
             dataType:"json",
             error:err=>{
                 console.log(err)

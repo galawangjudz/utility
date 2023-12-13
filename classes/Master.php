@@ -540,6 +540,24 @@ Class Master{
 		
 		return json_encode($resp);
 	}
+
+	function delete_adjustment(){
+		
+		extract($_POST);
+		$sql = "DELETE FROM t_utility_payments WHERE c_st_pay_date = '$paydate' and c_st_or_no = '$or_no' and c_account_no = '$id'";
+		$delete = odbc_exec($this->conn2, $sql);
+		//echo $sql;
+		if ($delete) {
+			$this->log_log('Utility Payment Adjustment', "DELETE - $paydate : $or_no : $id ");
+			$resp['status'] = 'success';
+			$resp['msg'] = "Adjustment has been deleted successfully.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
+		}
+		return json_encode($resp);
+	}
+
 	public function __destruct() {
         // Close the database connection when the object is destroyed
         odbc_close($this->conn2);
@@ -594,6 +612,10 @@ switch ($action) {
 
 	case 'update_request':
 		echo $Master->update_request();
+	break;
+
+	case 'delete_adjustment':
+		echo $Master->delete_adjustment();
 	break;
 
 	default:

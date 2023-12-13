@@ -240,7 +240,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <div class="container-fluid">
 <form action="" id="pay-form">
-<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-10px;display:none;" alt="">
+<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-30px;display:none;" alt="">
 
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="fieldset-container">
@@ -504,11 +504,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         var paymentForText;
 
         if (mainAmountPaid === 0) {
-            paymentForText = 'Payment for Streetlight Fee';
+            paymentForText = 'Streetlight Fee';
         } else if (stlAmountPaid === 0) {
-            paymentForText = 'Payment for Maintenance Fee';
+            paymentForText = 'Grass-Cutting Fee';
         }else{
-            paymentForText = 'Payment for Maintenance and Streetlight Fee';
+            paymentForText = 'Grass-Cutting and Streetlight Fee';
         }
 
         var printWindow = window.open('', '_blank');
@@ -519,15 +519,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('    background-image: url("payments/car.jpg");');
         printWindow.document.write('    background-size: 820px 350px;');
         printWindow.document.write('}');
-        printWindow.document.write('.pay-date { margin: 150px 450px; width: 100px; position:absolute; }');
-        printWindow.document.write('.full-name { margin: 170px 180px; width: 350px; position:absolute; }');
+        printWindow.document.write('.pay-date { margin: 130px 425px; width: 100px; position:absolute; }');
+        printWindow.document.write('.full-name { margin: 160px 180px; width: 350px; position:absolute; }');
         printWindow.document.write('.add { margin: 190px 150px; width: 350px; position:absolute; }');
         printWindow.document.write('.payment-or { margin: 20px 180px; }');
         printWindow.document.write('.mode-payment { margin: 10px 0; }');
        
-        printWindow.document.write('.stl { margin: 100px -170px; position:absolute; }');
+        printWindow.document.write('.stl { margin: 100px -195px; position:absolute; }');
 
-        printWindow.document.write('.mtf { margin: 100px -170px; position:absolute; }');
+        printWindow.document.write('.mtf { margin: 100px -195px; position:absolute; }');
 
         printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 260px 240px; width:300px; position:absolute; }');
@@ -547,7 +547,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.mtf { display: block; }');
             printWindow.document.write('.stl { display: none; }');
         }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
-            printWindow.document.write('.mtf { display: block; margin: 180px -170px; position:absolute; }');
+            printWindow.document.write('.mtf { display: block; margin: 180px -195px; position:absolute; }');
             printWindow.document.write('.stl { display: block; }');
         }
 
@@ -560,7 +560,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('</style>');
 
-        printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-10px;background-repeat:no-repeat;">');
+        printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-30px;background-repeat:no-repeat;">');
         var fullName = document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value;
         var accNo = document.getElementById("acc_no").value;
 
