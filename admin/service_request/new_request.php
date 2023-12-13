@@ -30,13 +30,13 @@ require_once('../../includes/config.php');
       <input type="hidden" name="id" value="<?php echo isset($ticket_id) ? $ticket_id : '' ?>">
       <div class="form-group row">
           <div class="col-sm-12">
-              <label for="subject" class="block">Subject</label>
+              <label for="subject" class="block">Account No</label>
           </div>
           <div class="col-sm-12">
               <input type="text" id="subject" name="subject"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($subject) ? $subject : ''; ?>">
           </div>
           <div class="col-sm-12">
-              <label for="department" class="block">Department</label>
+              <label for="department" class="block">Assigned To</label>
           </div>
          
           <div class="col-sm-12">

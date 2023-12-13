@@ -323,7 +323,7 @@ while ($row = odbc_fetch_array($result)) {
                                     
                                     <div class="dropdown-secondary dropdown">
                                         <button id="status-dropdown" class="btn btn-default btn-mini dropdown-toggle waves-light b-none txt-muted" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <?php echo getStatusText($result['status']); ?>
+                                            <?php echo $result['status'] == 0 ? 'Open' : ($result['status'] == 1 ? 'Processing' : ($result['status'] == 2 ? 'Resolved' : 'Closed')); ?>
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdown2" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
                                             <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 0 ? 'active' : ''; ?>" href="#!" data-status="0" data-ticket-id="<?php echo $result['id']; ?>">Open</a>
