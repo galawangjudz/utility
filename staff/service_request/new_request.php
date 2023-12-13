@@ -36,7 +36,7 @@ require_once('../../includes/config.php');
               <input type="text" id="subject" name="subject"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($subject) ? $subject : ''; ?>">
           </div>
           <div class="col-sm-12">
-              <label for="department" class="block">Department</label>
+              <label for="department">Department</label>
           </div>
          
           <div class="col-sm-12">
@@ -71,6 +71,7 @@ require_once('../../includes/config.php');
           <div class="col-sm-12">
               <select class="form-control form-control-border" name="request" id="request" required>
                 <option value="BA" <?php echo (isset($request) && $request == 'BA') ? 'selected' : ''; ?>>BILL ADJUSTMENT</option>
+                <option value="SA" <?php echo (isset($request) && $request == 'SA') ? 'selected' : ''; ?>>SURCHARGE ADJUSTMENT</option>
                 <option value="ADJ" <?php echo (isset($request) &&  $request == 'ADJ') ? 'selected' : ''; ?>>PAYMENT ADJUSTMENT</option>
                 <option value="PTO" <?php echo (isset($request) &&  $request == 'PTO') ? 'selected' : ''; ?>>PERMIT TO OCCUPY</option>
                 <option value="PTC" <?php echo (isset($request) &&  $request == 'PTC') ? 'selected' : ''; ?>>PERMIT TO CONSTRUCT</option>

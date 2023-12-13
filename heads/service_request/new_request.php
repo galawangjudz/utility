@@ -36,7 +36,7 @@ require_once('../../includes/config.php');
               <input type="text" id="subject" name="subject"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($subject) ? $subject : ''; ?>">
           </div>
           <div class="col-sm-12">
-              <label for="department" class="block">Department</label>
+              <label for="department" >Department</label>
           </div>
          
           <div class="col-sm-12">
