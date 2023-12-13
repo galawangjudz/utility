@@ -22,6 +22,7 @@
 							<span class="micon dw dw-user-13"></span><span class="mtext">Accounts</span>
 						</a>
 					</li>
+					<?php if ($_SESSION['alogin'] == '10184'):?>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-apartment"></span><span class="mtext"> Adjustments </span>
@@ -32,6 +33,7 @@
 							
 						</ul>
 					</li>
+					<?php endif;?>
 					<li>
 						<a href="<?php echo base_url ?>heads/?page=service_request" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-right-arrow"></span><span class="mtext">Service Request</span>

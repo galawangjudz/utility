@@ -57,7 +57,8 @@ if (isset($_GET['search'])) {
                 </colgroup>
 						<thead>
 							<tr>
-                                <th class="table-plus">Pay Date</th>
+                                <th class="table-plus">Account No</th>
+                                <th>Pay Date</th>
                                 <th>OR #</th>
                                 <th>Amount</th>
                                 <th>Discount</th>
@@ -124,7 +125,9 @@ if (isset($_GET['search'])) {
                                     $notes = odbc_result($qry, "c_notes");
                
                             ?>
+                                
                                 <tr>
+                                    <td class=""><?php echo $acc; ?></td>
                                     <td class=""><?php echo $pay_date; ?></td>
                                     <td class=""><?php echo $or_no ?></td>
                                     <td class=""><?php echo $amount ?></td>
