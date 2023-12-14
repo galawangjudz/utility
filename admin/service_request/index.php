@@ -124,7 +124,7 @@ while ($row = odbc_fetch_array($result)) {
                                 echo $status;
                                 $timeRange = isset($_GET['timeRange']) ? $_GET['timeRange'] : null;
 
-                                $query = "SELECT t.id, t.subject, t.description, t.status, t.priority, c.firstname, c.lastname, t.date_created, t.request, c.firstname, c.lastname, d.DepartmentName
+                                $query = "SELECT t.id, t.account_no, t.description, t.status, t.priority, c.firstname, c.lastname, t.date_created, t.request, c.firstname, c.lastname, d.DepartmentName
                                             FROM tickets t
                                             JOIN tblemployees c ON t.employee_id = c.emp_id
                                             JOIN tbldepartments d ON t.department_id = d.id ";
@@ -199,7 +199,7 @@ while ($row = odbc_fetch_array($result)) {
                                     while ($row = odbc_fetch_array($stmt)) {
                                         $result = [
                                             'id' => $row['id'],
-                                            'subject' => $row['subject'],
+                                            'subject' => $row['account_no'],
                                             'description' => $row['description'],
                                             'request' => $row['request'],
                                             'status' => $row['status'],
@@ -361,7 +361,7 @@ while ($row = odbc_fetch_array($result)) {
 		})
 
         $('#create-ticket').click(function(){
-			uni_modal("New Request","service_request/new_request.php",'large')
+			uni_modal("New Request","service_request/new_request.php")
 		})
 
         $('.edit-ticket').click(function(){

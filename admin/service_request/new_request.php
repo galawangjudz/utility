@@ -2,6 +2,7 @@
 require_once('../../includes/config.php');
 
     if(isset($_GET['id'])) {
+
         $id = $_GET['id'];
         
         $sql = "SELECT * FROM tickets WHERE id = ?";
@@ -13,14 +14,18 @@ require_once('../../includes/config.php');
         }
         while ($row2 = odbc_fetch_array($qry)) {
             $employeeID= $row2['employee_id'];
-            $subject=$row2['subject'];  
+            $acc_no=$row2['account_no'];  
+            $acc_no_to=$row2['transfer_to'];  
+            $adjust_for=$row2['request_from'];  
+            $adjust_to=$row2['request_to'];  
+            $amount=$row2['amount']; 
+            $gcf_edate=$row2['gcf_edate']; 
             $dept= $row2['department_id'];  
             $request= $row2['request']; 
             $priority=$row2['priority'];  
             $purpose=$row2['description'];
         }
 
-      
     }
 
 ?>
@@ -29,17 +34,11 @@ require_once('../../includes/config.php');
   <form action="" id="request-form"> 
       <input type="hidden" name="id" value="<?php echo isset($ticket_id) ? $ticket_id : '' ?>">
       <div class="form-group row">
-          <div class="col-sm-12">
-              <label for="subject" class="block">Account No</label>
-          </div>
-          <div class="col-sm-12">
-              <input type="text" id="subject" name="subject"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($subject) ? $subject : ''; ?>">
-          </div>
-          <div class="col-sm-12">
-              <label for="department" class="block">Assigned To</label>
-          </div>
-         
-          <div class="col-sm-12">
+            <div class="col-sm-12">
+                <label for="department" class="block">Assigned To</label>
+            </div>
+            <div class="col-sm-12">
+        
               <select name="department" class="custom-select form-control" required="true" autocomplete="off">
                 <?php
                 if (!empty($dept)) {
@@ -77,6 +76,41 @@ require_once('../../includes/config.php');
                 <option value="PTC" <?php echo (isset($request) &&  $request == 'PTC') ? 'selected' : ''; ?>>PERMIT TO CONSTRUCT</option>
                 <option value="ATC" <?php echo (isset($request) &&  $request == 'ATC') ? 'selected' : ''; ?>>AUTHORITY TO CONSTRUCT</option>
               </select>
+          </div>
+          <div class="col-sm-12">
+              <label for="subject">Account No</label>
+              <input type="text" id="account_no" name="account_no"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($acc_no) ? $acc_no : ''; ?>">
+          </div>
+          <div class="col-sm-12" id="accountto_row">
+              <label for="account_no_to" id="account_no_to_label">Account No To</label>
+              <input type="text" id="account_no_to" name="account_no_to"autocomplete="off" class="form-control" placeholder="" value="<?php echo isset($acc_no_to) ? $acc_no_to : NULL; ?>">
+          </div>
+         
+          <div class="col-sm-12">
+            <label for="adjust_for">Adjustment for</label>
+              <select class="form-control form-control-border" name="adjust_for" id="adjust_for" required>
+                        <option value="GCF" <?php echo (isset($adjust_for) && $adjust_for == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                        <option value="STL" <?php echo (isset($adjust_for) && $adjust_for == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
+              </select>
+          </div>
+          <div class="col-sm-12" id="transferto_row">
+              <label for="adjust_to">Transfer to</label>
+              <select name="adjust_to" id="adjust_to" class="form-control form-control-border">
+                    <option value="GCF" <?php echo (isset($adjust_to) && $adjust_to == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                    <option value="STL" <?php echo (isset($adjust_to) && $adjust_to == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
+              </select>
+          </div>
+
+          <div class="col-sm-12" id="amount_row">
+                    <label for="amount" class="control-label">Amount</label>
+                    <input type="number" name="amount" id="amount" class="form-control form-control-border" value ="<?php echo isset($amount) ? $amount : ''; ?>">
+                    <!-- <small class="text-danger">Amount must be higher than 0.</small> -->
+          </div>
+
+          <div class="col-sm-12" id="gcf_edaterow">
+                    <label for="gcf_edate" class="control-label">Date</label>
+                    <input type="date" name="gcf_edate" id="gcf_edate" class="form-control form-control-border" value ="<?php echo isset($gcf_edate) ? $gcf_edate : ''; ?>">
+                    <!-- <small class="text-danger">Amount must be higher than 0.</small> -->
           </div>
           
       </div>
@@ -118,7 +152,7 @@ require_once('../../includes/config.php');
 
           </div>
           <div class="col-sm-12">
-              <label for="purpose" class="block">Purpose</label>
+              <label for="purpose" class="block">Notes</label>
           </div>
           <div class="col-sm-12">
                 <textarea rows="3" name="purpose" id="purpose" class="form-control form-control-md rounded-0" required><?php echo isset($purpose) ? html_entity_decode($purpose) : '' ?></textarea>
@@ -133,6 +167,53 @@ require_once('../../includes/config.php');
   </form>
 </div>
 <script>
+    $(document).ready(function(){
+    $('#accountto_row').hide();
+    $('#transferto_row').hide();
+    $('#gcf_edaterow').hide();
+               
+    function handleFormChanges() {
+          // Hide all relevant rows
+          $('#accountto_row').hide();
+          $('#transferto_row').hide();
+          $('#gcf_edaterow').hide();
+          $('#amount_row').show();
+
+          // Show/hide the relevant rows based on the selected option
+          if($('#request').val() == 'ADJ') {
+              $('#accountto_row').show();
+              $('#transferto_row').show();
+              $('#amount_row').show();
+          } else if(['PTO', 'ATC', 'PTC'].includes($('#request').val())) {
+              $('#gcf_edaterow').show();
+              $('#amount_row').hide();
+          } else {
+              // Add similar conditions for other options if needed
+          }
+      }
+
+      // Handle changes in the form initially
+      handleFormChanges();
+
+
+      $('#request').change(function(){
+          // Reset the values of the input fields
+          $('#account_no_to').val('');
+          $('#adjust_to').val('');
+          $('#gcfEdateInput').val('');
+          $('#amount').val('');
+          handleFormChanges();
+      });
+
+
+
+
+  });
+
+
+
+
+
  $(function(){
         $('#uni_modal #request-form').submit(function(e){
             e.preventDefault();

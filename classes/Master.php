@@ -10,31 +10,37 @@ Class Master{
 
 	function add_ticket(){
 		extract($_POST);
-		$subject=$_POST['subject'];  
-		$dept=$_POST['department'];  
 		$request=$_POST['request']; 
+		$dept=$_POST['department']; 
+		$acc_no=$_POST['account_no'];  
+		$acc_no_to=isset($_POST['account_no_to']) ? $_POST['account_no_to'] : NULL; 
+		$adjust_for=$_POST['adjust_for'];  
+		$adjust_to=isset($_POST['adjust_to']) ? $_POST['adjust_to'] : NULL;   
+		$amount = isset($_POST['amount']) ? $_POST['amount'] : NULL; 
+		$gcf_edate = isset($_POST['gcf_edate']) ? $_POST['gcf_edate'] : NULL;  
 		$priority=$_POST['priority'];  
 		$purpose=$_POST['purpose'];
 
-		if (empty($subject) || empty($purpose) || empty($priority) || empty($dept)) {
+		if (empty($acc_no) || empty($purpose) || empty($priority) || empty($dept) || empty($adjust_for)) {
 			$resp['status'] = 'error';
 			$resp['msg'] = "Please fill in all required fields";
 			return json_encode($resp);
 			exit;
 		}
 
-		$status = 0; // Set initial status to 0
+		$status = 0;
 		$date_created = date('Y-m-d H:i:s');
 		require_once('../includes/session.php');
 		$loginID = $_SESSION['alogin'];
 		
 		
-		$params = "'$subject', '$dept', '$request', '$priority', '$purpose','$loginID','$status', '$date_created'";
+		$params = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','$loginID','$status', '$date_created'";
 		if (empty($id)) {
-			$ticket_query = "INSERT INTO tickets (subject, department_id, request, priority, description, employee_id,status, date_created) VALUES ($params)";
+			$ticket_query = "INSERT INTO tickets (request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, employee_id,status, date_created) VALUES ($params)";
+			
 		}else{
-			$data ="subject,department_id,request,priority,description";
-			$values = "'$subject','$dept','$request','$priority','$purpose'";
+			$data ="request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, status";
+			$values = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','0'";
 			$ticket_query = "UPDATE tickets SET ($data) = ($values) WHERE id = ".$id;
 		}
 		if (odbc_exec($this->conn2, $ticket_query)) {
