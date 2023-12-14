@@ -61,7 +61,7 @@ $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
                     <label for="type" class="control-label">ADJUSTMENT TYPE</label>
                     <select name="type" id="type" class="form-control form-control-border" required>
                         <option value="BA">BILL ADJUSTMENT</option>
-                        <option value="ADJ">PAYMENT ADJUSTMENT</option>
+                        <option value="SA">SURCHARGE ADJUSTMENT</option>
                         <option value="RF">REFUND</option>
                     </select>
                 </div>

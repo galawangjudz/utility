@@ -250,6 +250,8 @@ Class Master{
 		$amount = (float)$_POST['amount'];
 		require_once('../includes/session.php');
 		$encoded_by = $_SESSION['alogin'];
+		$date_encoded = date('Y-m-d H:i:s');
+		$date_updated = date('Y-m-d H:i:s');
 		$discount = 0;
 		$notes = $_POST['notes'];
 
@@ -268,8 +270,13 @@ Class Master{
 		endif;
 		do {
 			$random_no = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
-			$unique_no = $adjust_for . '-' . $adjust_type . $random_no;
-		
+			$unique_no = $adjust_for . '-BA'. $random_no;
+			if ($adjust_for == 'MTF'):
+					$adjust_for1 = 'GCF';
+			else:
+				$adjust_for1 = $adjust_for;
+			endif;
+			$payment_type = $adjust_for1 . '-' .$adjust_type;
 			// Check if the number exists in the database
 			$query = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$unique_no'";
 			/* $result = $mysqli->query($query); */
@@ -280,12 +287,21 @@ Class Master{
 			}
 		} while (true);
 		
-		
-		$params = "'$acc_no', '$unique_no', '$adjust_date', '$amount', '$discount', '$encoded_by'";
-		// Create the INSERT query using parameterized query
-		$insert_query = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params)";
 
-		$params2 = "'$unique_no','$acc_no', '$adjust_date', 'BILL ADJUSTMENT','$notes'";
+		
+		$params = "'$acc_no', '$unique_no', '$adjust_date', '$amount', '$discount', '$encoded_by','$payment_type','$date_encoded'";
+		// Create the INSERT query using parameterized query
+		$insert_query = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by, payment_type, date_encoded) VALUES ($params)";
+
+		if ($adjust_type == "BA"):
+			$adjust_desc = 'Bill Adjustment';
+		elseif ($adjust_type == 'SA'):
+			$adjust_desc = 'Surcharge Adjustment';
+		else:
+			$adjust_desc = 'Refund';
+		endif;
+
+		$params2 = "'$unique_no','$acc_no', '$adjust_date', '$adjust_desc','$notes'";
 		$insert_adjustment = "INSERT INTO t_adjustment VALUES ($params2)";
 		$adjustment = odbc_exec($this->conn2, $insert_adjustment);
 
@@ -314,6 +330,8 @@ Class Master{
 		$amount = (float)$_POST['amount'];
 		require_once('../includes/session.php');
 		$encoded_by = $_SESSION['alogin'];
+		$date_encoded = date('Y-m-d H:i:s');
+		$date_updated = date('Y-m-d H:i:s');
 		$discount = 0;
 		$notes = $_POST['notes'];
 
@@ -333,8 +351,19 @@ Class Master{
 		do {
 			$random_no = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
 			$unique_no1 = $adjust_from . '-' . $adjust_type . $random_no;
+			if ($adjust_from == 'MTF'):
+				$adjust_from1 = 'GCF';
+			else:
+				$adjust_from1 = $adjust_from;
+			endif;
+			$payment_type1 = $adjust_from1 . '-' . $adjust_type;
 			$unique_no2 = $adjust_to . '-' . $adjust_type . $random_no;
-		
+			if ($adjust_to == 'MTF'):
+				$adjust_to1 = 'GCF';
+			else:
+				$adjust_to1 = $adjust_to;
+			endif;
+			$payment_type2 = $adjust_to . '-' . $adjust_type;
 			// Check if the number exists in the database
 			$query = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$unique_no1' or c_st_or_no = '$unique_no2'";
 			/* $result = $mysqli->query($query); */
@@ -348,11 +377,11 @@ Class Master{
 		$amount_from = -$amount;
 		$amount_to = $amount;
 		
-		$params_from = "'$acc_no', '$unique_no1', '$adjust_date', '$amount_from', '$discount', '$encoded_by'";
-		$params_to = "'$new_acc', '$unique_no2', '$adjust_date', '$amount_to', '$discount', '$encoded_by'";
+		$params_from = "'$acc_no', '$unique_no1', '$adjust_date', '$amount_from', '$discount', '$encoded_by','$date_encoded','$payment_type1'";
+		$params_to = "'$new_acc', '$unique_no2', '$adjust_date', '$amount_to', '$discount', '$encoded_by','$date_encoded','$payment_type2'";
 		// Create the INSERT query using parameterized query
-		$insert_query_from = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params_from)";
-		$insert_query_to = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by) VALUES ($params_to)";
+		$insert_query_from = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by, date_encoded, payment_type) VALUES ($params_from)";
+		$insert_query_to = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by, date_encoded, payment_type) VALUES ($params_to)";
 
 
 		$params2_from = "'$unique_no1','$acc_no', '$adjust_date', 'PAYMENT ADJUSTMENT','$notes'";
@@ -369,7 +398,7 @@ Class Master{
 		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = "An error occurred.";
-			$resp['err'] = odbc_errormsg($this->conn2) . " [$insert_query]";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$insert_query_from] [$insert_query_to]";
 		}
 		
 		return json_encode($resp);
@@ -422,10 +451,12 @@ Class Master{
 		if ($main_amount_paid != 0):
 				$l_gcf = 1;
 				$main_or_no = 'MTF-CAR' . $_POST['payment_or'];
+				$payment_type1 = "GCF-PAY";
 		endif;
 		if  ($stl_amount_paid != 0):
 				$l_stl = 1;
 				$stl_or_no = 'STL-CAR' . $_POST['payment_or'];
+				$payment_type2 = "STL-PAY";
 		endif;
 
 		$check_payment = "SELECT * FROM t_utility_payments WHERE c_st_or_no ILIKE ?";
@@ -435,13 +466,13 @@ Class Master{
 		if (!odbc_fetch_row($check_payment_query)) {
 		
 			if ($l_gcf == 1) {
-				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by','$date_encoded','$date_updated'";
-				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by, date_encoded, date_updated) VALUES ($params)";
+				$params = "'$acc_no', '$main_or_no', '$pay_date', '$main_amount_paid', '$main_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by','$date_encoded','$date_updated','$payment_type1'";
+				$insert_query_gcf = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by, date_encoded, date_updated, payment_type) VALUES ($params)";
 			}
 			
 			if ($l_stl == 1) {
-				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by','$date_encoded','$date_updated'";
-				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by, date_encoded, date_updated) VALUES ($params2)";
+				$params2 = "'$acc_no', '$stl_or_no', '$pay_date', '$stl_amount_paid', '$stl_discount','$mode_of_payment','$ref_no','$branch', " . ($check_date ? "'$check_date'" : 'NULL') . ",'$encoded_by','$date_encoded','$date_updated','$payment_type2'";
+				$insert_query_stl = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_mop , c_ref_no, c_branch, c_check_date, c_encoded_by, date_encoded, date_updated, payment_type) VALUES ($params2)";
 			
 			}
 			

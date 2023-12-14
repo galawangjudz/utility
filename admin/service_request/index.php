@@ -276,7 +276,7 @@ while ($row = odbc_fetch_array($result)) {
                                 <th>Requestor</th>
                                 <th>Nature of Request</th>
                                 <th>Assigned to</th>
-                                <th>Due Time</th>
+                               <!--  <th>Due Time</th> -->
                                 <th>Status</th>
 								<th class="datatable-nosort">Action</th>
 							</tr>
@@ -308,7 +308,7 @@ while ($row = odbc_fetch_array($result)) {
                                 echo isset($result['request']) ? $requestAcronyms[$result['request']] : '';
                                 ?></td>
                                 <td class=""><?php echo $result['department_name']; ?></td>
-                                <td class=""><?php echo $result['due_label']; ?></td>
+                               <!--  <td class=""><?php echo $result['due_label']; ?></td> -->
                                 <td>  <span class="status-label <?php echo getStatusClass($result['status']); ?>">
                                         <?php echo getStatusText($result['status']); ?>
                                 </span> </td>

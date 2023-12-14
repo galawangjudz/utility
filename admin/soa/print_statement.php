@@ -135,13 +135,23 @@ if(isset($_GET['id'])){
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                                WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                            /*     WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
                                 WHEN UPPER(c_st_or_no) LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
                                 WHEN UPPER(c_st_or_no) LIKE 'MTF-BA%' THEN 'GCF Bill Adjustment'
-                                WHEN UPPER(c_st_or_no) LIKE 'STL-BA%' THEN 'STL Bill Adjustment'
-                                ELSE 'Unidentified payment'
+                                WHEN UPPER(c_st_or_no) LIKE 'STL-BA%' THEN 'STL Bill Adjustment' */
+                                WHEN payment_type = 'GCF-PAY' THEN 'GCF Payment'
+                                WHEN payment_type = 'STL-PAY' THEN 'STL Payment'
+                                WHEN payment_type = 'GCF-BA' THEN 'GCF Bill Adj.'
+                                WHEN payment_type = 'STL-BA' THEN 'STL Bill Adj.'
+                                WHEN payment_type = 'STL-ADJ' THEN 'STL Payment Adj.'
+                                WHEN payment_type = 'GCF-ADJ' THEN 'GCF Payment Adj.'
+                                WHEN payment_type = 'GCF-SA' THEN 'GCF Surcharge Adj.'
+                                WHEN payment_type = 'STL-SA' THEN 'STL Surcharge Adj.'
+                                WHEN payment_type = 'GCF-RF' THEN 'GCF Refund'
+                                WHEN payment_type = 'STL-RF' THEN 'STL Refund'
+                                ELSE ''
                             END AS c_pay_type,
                             c_st_amount_paid as c_tot_amt_paid,
                             c_discount
