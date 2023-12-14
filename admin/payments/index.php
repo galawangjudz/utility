@@ -52,6 +52,7 @@ if(isset($_GET['id'])){
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {
         $l_ddate = "1990-01-01";
+        $l_sdate = "";
     }else{
         while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y-m-d", strtotime($due['c_end_date']));
@@ -63,6 +64,7 @@ if(isset($_GET['id'])){
             $l_prev_bal = $due['c_prev_balance'];
         }
     }
+    $mainte_edate =  date("M Y", strtotime($l_sdate));
     $mainte_due = $l_ddate;
 
     $load_mtf_bill = "SELECT SUM(c_amount_due) as c_total_mtf from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%MTF%%'" ;
@@ -77,6 +79,14 @@ if(isset($_GET['id'])){
         } else {
             // No MTF records found
             $l_mtf_due = 0;
+            $start_qry = "SELECT c_start_date from t_utility_bill where  c_account_no = '$l_acc_no' and (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') ORDER BY c_start_date DESC limit 1";
+            $gcf_start = odbc_exec($conn2, $start_qry);
+            if ($gcf_start) {
+                $gcfresult = odbc_fetch_array($gcf_start);
+                if ($gcfresult) {
+                    $l_gcf_status = date("M Y", strtotime($gcfresult['c_start_date']));
+                }
+            }
         }
     } else {
         // Error executing the query
@@ -92,9 +102,45 @@ if(isset($_GET['id'])){
         if ($row) {
             // Access the total MTF payment amount
             $l_mtf_payment = $row['c_total_mtf_payment'];
+           
+            $check_cover = "SELECT sum(c_amount_due) as gcf_tot_due from t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF')";
+            $gcf_total_due = odbc_exec($conn2, $check_cover);
+            if ($gcf_total_due) {
+                $gcf_tot_bill = odbc_fetch_array($gcf_total_due);
+                $l_gcf_tot_due = $gcf_tot_bill['gcf_tot_due'];
+               
+                if ($l_mtf_payment == $l_gcf_tot_due):
+                    $l_gcf_status = "UPDATED";
+                elseif($l_mtf_payment > $l_gcf_tot_due):
+                    $l_gcf_status = "OVER PAYMENT";
+                else:
+                    $qry_gcf_period = "SELECT * FROM t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') order by c_start_date ASC";
+                    $gcf_period = odbc_exec($conn2, $qry_gcf_period);
+                    $quiboloy = 0;
+                    $gcf_tot_period = 0;
+                    if ($gcf_total_due) {
+                        while ($due = odbc_fetch_array($gcf_period)){
+                            $l_amount = $due['c_amount_due'];
+                            $gcf_tot_period += $l_amount;
+                            
+                            if ($l_mtf_payment < $gcf_tot_period && $quiboloy == 0) {
+                                $l_gcf_status = date("M Y", strtotime($due['c_start_date']));
+                                $quiboloy = 1;
+                                break;
+                            } else {
+                                
+                            }
+                        }
+                    }
+
+                endif;
+
+            }
+
         } else {
             // No MTF payment records found
             $l_mtf_payment = 0;
+            
         }
     } else {
         // Error executing the query
@@ -103,7 +149,7 @@ if(isset($_GET['id'])){
 
     $mainte_bal = $l_mtf_due - $l_mtf_payment;
     
-
+   
 
 
 $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') ORDER BY c_start_date DESC limit 1";
@@ -111,6 +157,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {
         $l_ddate = "1990-01-01";
+        $l_sdate = "";
     }else{
         while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y-m-d", strtotime($due['c_end_date']));
@@ -122,6 +169,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_prev_bal = $due['c_prev_balance'];
         }
     }
+    $street_edate =  date("M Y", strtotime($l_sdate));
     $street_due = $l_ddate;
 
     $load_stl_bill = "SELECT SUM(c_amount_due) as c_total_stl from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%STL%%'" ;
@@ -133,6 +181,14 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_stl_due = $row['c_total_stl'];
         } else {
             $l_stl_due = 0;
+            $start_qry2 = "SELECT c_start_date from t_utility_bill where  c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') ORDER BY c_start_date DESC limit 1";
+            $stl_start = odbc_exec($conn2, $start_qry2);
+            if ($stl_start) {
+                $stlresult = odbc_fetch_array($stl_start);
+                if ($stlresult) {
+                    $l_stl_status =  date("M Y", strtotime($stlresult['c_start_date']));
+                }
+            }
         }
     } else {
         echo "Error: " . odbc_errormsg($conn2);
@@ -147,6 +203,42 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
         if ($row) {
             // Access the total STL payment amount
             $l_stl_payment = $row['c_total_stl_payment'];
+            $check_cover2 = "SELECT sum(c_amount_due) as stl_tot_due from t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL')";
+            $stl_total_due = odbc_exec($conn2, $check_cover2);
+            if ($stl_total_due) {
+                $stl_tot_bill = odbc_fetch_array($stl_total_due);
+                $l_stl_tot_due = $stl_tot_bill['stl_tot_due'];
+               
+                if ($l_stl_payment == $l_stl_tot_due):
+                    $l_stl_status = "UPDATED";
+                elseif($l_stl_payment > $l_stl_tot_due):
+                    $l_stl_status = "OVER PAYMENT";
+                else:
+                    $qry_stl_period = "SELECT * FROM t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') order by c_start_date ASC";
+                    $stl_period = odbc_exec($conn2, $qry_stl_period);
+                    $quiboloy1 = 0;
+                    $stl_tot_period = 0;
+                    if ($stl_total_due) {
+                        while ($due = odbc_fetch_array($stl_period)){
+                            $l_amount2 = $due['c_amount_due'];
+                            $stl_tot_period += $l_amount2;
+                            
+                            if ($l_stl_payment < $stl_tot_period && $quiboloy1 == 0) {
+                                $l_stl_status = date("M Y", strtotime($due['c_start_date']));
+                                $quiboloy1 = 1;
+                                break;
+                            } else {
+                                
+                            }
+                        }
+                    }
+
+                endif;
+
+            }
+
+
+
         } else {
             // No stl payment records found
             $l_stl_payment = 0;
@@ -206,6 +298,20 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
     $mainte_prev =  ($mainte_bal - $l_mtf_cur - $l_mtf_sur);
 
     $stl_prev = ($stl_bal - $l_stl_cur - $l_stl_sur);  
+
+
+   
+    if ($l_gcf_status == "UPDATED" || $l_gcf_status == "OVERPAYMENT"){
+        $l_gcf_status =  $l_gcf_status ;
+    }else{
+        $l_gcf_status = $l_gcf_status . " to " . $mainte_edate;
+    }
+
+    if ($l_stl_status == "UPDATED" || $l_stl_status == "OVERPAYMENT"){
+        $l_stl_status =  $l_stl_status ;
+    }else{
+        $l_stl_status = $l_stl_status . " to " . $street_edate;
+    }
 }
 
 
@@ -275,7 +381,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="stl_date" class="control-label">STL Due Date: </label></td>
+                        <td><label for="stl_date" class="control-label">STL Due Date: <br><span style="color: red;"><?php echo $l_stl_status; ?></span> </label></td>
                         <td><input type="date" name="stl_date" id="stl_date" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
@@ -301,7 +407,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_date" class="control-label">GCF Due Date: </label></td>
+                        <td><label for="main_date" class="control-label">GCF Due Date: <br><span style="color: red;"><?php echo $l_gcf_status; ?></span></label></td>
                         <td><input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
