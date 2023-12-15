@@ -1,8 +1,30 @@
 <?php
 
 $user_type = $_SESSION['user_type'];
+$user_dept = $_SESSION['dept'];
+
+echo $user_dept;
+
+$qry = "SELECT * FROM tbldepartments WHERE DepartmentShortName = ?";
+$result = odbc_prepare($conn2, $qry);
+
+if (!$result) {
+    die('Error preparing statement: ' . odbc_errormsg($conn2));
+}
+
+$success = odbc_execute($result, array($user_dept));
+
+if (!$success) {
+    die('Error executing statement: ' . odbc_errormsg($conn2));
+}
+
+while ($row = odbc_fetch_array($result)) {
+    $dept_id = $row['id'];
+    echo $dept_id;
+}
+
 ?>
-<link rel="stylesheet" type="text/css" href="../staff/service_request/style.css">
+<link rel="stylesheet" type="text/css" href="../admin/service_request/style.css">
 <style>
     /*======= Card-Border-Top-color css starts  ======= */
 .card-border-primary {
@@ -45,10 +67,14 @@ $user_type = $_SESSION['user_type'];
         font-weight: bold;
         font-size: 12px; /* Adjust font size for size */
     }
+    .dropdown-status.active {
+    background-color: #007bff; /* Change this to the desired color for the active status */
+    color: #fff; /* Change this to the desired text color for the active status */
+    }
 
     .status-label {
-    padding: 3px 5px;
-    border-radius: 2px;
+    padding: 5px 10px;
+    border-radius: 5px;
     font-weight: bold;
     }
 
@@ -59,6 +85,17 @@ $user_type = $_SESSION['user_type'];
 
 </style>
 <?php
+    function getStatusClass($status) {
+        $classes = ['open', 'processing', 'resolved', 'closed'];
+        return $classes[$status] ?? 'closed';
+    }
+
+    function getStatusText($status) {
+        $texts = ['Open', 'Processing', 'Resolved', 'Closed'];
+        return $texts[$status] ?? 'Closed';
+    }
+
+
     function get_priority_color($priority) {
         switch ($priority) {
             case 'Highest':
@@ -73,19 +110,6 @@ $user_type = $_SESSION['user_type'];
                 return '#000000'; // Default color
         }
     }
-
-    
-    function getStatusClass($status) {
-        $classes = ['open', 'processing', 'resolved', 'closed'];
-        return $classes[$status] ?? 'closed';
-    }
-
-    function getStatusText($status) {
-        $texts = ['Open', 'Processing', 'Resolved', 'Closed'];
-        return $texts[$status] ?? 'Closed';
-    }
-
-
     ?>
  
  <div class="main-container">
@@ -100,13 +124,13 @@ $user_type = $_SESSION['user_type'];
                                 echo $status;
                                 $timeRange = isset($_GET['timeRange']) ? $_GET['timeRange'] : null;
 
-                                $query = "SELECT t.id, t.subject, t.description, t.status, t.priority, t.date_created, c.firstname, c.lastname, d.DepartmentName
+                                $query = "SELECT t.id, t.account_no, t.description, t.status, t.priority, c.firstname, c.lastname, t.date_created, t.request, c.firstname, c.lastname, d.DepartmentName
                                             FROM tickets t
                                             JOIN tblemployees c ON t.employee_id = c.emp_id
                                             JOIN tbldepartments d ON t.department_id = d.id ";
 
                                 $where = "WHERE t.employee_id =" .$_SESSION['alogin']; // Add condition for customer ID
-
+                                //$where = "";
                                 $params = array($_SESSION['alogin']); // Parameters for prepared statement
 
                                 if (isset($timeRange)) {
@@ -132,8 +156,8 @@ $user_type = $_SESSION['user_type'];
                                             break;
                                     }
                                 }
-
-                                if ($status !== null) {
+                                if (isset($status)){
+                               /*  if ($status !== null) { */
                                     switch ($status) {
                                         case 'open':
                                             $where .= " AND t.status = 0";
@@ -175,8 +199,9 @@ $user_type = $_SESSION['user_type'];
                                     while ($row = odbc_fetch_array($stmt)) {
                                         $result = [
                                             'id' => $row['id'],
-                                            'subject' => $row['subject'],
+                                            'subject' => $row['account_no'],
                                             'description' => $row['description'],
+                                            'request' => $row['request'],
                                             'status' => $row['status'],
                                             'priority' => $row['priority'],
                                             'date_created' => $row['date_created'],
@@ -209,26 +234,26 @@ $user_type = $_SESSION['user_type'];
                                                 <?php if (!$timeRange): ?>
                                                     <a class="dropdown-item active" href="#">Show all</a>
                                                 <?php else: ?>
-                                                    <a class="dropdown-item <?php echo (!$timeRange) ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request">Show all</a>
+                                                    <a class="dropdown-item <?php echo (!$timeRange) ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request">Show all</a>
                                                 <?php endif; ?>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item <?php echo $timeRange === 'today' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=today">Today</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'yesterday' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=yesterday">Yesterday</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-week' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-week">This week</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-month' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-month">This month</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-year' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-year">This year</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'today' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=today">Today</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'yesterday' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=yesterday">Yesterday</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-week' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=this-week">This week</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-month' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=this-month">This month</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-year' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=this-year">This year</a>
                                             </div>
                                         </li>
                                         <!-- end of by date dropdown -->
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#!" id="bystatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="dw dw-analytics-11"></i> By Status</a>
                                             <div class="dropdown-menu" aria-labelledby="bystatus">
-                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request">>Show all</a>
+                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request">Show all</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=open">Open</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=processing">Processing</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'resolved' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=resolved">Resolved</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'closed' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=closed">Closed</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=open">Open</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=processing">Processing</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'resolved' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=resolved">Resolved</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'closed' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=closed">Closed</a>
                                             </div>
                                         </li>
                                         <!-- end of by status dropdown -->
@@ -241,89 +266,86 @@ $user_type = $_SESSION['user_type'];
                         </div>
                            
                
-                <div class="row">
-                <?php foreach ($results as $result){ ?>
-                    <div class="col-sm-6">
-                        <?php
-                        // Assign color class based on priority
-                        $color_class = '';
-                        switch ($result['priority']) {
-                            case 'Highest':
-                                $color_class = 'card-border-danger';
-                                break;
-                            case 'High':
-                                $color_class = 'card-border-warning';
-                                break;
-                            case 'Normal':
-                                $color_class = 'card-border-success';
-                                break;
-                            case 'Low':
-                                $color_class = 'card-border-primary';
-                                break;
-                            default:
-                                $color_class = 'card-border-primary';
-                        }
-                    
-                        ?>
-                        
-                        <div class="card-box <?php echo $color_class; ?>">
-                            <div class="card-header">
-                                <a href="#" class="card-title">#<?php echo $result['id']; ?>. <?php echo $result['subject']; ?> </a>
-                                <span class="label label-primary f-right"><?php echo date('d F, Y', strtotime($result['date_created'])); ?> </span>
-                            </div>
-                            <div class="card-block">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <p class="task-detail">
-                                            <?php
-                                            $description = htmlspecialchars_decode($result['description']);
-                                            $description = strip_tags($description);
-                                            $description = substr($description, 0, 250);
-                                            echo $description . (strlen($result['description']) > 250 ? '...' : '');
-                                            ?>
-                                        </p>
-                                    </div>
-                                    <!-- end of col-sm-8 -->
-                                </div>
-                                <!-- end of row -->
-                            </div>
-                            <div class="card-footer">
-                                <div class="task-list-table">
-                                        <p class="task-due" style="margin-top: 10px;"><strong> Due : </strong><?php echo $result['due_label']; ?></p>
-                                </div>
-                                <div class="priority-badge" style="background-color: <?php echo get_priority_color($result['priority']); ?>;">
-                                        <?php echo $result['priority']; ?>
-                                </div>
-                                <div class="task-board">
-                                       
-                                    <span class="status-label <?php echo getStatusClass($result['status']); ?>">
+              
+                    <div class="pb-20">
+					<table class="data-table table stripe hover nowrap">
+						<thead>
+							<tr>
+								<th class="table-plus">No</th>
+                                <th>Date Created</th>
+                                <th>Requestor</th>
+                                <th>Nature of Request</th>
+                                <th>Assigned to</th>
+                               <!--  <th>Due Time</th> -->
+                                <th>Status</th>
+								<th class="datatable-nosort">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+                        <?php foreach ($results as $result){ ?>
+							<tr>
+                                <td class="">
+                                    <?php
+                                    $formattedDate = date('y', strtotime($result['date_created']));
+                                    $formattedID = str_pad($result['id'], 4, '0', STR_PAD_LEFT);
+                                    echo $formattedDate . '-' . $formattedID;
+                                    ?>
+                                </td>
+                               
+                                <td class=""><?php echo date('d F, Y', strtotime($result['date_created'])); ?> </td>
+                                <td class=""><?php echo $result['customer_name']; ?></td>
+                                <td class="">
+                                <?php
+                                $requestAcronyms = [
+                                    'BA' => 'BILL ADJUSTMENT',
+                                    'SA' => 'SURCHARGE ADJUSTMENT',
+                                    'ADJ' => 'PAYMENT ADJUSTMENT',
+                                    'PTO' => 'PERMIT TO OCCUPY',
+                                    'PTC' => 'PERMIT TO CONSTRUCT',
+                                    'ATC' => 'AUTHORITY TO CONSTRUCT',
+                                ];
+
+                                echo isset($result['request']) ? $requestAcronyms[$result['request']] : '';
+                                ?></td>
+                                <td class=""><?php echo $result['department_name']; ?></td>
+                               <!--  <td class=""><?php echo $result['due_label']; ?></td> -->
+                                <td>  <span class="status-label <?php echo getStatusClass($result['status']); ?>">
                                         <?php echo getStatusText($result['status']); ?>
-                                    </span>
-                              
-                                    <!-- end of dropdown-secondary -->
-                                    <div class="dropdown">
-                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                            <i class="dw dw-list"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                            <a class="dropdown-item edit-ticket" id="<?php echo $result['id']; ?>"><i class="dw dw-edit"></i> Edit Ticket</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item view-ticket" id ="<?php echo $result['id']; ?>" role ="<?php echo $user_type; ?>"><i class="dw dw-eye"></i> View Ticket</a>
-                                     
-                                        </div>
+                                </span> </td>
+                                <td>
+                                <button class="btn btn-link font-24 p-0 line-height-1 no-arrow view-ticket" id="<?php echo $result['id']; ?>" create_date ="<?php $formattedDate = date('y', strtotime($result['date_created']));
+                                            $formattedID = str_pad($result['id'], 4, '0', STR_PAD_LEFT);
+                                            echo $formattedDate . '-' . $formattedID; ?>"><i class="dw dw-eye"></i>
+                                </button>
+                                <button class="btn btn-link font-24 p-0 line-height-1 no-arrow edit-ticket" id="<?php echo $result['id']; ?>" create_date ="<?php $formattedDate = date('y', strtotime($result['date_created']));
+                                    $formattedID = str_pad($result['id'], 4, '0', STR_PAD_LEFT);
+                                    echo $formattedDate . '-' . $formattedID; ?>"><i class="dw dw-edit"></i>
+                                </button>
+
+                                   <!--  <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                        <i class="dw dw-list"></i>
+                                    </a>
+                                    <?php echo $result['status'] == 0 ? 'Open' : ($result['status'] == 1 ? 'Processing' : ($result['status'] == 2 ? 'Resolved' : 'Closed')); ?>
+                                   
+                                    <div class="dropdown-menu" aria-labelledby="dropdown2" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut">
+                                        <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 0 ? 'active' : ''; ?>" href="#!" data-status="0" data-ticket-id="<?php echo $result['id']; ?>">Open</a>
+                                        <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 1 ? 'active' : ''; ?>" href="#!" data-status="1" data-ticket-id="<?php echo $result['id']; ?>">Processing</a>
+                                        <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 2 ? 'active' : ''; ?>" href="#!" data-status="2" data-ticket-id="<?php echo $result['id']; ?>">Resolved</a>
+                                        <a class="dropdown-status dropdown-item waves-light waves-effect <?php echo $result['status'] == 3 ? 'active' : ''; ?>" href="#!" data-status="3" data-ticket-id="<?php echo $result['id']; ?>">Closed</a>
                                     </div>
-                                  
-                                    <!-- end of seconadary -->
-                                </div>
-                                <!-- end of pull-right class -->
-                            </div>
-                            <!-- end of card-footer -->
-                        </div>
-                        <br>
-                    </div>
-                    <?php } ?>
-                </div>
+                                -->
+                                
+                               
+                                </td>
+                                <?php } ?>
+                            </tr>
+						</tbody>
+					</table>
+			    </div>
+                    
+                
             </div>
+            
     
 </div>
 
@@ -333,19 +355,43 @@ $user_type = $_SESSION['user_type'];
 <script>
     $(document).ready(function(){
 
-		$('.view-ticket').click(function(){
-			uni_modal_2("Request Details","service_request/ticket_details.php?id="+$(this).attr('id')+"&user_type="+$(this).attr('user_type'))
-		})
+        $('.view-ticket').click(function(){
+			uni_modal_ticket("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'),"large",true)
+        })
 
         $('#create-ticket').click(function(){
-			uni_modal("Request Details","service_request/new_request.php",'large')
+			uni_modal_ticket("New Request","service_request/new_request.php")
 		})
 
         $('.edit-ticket').click(function(){
-			uni_modal("Request Details","service_request/new_request.php?id="+$(this).attr('id'))
+			uni_modal_ticket("Edit Request No. "+ $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'))
 		})
 
     })
+
+    function update_request(id, ticket_status){
+		start_loader();
+		$.ajax({
+			url:_base_url_+"classes/Master.php?f=update_request",
+			method:"POST",
+			data:{id: id, ticket_status: ticket_status},
+			dataType:"json",
+			error:err=>{
+				console.log(err)
+				alert("An error occured.",'error');
+				end_loader();
+			},
+			success:function(resp){
+				if(typeof resp== 'object' && resp.status == 'success'){
+                    alert(resp.msg);
+					location.reload();
+				}else{
+					alert("An error occured.",'error');
+					end_loader();
+				}
+			}
+		})
+	}
 </script>
 <style>
 

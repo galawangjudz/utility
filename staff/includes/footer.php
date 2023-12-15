@@ -48,6 +48,44 @@
             }
         })
     }
+    window.uni_modal_ticket = function($title = '', $url = '', $size = "", hideFooter = false) {
+        start_loader();
+        $.ajax({
+            url: $url,
+            error: err => {
+                console.log();
+                alert("An error occurred");
+            },
+            success: function (resp) {
+                if (resp) {
+                    $('#uni_modal_ticket .modal-title').html($title);
+                    $('#uni_modal_ticket .modal-body').html(resp);
+
+                    // Conditionally hide the footer
+                    if (hideFooter) {
+                        $('#uni_modal_ticket .modal-footer').addClass('hidden-footer');
+                    } else {
+                        $('#uni_modal_ticket .modal-footer').removeClass('hidden-footer');
+                    }
+
+                    if ($size != '') {
+                        $('#uni_modal_ticket .modal-dialog').addClass($size + ' modal-dialog-centered');
+                    } else {
+                        $('#uni_modal_ticket .modal-dialog').removeAttr("class").addClass("modal-dialog modal-lg modal-dialog-centered");
+                    }
+                    $('#uni_modal_ticket').modal({
+                        show: true,
+                        backdrop: 'static',
+                        keyboard: false,
+                        focus: true
+                    });
+                    end_loader();
+                }
+            }
+        });
+    };
+
+   
     window.uni_modal_2 = function($title = '' , $url='',$size=""){
         start_loader()
         $.ajax({
@@ -76,6 +114,7 @@
             }
         })
     }
+
     window.uni_modal_payment = function($title = '' , $url='',$size=""){
         start_loader()
         $.ajax({
@@ -104,6 +143,7 @@
             }
         })
     }
+
     window.uni_modal_right = function($title = '' , $url='',$size=""){
         start_loader()
         $.ajax({

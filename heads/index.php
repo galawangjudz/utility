@@ -73,6 +73,24 @@
 			</div>
 			</div>
 		</div>
+		<div class="modal fade rounded-0" id="uni_modal_ticket" role='dialog'>
+			<div class="modal-dialog modal-md modal-dialog-centered rounded-0" role="document">
+			<div class="modal-content rounded-0">
+				<div class="modal-header rounded-0">
+				<h5 class="modal-title"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span class="fa fa-close"></span>
+				</button>
+			</div>
+			<div class="modal-body rounded-0">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-flat" id='submit' onclick="$('#uni_modal_ticket form').submit()">Save</button>
+				<button type="button" class="btn btn-secondary btn-flat" data-dismiss="modal">Cancel</button>
+			</div>
+			</div>
+			</div>
+		</div>
 		<div class="modal fade rounded-0" id="uni_modal_payment" role='dialog'>
 			<div class="modal-dialog modal-md modal-dialog-centered rounded-0" role="document">
 			<div class="modal-content rounded-0">

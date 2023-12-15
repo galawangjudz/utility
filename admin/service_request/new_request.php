@@ -29,7 +29,7 @@ require_once('../../includes/config.php');
     }
 
 ?>
-
+<body onload="handleFormChanges()">
 <div class="container-fluid">
   <form action="" id="request-form"> 
       <input type="hidden" name="id" value="<?php echo isset($ticket_id) ? $ticket_id : '' ?>">
@@ -171,14 +171,13 @@ require_once('../../includes/config.php');
     $('#accountto_row').hide();
     $('#transferto_row').hide();
     $('#gcf_edaterow').hide();
-               
+              
     function handleFormChanges() {
           // Hide all relevant rows
           $('#accountto_row').hide();
           $('#transferto_row').hide();
           $('#gcf_edaterow').hide();
           $('#amount_row').show();
-
           // Show/hide the relevant rows based on the selected option
           if($('#request').val() == 'ADJ') {
               $('#accountto_row').show();
@@ -190,11 +189,10 @@ require_once('../../includes/config.php');
           } else {
               // Add similar conditions for other options if needed
           }
-      }
+    }
 
       // Handle changes in the form initially
-      handleFormChanges();
-
+    handleFormChanges();
 
       $('#request').change(function(){
           // Reset the values of the input fields
@@ -215,7 +213,7 @@ require_once('../../includes/config.php');
 
 
  $(function(){
-        $('#uni_modal #request-form').submit(function(e){
+        $('#uni_modal_ticket #request-form').submit(function(e){
             e.preventDefault();
             var _this = $(this)
             $('.pop-msg').remove()
@@ -258,10 +256,18 @@ require_once('../../includes/config.php');
         })
     })
 
+    
+
 
 </script>
 
 <style>
+
+.hidden-footer {
+    display: none;
+}
+
+  
   .radio-inline,
   .border-checkbox-section .border-checkbox-group,
   .checkbox-color {

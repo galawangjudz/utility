@@ -6091,6 +6091,10 @@ a.close.disabled {
   overflow: scroll;
 }
 
+.hidden-footer {
+  display: none;
+}
+
 @media (min-width: 576px) {
   .modal-dialog {
     max-width: 500px;

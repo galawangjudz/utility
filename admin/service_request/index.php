@@ -357,20 +357,17 @@ while ($row = odbc_fetch_array($result)) {
     $(document).ready(function(){
 
 		$('.view-ticket').click(function(){
-			uni_modal_2("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id')+"&user_type="+$(this).attr('user_type'))
-		})
+			uni_modal_ticket("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'),"large",true)
+        })
 
         $('#create-ticket').click(function(){
-			uni_modal("New Request","service_request/new_request.php")
+			uni_modal_ticket("New Request","service_request/new_request.php")
 		})
 
         $('.edit-ticket').click(function(){
-			uni_modal("Edit Request No. "+ $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'))
+			uni_modal_ticket("Edit Request No. "+ $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'))
 		})
 
-       /*  $('.dropdown-status').click(function(){
-			uni_modal("Request Details","service_request/new_request.php?id="+$(this).attr('id'))
-		}) */
 
         $('.dropdown-status').click(function(){
             var id = $(this).attr('data-ticket-id');
@@ -408,7 +405,11 @@ while ($row = odbc_fetch_array($result)) {
 </script>
 <style>
 
-    
+
+.hidden-footer {
+  display: none;
+}
+
 
 .f-left {
   float: left;
