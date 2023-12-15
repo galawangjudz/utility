@@ -356,7 +356,7 @@ while ($row = odbc_fetch_array($result)) {
     $(document).ready(function(){
 
         $('.view-ticket').click(function(){
-			uni_modal_ticket("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'),"large",true)
+			uni_modal_ticket("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'),"",true)
         })
 
         $('#create-ticket').click(function(){
