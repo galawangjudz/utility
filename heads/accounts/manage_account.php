@@ -3,6 +3,7 @@ require_once('../../includes/config.php');
 
 if(isset($_GET['id'])){
 
+    
 
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
     $acc = $_GET['id'];
@@ -31,6 +32,7 @@ if(isset($_GET['id'])){
         $remarks = $res["c_remarks"];
         $email = $res["c_email"];
         $contact_no = $res["c_contact_no"];
+        $billing_method = $res["billing_method"];
         if ($remarks === '') {
             $remarks = "N/A";
         }
@@ -56,6 +58,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 ?>
 <div class="container-fluid">
+    <form action="" id="account-form">
         <h3><?php echo isset($c_location) ? $c_location : '' ?></h3>
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="row">
@@ -96,7 +99,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="date_applied" class="control-label">Date Applied *</label>
-                    <input type="date" name="date_applied" id="date_applied" class="form-control form-control-border" value ="<?php echo isset($date_applied) ? $date_applied : date('Y-m-d'); ?>"readonly required>
+                    <input type="date" name="date_applied" id="date_applied" class="form-control form-control-border" value ="<?php echo isset($date_applied) ? $date_applied : date('Y-m-d'); ?>" readonly>
                 
                 </div>
             </div>
@@ -105,19 +108,19 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 			<div class="col-md-4">
                 <div class="form-group">
                     <label for="fname" class="control-label">First Name  *</label>
-                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>"readonly required>
+                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="lname" class="control-label">Last Name  *</label>
-                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>"readonly required>
+                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="mname" class="control-label">Middle Name  *</label>
-                    <input type="text" name="mname" id="mname" class="form-control form-control-border" placeholder="Enter Middle Name" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>"readonly required>
+                    <input type="text" name="mname" id="mname" class="form-control form-control-border" placeholder="Enter Middle Name" value ="<?php echo isset($middle_name) ? $middle_name : '' ?>" readonly>
                 </div>
             </div>
         </div>
@@ -125,47 +128,72 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 			<div class="col-md-7">
                 <div class="form-group">
                     <label for="add" class="control-label">Address  *</label>
-                    <input type="text" name="add" id="add" class="form-control form-control-border" placeholder="Enter Address" value ="<?php echo isset($address) ? $address : '' ?>"readonly required>
+                    <input type="text" name="add" id="add" class="form-control form-control-border" placeholder="Enter Address" value ="<?php echo isset($address) ? $address : '' ?>" readonly>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="city_prov" class="control-label">City/ Province  *</label>
-                    <input type="text" name="city_prov" id="city_prov" class="form-control form-control-border" placeholder="Enter City/Prov" value ="<?php echo isset($city_prov) ? $city_prov : '' ?>"readonly required>
+                    <input type="text" name="city_prov" id="city_prov" class="form-control form-control-border" placeholder="Enter City/Prov" value ="<?php echo isset($city_prov) ? $city_prov : '' ?>" readonly>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="zip_code" class="control-label">Zip Code  *</label>
-                    <input type="text" name="zip_code" id="zip_code" class="form-control form-control-border" placeholder="Enter Zipcode" value ="<?php echo isset($zip_code) ? $zip_code : '' ?>"readonly required>
+                    <input type="text" name="zip_code" id="zip_code" class="form-control form-control-border" placeholder="Enter Zipcode" value ="<?php echo isset($zip_code) ? $zip_code : '' ?>" readonly>
                 </div>
             </div>
         </div>
 
         <div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
                 <div class="form-group">
                     <label for="lot_area" class="control-label">Lot Area  *</label>
-                    <input type="number" name="lot_area" id="lot_area" class="form-control form-control-border" placeholder="Enter Lot Area" value ="<?php echo isset($lot_area) ? $lot_area : 0 ?>"readonly required>
+                    <input type="number" name="lot_area" id="lot_area" class="form-control form-control-border" placeholder="Enter Lot Area" value ="<?php echo isset($lot_area) ? $lot_area : 0 ?>" readonly>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="type" class="control-label">Type  *</label>
-                    <select name="type" id="type" class="form-control form-control-border"readonly required>
+                    <select name="type" id="type" class="form-control form-control-border" readonly>
                         <option value="STL and MTF" <?= isset($type) && $type == 'STL and MTF' ? 'selected' : '' ?>>STL and MTF</option>
                         <option value="STL Only" <?= isset($type) && $type == 'STL Only' ? 'selected' : '' ?>>STL Only</option>
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="status" class="control-label">Status  *</label>
-                    <select name="status" id="status" class="form-control form-control-border"readonly required>
+                    <select name="status" id="status" class="form-control form-control-border" readonly>
                         <option value="Active" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Active</option>
                         <option value="Inactive" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Inactive</option>
                     </select>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="billing_method" class="control-label">Billing Method *</label>
+                    <?php
+                    $billing_method_label = '';
+
+                    switch ($billing_method) {
+                        case 1:
+                            $billing_method_label = 'Email';
+                            break;
+                        case 2:
+                            $billing_method_label = 'Text';
+                            break;
+                        case 3:
+                            $billing_method_label = 'Email & Text';
+                            break;
+                        default:
+                            $billing_method_label = 'Default/NULL';
+                    }
+                    ?>
+                    <input type="hidden" name= "billing_method" id="billing_method" class="form-control form-control-border" value="<?php echo isset($billing_method) ? $billing_method : ''; ?>" required>
+                    <input type="text" id="billing_method_label" class="form-control form-control-border" readonly value="<?php echo $billing_method_label; ?>" required>
                 </div>
             </div>
         </div>
@@ -174,14 +202,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
            
             <div class="col-md-4">
                 <div class="form-group">
-                <label for="mtf_end" class="control-label">MTF End Date </label>
-                <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('2030-01-01'); ?>"readonly required>
+                <label for="mtf_end" class="control-label">GCF End Date </label>
+                <input type="date" name="mtf_end" id="mtf_end" class="form-control form-control-border" value ="<?php echo isset($mtf_end) ? $mtf_end : date('2030-01-01'); ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="contact_no" class="control-label">Contact No</label>
-                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="<?php echo isset($contact_no) ? $contact_no : '' ?>" readonly>
+                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="<?php echo isset($contact_no) ? $contact_no : '' ?>"readonly>
                 </div>
             </div>
             <div class="col-md-4">

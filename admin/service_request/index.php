@@ -3,7 +3,7 @@
 $user_type = $_SESSION['user_type'];
 $user_dept = $_SESSION['dept'];
 
-echo $user_dept;
+
 
 $qry = "SELECT * FROM tbldepartments WHERE DepartmentShortName = ?";
 $result = odbc_prepare($conn2, $qry);
@@ -20,7 +20,7 @@ if (!$success) {
 
 while ($row = odbc_fetch_array($result)) {
     $dept_id = $row['id'];
-    echo $dept_id;
+  
 }
 
 ?>
@@ -121,7 +121,6 @@ while ($row = odbc_fetch_array($result)) {
                             </div>
                             <?php
                                 $status = isset($_GET['status']) ? $_GET['status'] : null;
-                                echo $status;
                                 $timeRange = isset($_GET['timeRange']) ? $_GET['timeRange'] : null;
 
                                 $query = "SELECT t.id, t.account_no, t.description, t.status, t.priority, c.firstname, c.lastname, t.date_created, t.request, c.firstname, c.lastname, d.DepartmentName
@@ -357,7 +356,7 @@ while ($row = odbc_fetch_array($result)) {
     $(document).ready(function(){
 
 		$('.view-ticket').click(function(){
-			uni_modal_ticket("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'),"large",true)
+			uni_modal_ticket("Request No. " + $(this).attr('create_date'),"service_request/new_request.php?id="+$(this).attr('id'),"",true)
         })
 
         $('#create-ticket').click(function(){

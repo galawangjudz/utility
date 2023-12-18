@@ -24,7 +24,7 @@ while ($row = odbc_fetch_array($result)) {
 }
 
 ?>
-<link rel="stylesheet" type="text/css" href="../admin/service_request/style.css">
+<link rel="stylesheet" type="text/css" href="../staff/service_request/style.css">
 <style>
     /*======= Card-Border-Top-color css starts  ======= */
 .card-border-primary {
@@ -234,26 +234,26 @@ while ($row = odbc_fetch_array($result)) {
                                                 <?php if (!$timeRange): ?>
                                                     <a class="dropdown-item active" href="#">Show all</a>
                                                 <?php else: ?>
-                                                    <a class="dropdown-item <?php echo (!$timeRange) ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request">Show all</a>
+                                                    <a class="dropdown-item <?php echo (!$timeRange) ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request">Show all</a>
                                                 <?php endif; ?>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item <?php echo $timeRange === 'today' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=today">Today</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'yesterday' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=yesterday">Yesterday</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-week' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=this-week">This week</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-month' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=this-month">This month</a>
-                                                <a class="dropdown-item <?php echo $timeRange === 'this-year' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&timeRange=this-year">This year</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'today' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=today">Today</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'yesterday' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=yesterday">Yesterday</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-week' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-week">This week</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-month' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-month">This month</a>
+                                                <a class="dropdown-item <?php echo $timeRange === 'this-year' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&timeRange=this-year">This year</a>
                                             </div>
                                         </li>
                                         <!-- end of by date dropdown -->
                                         <li class="nav-item dropdown">
                                             <a class="nav-link dropdown-toggle" href="#!" id="bystatus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="dw dw-analytics-11"></i> By Status</a>
                                             <div class="dropdown-menu" aria-labelledby="bystatus">
-                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request">Show all</a>
+                                                <a class="dropdown-item <?php echo !isset($_GET['status']) ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request">Show all</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=open">Open</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=processing">Processing</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'resolved' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=resolved">Resolved</a>
-                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'closed' ? 'active' : ''; ?>" href="<?php echo base_url?>admin/?page=service_request&status=closed">Closed</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'open' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=open">Open</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'processing' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=processing">Processing</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'resolved' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=resolved">Resolved</a>
+                                                <a class="dropdown-item <?php echo isset($_GET['status']) && $_GET['status'] === 'closed' ? 'active' : ''; ?>" href="<?php echo base_url?>staff/?page=service_request&status=closed">Closed</a>
                                             </div>
                                         </li>
                                         <!-- end of by status dropdown -->

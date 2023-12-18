@@ -238,59 +238,22 @@ if ($l_acct_no != ''){
 <script>
     $(document).ready(function(){
 
-
-        $('#create_new').click(function(){
-			uni_modal("Add New Account","accounts/manage_account.php",'mid-large')
-		})
         $('.soa_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
 		})
-		/* $('.stl_bill_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/stl_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
-		}) */
         $('.stl_bill_data').click(function(){
 			uni_modal_2("STL Due and Payment Details", "soa/statement_stl.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
-		/* $('.mtf_bill_data').click(function(){
-			uni_modal_2("Due and Payment Details", "soa/mtf_payment_record.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
-		}) */
+	
         $('.mtf_bill_data').click(function(){
 			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
-      
         $('.payment_data').click(function(){
 			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
-		})
-		$('.delete_data').click(function(){
-			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
 		})
 		$('.view_data').click(function(){
 			uni_modal("Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')
 		})
 
     })
-
-    function delete_account($id){
-		start_loader();
-		$.ajax({
-			url:_base_url_+"classes/Master.php?f=delete_account",
-			method:"POST",
-			data:{id: $id},
-			dataType:"json",
-			error:err=>{
-				console.log(err)
-				alert("An error occured.",'error');
-				end_loader();
-			},
-			success:function(resp){
-				if(typeof resp== 'object' && resp.status == 'success'){
-                    alert(resp.msg);
-					location.reload();
-				}else{
-					alert("An error occured.",'error');
-					end_loader();
-				}
-			}
-		})
-	}
 </script>

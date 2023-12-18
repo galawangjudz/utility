@@ -32,6 +32,7 @@ if(isset($_GET['id'])){
         $remarks = $res["c_remarks"];
         $email = $res["c_email"];
         $contact_no = $res["c_contact_no"];
+        $billing_method = $res["billing_method"];
         if ($remarks === '') {
             $remarks = "N/A";
         }
@@ -145,14 +146,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         </div>
 
         <div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
                 <div class="form-group">
                     <label for="lot_area" class="control-label">Lot Area  *</label>
                     <input type="number" name="lot_area" id="lot_area" class="form-control form-control-border" placeholder="Enter Lot Area" value ="<?php echo isset($lot_area) ? $lot_area : 0 ?>" required>
                 </div>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="type" class="control-label">Type  *</label>
                     <select name="type" id="type" class="form-control form-control-border" required>
@@ -161,13 +162,30 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="status" class="control-label">Status  *</label>
                     <select name="status" id="status" class="form-control form-control-border" required>
                         <option value="Active" <?= isset($status) && $status == 'Active' ? 'selected' : '' ?>>Active</option>
                         <option value="Inactive" <?= isset($status) && $status == 'Inactive' ? 'selected' : '' ?>>Inactive</option>
                     </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="billing_method" class="control-label">Billing Method</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_email" value="1" <?= isset($billing_method) && $billing_method == 1 ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="billing_method_email">Email</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_text" value="2" <?= isset($billing_method) && $billing_method == 2 ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="billing_method_text">Text</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_both" value="3" <?= isset($billing_method) && $billing_method == 3 ? 'checked' : '' ?>>
+                        <label class="form-check-label" for="billing_method_both">Both</label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -193,7 +211,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </div>
             </div>
         </div>
-       
+        
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">

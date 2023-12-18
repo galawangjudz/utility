@@ -105,6 +105,13 @@ Class Master{
 	
 		extract($_POST);
 		
+		if (empty($acc_no) || empty($fname) || empty($add) || empty($city_prov)) {
+			$resp['status'] = 'error';
+			$resp['msg'] = "Please fill in all required fields";
+			return json_encode($resp);
+			exit;
+		}
+
 		$site = substr($acc_no, 0, 3);
 		$blk = substr($acc_no, 3, 3);
 		$lot = substr($acc_no, 6, 2);
@@ -123,8 +130,8 @@ Class Master{
 			}
 		$pbl = sprintf("%s B-%d L-%d No. %d", $acronym, $blk, $lot, $no);
 		
-		$data = "c_account_no, c_site, c_block, c_lot, c_no, c_control_no, c_location, c_last_name, c_first_name, c_middle_name, c_address, c_city_prov, c_zipcode, c_status, c_remarks, c_date_applied, c_lot_area, c_types, c_end_date, c_email, c_contact_no";
-		$values = "'$acc_no', '$site','$blk', '$lot', '$no', '$ctr', '$pbl', '$lname', '$fname', '$mname', '$add', '$city_prov', '$zip_code', '$status', '$remarks', '$date_applied', '$lot_area', '$type', '$mtf_end', '$email_add', '$contact_no' ";
+		$data = "c_account_no, c_site, c_block, c_lot, c_no, c_control_no, c_location, c_last_name, c_first_name, c_middle_name, c_address, c_city_prov, c_zipcode, c_status, c_remarks, c_date_applied, c_lot_area, c_types, c_end_date, c_email, c_contact_no, billing_method";
+		$values = "'$acc_no', '$site','$blk', '$lot', '$no', '$ctr', '$pbl', '$lname', '$fname', '$mname', '$add', '$city_prov', '$zip_code', '$status', '$remarks', '$date_applied', '$lot_area', '$type', '$mtf_end', '$email_add', '$contact_no','$billing_method' ";
 		if (empty($id)) {
 			$data2 = "c_account_no, c_billed_up_to_date, c_due_date, c_balance, c_begin_balance , c_begin_date";
 			$values2 = "'$acc_no', '$date_applied','$date_applied','0.0','0.0','$date_applied'";
