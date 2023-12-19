@@ -317,10 +317,14 @@ while ($row = odbc_fetch_array($result)) {
                                             $formattedID = str_pad($result['id'], 4, '0', STR_PAD_LEFT);
                                             echo $formattedDate . '-' . $formattedID; ?>"><i class="dw dw-eye"></i>
                                 </button>
-                                <button class="btn btn-link font-24 p-0 line-height-1 no-arrow edit-ticket" id="<?php echo $result['id']; ?>" create_date ="<?php $formattedDate = date('y', strtotime($result['date_created']));
-                                    $formattedID = str_pad($result['id'], 4, '0', STR_PAD_LEFT);
-                                    echo $formattedDate . '-' . $formattedID; ?>"><i class="dw dw-edit"></i>
-                                </button>
+
+                                <?php
+                                if($result['status'] == 0):?>
+                                    <button class="btn btn-link font-24 p-0 line-height-1 no-arrow edit-ticket" id="<?php echo $result['id']; ?>" create_date ="<?php $formattedDate = date('y', strtotime($result['date_created']));
+                                        $formattedID = str_pad($result['id'], 4, '0', STR_PAD_LEFT);
+                                        echo $formattedDate . '-' . $formattedID; ?>"><i class="dw dw-edit"></i>
+                                    </button>
+                                <?php endif; ?>
 
                                    <!--  <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                         <i class="dw dw-list"></i>
