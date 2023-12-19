@@ -176,13 +176,21 @@ if (isset($_POST["update_image"])) {
 																	$row_staff = mysqli_fetch_array($query_staff);
 																	?>
 
-																	<?php
+																	<!-- <?php
 																	$query = mysqli_query($conn, "select * from tbldepartments");
 																	while ($row = mysqli_fetch_array($query)) {
 																		$selected = ($row['DepartmentShortName'] === $row_staff['Department']) ? 'selected' : '';
 																	?>
 																		<option value="<?php echo $row['DepartmentShortName']; ?>" <?php echo $selected; ?>><?php echo $row['DepartmentName']; ?></option>
-																	<?php } ?>
+																	<?php } ?> -->
+																	<?php
+																	$query = "select * from tbldepartments";
+																	$result = odbc_exec($conn2, $query);
+																	while ($row2 = odbc_fetch_array($result))  {
+																	?>
+																	<option value="<?php echo $row2['id']; ?>"><?php echo $row2['departmentname']; ?></option>
+																	<?php
+																	}?> 
 																</select>
 
 															</div>
