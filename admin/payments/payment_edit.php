@@ -1,5 +1,11 @@
 <?php
 require_once('../../includes/config.php');
+
+
+function format_num($number){
+    $decimals = 2; // Set the number of decimal places
+    return number_format($number, $decimals);
+}
 if(isset($_GET['id'])){
     $or_no = $_GET['data-car'];
     $query = "SELECT * from t_utility_payments where c_st_or_no = '".$or_no."' and c_account_no = ".$_GET['id'];
@@ -11,8 +17,8 @@ if(isset($_GET['id'])){
                 $account_no = $row['c_account_no'];
                 $pay_date = $row['c_st_pay_date'];
                 $l_car_no = $row['c_st_or_no'];
-                $amount = $row['c_st_amount_paid'];
-                $discount = $row['c_discount'];
+                $amount = format_num($row['c_st_amount_paid']);
+                $discount = format_num($row['c_discount']);
 
         endwhile;
     } else {
