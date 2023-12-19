@@ -174,17 +174,13 @@ if (isset($_POST["update_image"])) {
 																<label>Department</label>
 																<select name="department" class="custom-select form-control" required="true" autocomplete="off">
 																	<?php
-																	$query_staff = mysqli_query($conn, "select * from tblemployees join tbldepartments where emp_id = '$session_id'") or die(mysqli_error());
-																	$row_staff = mysqli_fetch_array($query_staff);
+																	$query = "select * from tbldepartments";
+																	$result = odbc_exec($conn2, $query);
+																	while ($row2 = odbc_fetch_array($result))  {
 																	?>
-
+																	<option value="<?php echo $row2['id']; ?>"><?php echo $row2['departmentname']; ?></option>
 																	<?php
-																	$query = mysqli_query($conn, "select * from tbldepartments");
-																	while ($row = mysqli_fetch_array($query)) {
-																		$selected = ($row['DepartmentShortName'] === $row_staff['Department']) ? 'selected' : '';
-																	?>
-																		<option value="<?php echo $row['DepartmentShortName']; ?>" <?php echo $selected; ?>><?php echo $row['DepartmentName']; ?></option>
-																	<?php } ?>
+																	}?> 
 																</select>
 															</div>
 														</div>

@@ -75,6 +75,8 @@ if(isset($_GET['id'])){
 						<option value="PA" <?php echo isset($meta['Department']) && $meta['Department'] == "PA" ? 'selected': '' ?>>Project Admin</option>
 						<option value="TSR"<?php echo isset($meta['Department']) && $meta['Department'] == "TSR" ? 'selected': '' ?>>Treasury</option>
 						<option value="CSPV"<?php echo isset($meta['Department']) && $meta['Department'] == "CSPV" ? 'selected': '' ?>>Cashier Supervisor</option>
+						<option value="FIN"<?php echo isset($meta['Department']) && $meta['Department'] == "FIN" ? 'selected': '' ?>>Finance</option>
+						<option value="ENGR"<?php echo isset($meta['Department']) && $meta['Department'] == "ENGR" ? 'selected': '' ?>>Engineering</option>
 					</select>
 				</div>
 				<div class="form-group">
