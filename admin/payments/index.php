@@ -508,10 +508,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             <input type="date" name="check_date" id="check_date" class="form-control form-control-border">
                         </div>
                     </td>
-                    <td class="col-md-4">
+                    <td class="col-md-2">
                         <div class="form-group">
                             <label for="branch" class="control-label"><b>Branch: </b></label>
-                            <select name="branch" id="branch" class="form-control form-control-border" style="text-align: center;">
+                            <select name="branch" id="branch" class="form-control form-control-border custom" style="text-align: center;">
                                 <option value="" selected>--SELECT BANK--</option>
                                 <option value="BPI">BPI</option>
                                 <option value="BDO">BDO</option>
@@ -602,7 +602,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
     
     function printInputData() {
-       
+        var mp = document.getElementById("mode_payment").value;
         var mainAmountPaid = parseFloat(document.getElementById("main_amount_paid").value);
         var stlAmountPaid = parseFloat(document.getElementById("stl_amount_paid").value);
         var totalPaid =mainAmountPaid + stlAmountPaid;
@@ -633,7 +633,25 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
        
         printWindow.document.write('.stl { margin: 100px -195px; position:absolute; }');
 
-        printWindow.document.write('.mtf { margin: 100px -195px; position:absolute; }');
+        printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
+
+        if (mp === "1") {
+            printWindow.document.write('.mp { margin: 280px -130px; position:absolute; width:200px;}');
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no {display:none;}');
+            printWindow.document.write('.branch {display:none;}');
+        } else if(mp === "2") {
+            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date { margin: 320px -50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no {display:none;}');
+        }else{
+            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch {display:none;}');
+        }
+        
 
         printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 260px 240px; width:300px; position:absolute; }');
@@ -644,7 +662,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.stl-amt { text-align:right; position:absolute; }');
 
         printWindow.document.write('.stl_amount_pay { disabled:disabled; }');
-
+        
         if (mainAmountPaid === 0 && stlAmountPaid !== 0) {
             printWindow.document.write('.mtf { display: none; }');
             printWindow.document.write('.stl { display: block; }');
@@ -693,6 +711,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<tr><td>GCF Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_paid").value)) + '</td></tr>');
         printWindow.document.write('</table>');
 
+        printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
+        printWindow.document.write('<p class="branch">Bank Branch: ' + document.getElementById("branch").value + '</p>');
+        printWindow.document.write('<p class="ref_no">Reference No. : ' + document.getElementById("ref_no").value + '</p>');
+
         printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
 
@@ -702,9 +725,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.close();
         printWindow.print();
         printWindow.close();
-        }
-
-
+    }
 
     document.getElementById("printDataButton").addEventListener("click", printInputData);
 </script>
@@ -886,28 +907,28 @@ function compute_total_amt_paid(){
 </script>
 
 <script>
-document.getElementById('mode_payment').addEventListener('change', function() {
+    document.getElementById('mode_payment').addEventListener('change', function() {
     var checkDetails = document.getElementById('check_details');
     var refNoDetails = document.getElementById('ref_no_details');
-    var checkDateInput = document.getElementById('check_date'); // Get the Check Date input element
-    var branchInput = document.getElementById('branch'); // Get the Branch input element
+    var checkDateInput = document.getElementById('check_date'); 
+    var branchInput = document.getElementById('branch'); 
 
 
-    if (this.value === '1' || this.value === '3') { // '1' represents 'Cash', '3' represents 'Gcash/Online'
+    if (this.value === '1' || this.value === '3') { 
         branchInput.value = null;
     }
 
-    if (this.value === '2') { // '2' represents 'Check'
+    if (this.value === '2') { 
         checkDetails.style.display = 'block';
         refNoDetails.style.display = 'none';
-            // Set the value to today's date when Check Date is displayed
+           
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
         var yyyy = today.getFullYear();
         today = yyyy + '-' + mm + '-' + dd;
         checkDateInput.value = today;
-    } else if (this.value === '3') { // '3' represents 'Gcash/Online'
+    } else if (this.value === '3') { 
         checkDetails.style.display = 'none';
         refNoDetails.style.display = 'block';
         checkDateInput.value = null;
