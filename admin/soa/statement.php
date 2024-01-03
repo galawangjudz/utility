@@ -447,7 +447,8 @@ function format_num($number){
 
                         <tr>
                             
-                        </tr>
+
+
                         <tr><td></td></tr>
                         <tr><td></td></tr>
                         <tr>
