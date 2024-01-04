@@ -280,8 +280,8 @@ function format_num($number){
     </div>
 
     <div class="col-md-12">
-            <div class="form-group">
-                <table style="width:100%;">
+            <div class="form-group" style="overflow:auto;">
+                <table style="width:100%;max-width:100%;">
                     <tr>
                         <?php 
                          $summary = "SELECT 
@@ -354,13 +354,13 @@ function format_num($number){
                         ?> 
                         <hr>
                       
-                        <td style="font-size:12px;"><label for="tot_bill" class="control-label">GCF Total Bill: </label>
+                        <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">GCF Total Bill: </label>
                         <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_mtf_bill) ? format_num($total_mtf_bill): 0; ?>" disabled></td>
-                        <td style="font-size:12px;"><label for="tot_paid" class="control-label">GCF Total Paid: </label>
+                        <td style="font-size:12px;"><label for="tot_paid" class="control-label" style="font-weight:bold;">GCF Total Paid: </label>
                         <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_mtf_paid) ? format_num($total_mtf_paid): 0; ?>" disabled></td>
-                        <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">GCF Total Discount: </label>
+                        <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label" style="font-weight:bold;">GCF Total Discount: </label>
                         <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_mtf_disc) ? format_num($total_mtf_disc): 0; ?>" disabled></td>
-                        <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>GCF Balance:</b></label>
+                        <td style="font-size:12px;"><label for="tot_amt_due" class="control-label" style="font-weight:bold;"><b>GCF Balance:</b></label>
                         <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
                   
                     </tr>
@@ -393,6 +393,15 @@ function format_num($number){
     opacity: 1;
     transform: translateY(0);
     margin-left:70%;
+}
+
+.form-control-sm {
+    max-width: 150px; 
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: break-word; 
+    background-color: transparent;
+    border:none;
 }
    
 </style>

@@ -48,6 +48,14 @@ require_once('../../includes/config.php');
         td{
             font-weight:normal;
         }
+        .form-control-sm {
+            max-width: 150px; 
+            overflow: hidden;
+            white-space: nowrap;
+            word-wrap: break-word; 
+            background-color: transparent;
+            border:none;
+        }
 
     </style>
 </head>

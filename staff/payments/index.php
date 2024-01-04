@@ -52,6 +52,7 @@ if(isset($_GET['id'])){
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {
         $l_ddate = "1990-01-01";
+        $l_sdate = "";
     }else{
         while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y-m-d", strtotime($due['c_end_date']));
@@ -63,8 +64,11 @@ if(isset($_GET['id'])){
             $l_prev_bal = $due['c_prev_balance'];
         }
     }
+    $mainte_edate =  date("M Y", strtotime($l_sdate));
     $mainte_due = $l_ddate;
 
+
+    $l_gcf_status = date("M Y", strtotime($l_sdate));
     $load_mtf_bill = "SELECT SUM(c_amount_due) as c_total_mtf from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%MTF%%'" ;
     $mtf_result = odbc_exec($conn2, $load_mtf_bill);
     if ($mtf_result) {
@@ -77,6 +81,14 @@ if(isset($_GET['id'])){
         } else {
             // No MTF records found
             $l_mtf_due = 0;
+            $start_qry = "SELECT c_start_date from t_utility_bill where  c_account_no = '$l_acc_no' and (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') ORDER BY c_start_date DESC limit 1";
+            $gcf_start = odbc_exec($conn2, $start_qry);
+            if ($gcf_start) {
+                $gcfresult = odbc_fetch_array($gcf_start);
+                if ($gcfresult) {
+                    $l_gcf_status = date("M Y", strtotime($gcfresult['c_start_date']));
+                }
+            }
         }
     } else {
         // Error executing the query
@@ -92,9 +104,45 @@ if(isset($_GET['id'])){
         if ($row) {
             // Access the total MTF payment amount
             $l_mtf_payment = $row['c_total_mtf_payment'];
+           
+            $check_cover = "SELECT sum(c_amount_due) as gcf_tot_due from t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF')";
+            $gcf_total_due = odbc_exec($conn2, $check_cover);
+            if ($gcf_total_due) {
+                $gcf_tot_bill = odbc_fetch_array($gcf_total_due);
+                $l_gcf_tot_due = $gcf_tot_bill['gcf_tot_due'];
+               
+                if ($l_mtf_payment == $l_gcf_tot_due):
+                    $l_gcf_status = "UPDATED";
+                elseif($l_mtf_payment > $l_gcf_tot_due):
+                    $l_gcf_status = "OVER PAYMENT";
+                else:
+                    $qry_gcf_period = "SELECT * FROM t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'MTF' or c_bill_type = 'DLQ_MTF') order by c_start_date ASC";
+                    $gcf_period = odbc_exec($conn2, $qry_gcf_period);
+                    $quiboloy = 0;
+                    $gcf_tot_period = 0;
+                    if ($gcf_total_due) {
+                        while ($due = odbc_fetch_array($gcf_period)){
+                            $l_amount = $due['c_amount_due'];
+                            $gcf_tot_period += $l_amount;
+                            
+                            if ($l_mtf_payment < $gcf_tot_period && $quiboloy == 0) {
+                                $l_gcf_status = date("M Y", strtotime($due['c_start_date']));
+                                $quiboloy = 1;
+                                break;
+                            } else {
+                                
+                            }
+                        }
+                    }
+
+                endif;
+
+            }
+
         } else {
             // No MTF payment records found
             $l_mtf_payment = 0;
+            
         }
     } else {
         // Error executing the query
@@ -103,7 +151,7 @@ if(isset($_GET['id'])){
 
     $mainte_bal = $l_mtf_due - $l_mtf_payment;
     
-
+   
 
 
 $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') ORDER BY c_start_date DESC limit 1";
@@ -111,6 +159,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
     $due_count = odbc_num_rows($result);
     if ($due_count == 0) {
         $l_ddate = "1990-01-01";
+        $l_sdate = "";
     }else{
         while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y-m-d", strtotime($due['c_end_date']));
@@ -122,6 +171,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_prev_bal = $due['c_prev_balance'];
         }
     }
+    $street_edate =  date("M Y", strtotime($l_sdate));
     $street_due = $l_ddate;
 
     $load_stl_bill = "SELECT SUM(c_amount_due) as c_total_stl from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%STL%%'" ;
@@ -133,6 +183,14 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_stl_due = $row['c_total_stl'];
         } else {
             $l_stl_due = 0;
+            $start_qry2 = "SELECT c_start_date from t_utility_bill where  c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') ORDER BY c_start_date DESC limit 1";
+            $stl_start = odbc_exec($conn2, $start_qry2);
+            if ($stl_start) {
+                $stlresult = odbc_fetch_array($stl_start);
+                if ($stlresult) {
+                    $l_stl_status =  date("M Y", strtotime($stlresult['c_start_date']));
+                }
+            }
         }
     } else {
         echo "Error: " . odbc_errormsg($conn2);
@@ -147,6 +205,42 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
         if ($row) {
             // Access the total STL payment amount
             $l_stl_payment = $row['c_total_stl_payment'];
+            $check_cover2 = "SELECT sum(c_amount_due) as stl_tot_due from t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL')";
+            $stl_total_due = odbc_exec($conn2, $check_cover2);
+            if ($stl_total_due) {
+                $stl_tot_bill = odbc_fetch_array($stl_total_due);
+                $l_stl_tot_due = $stl_tot_bill['stl_tot_due'];
+               
+                if ($l_stl_payment == $l_stl_tot_due):
+                    $l_stl_status = "UPDATED";
+                elseif($l_stl_payment > $l_stl_tot_due):
+                    $l_stl_status = "OVER PAYMENT";
+                else:
+                    $qry_stl_period = "SELECT * FROM t_utility_bill where c_account_no = '$l_acc_no' and (c_bill_type = 'STL' or c_bill_type = 'DLQ_STL') order by c_start_date ASC";
+                    $stl_period = odbc_exec($conn2, $qry_stl_period);
+                    $quiboloy1 = 0;
+                    $stl_tot_period = 0;
+                    if ($stl_total_due) {
+                        while ($due = odbc_fetch_array($stl_period)){
+                            $l_amount2 = $due['c_amount_due'];
+                            $stl_tot_period += $l_amount2;
+                            
+                            if ($l_stl_payment < $stl_tot_period && $quiboloy1 == 0) {
+                                $l_stl_status = date("M Y", strtotime($due['c_start_date']));
+                                $quiboloy1 = 1;
+                                break;
+                            } else {
+                                
+                            }
+                        }
+                    }
+
+                endif;
+
+            }
+
+
+
         } else {
             // No stl payment records found
             $l_stl_payment = 0;
@@ -206,6 +300,20 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
     $mainte_prev =  ($mainte_bal - $l_mtf_cur - $l_mtf_sur);
 
     $stl_prev = ($stl_bal - $l_stl_cur - $l_stl_sur);  
+
+
+   
+    if ($l_gcf_status == "UPDATED" || $l_gcf_status == "OVERPAYMENT"){
+        $l_gcf_status =  $l_gcf_status ;
+    }else{
+        $l_gcf_status = $l_gcf_status . " to " . $mainte_edate;
+    }
+
+    if ($l_stl_status == "UPDATED" || $l_stl_status == "OVERPAYMENT"){
+        $l_stl_status =  $l_stl_status ;
+    }else{
+        $l_stl_status = $l_stl_status . " to " . $street_edate;
+    }
 }
 
 
@@ -275,7 +383,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="stl_date" class="control-label">STL Due Date: </label></td>
+                        <td><label for="stl_date" class="control-label">STL Due Date: <br><span style="color: red;"><?php echo $l_stl_status; ?></span> </label></td>
                         <td><input type="date" name="stl_date" id="stl_date" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
@@ -301,7 +409,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_date" class="control-label">GCF Due Date: </label></td>
+                        <td><label for="main_date" class="control-label">GCF Due Date: <br><span style="color: red;"><?php echo $l_gcf_status; ?></span></label></td>
                         <td><input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
@@ -402,10 +510,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             <input type="date" name="check_date" id="check_date" class="form-control form-control-border">
                         </div>
                     </td>
-                    <td class="col-md-4">
+                    <td class="col-md-2">
                         <div class="form-group">
                             <label for="branch" class="control-label"><b>Branch: </b></label>
-                            <select name="branch" id="branch" class="form-control form-control-border" style="text-align: center;">
+                            <select name="branch" id="branch" class="form-control form-control-border custom" style="text-align: center;">
                                 <option value="" selected>--SELECT BANK--</option>
                                 <option value="BPI">BPI</option>
                                 <option value="BDO">BDO</option>
@@ -496,7 +604,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
     
     function printInputData() {
-       
+        var mp = document.getElementById("mode_payment").value;
         var mainAmountPaid = parseFloat(document.getElementById("main_amount_paid").value);
         var stlAmountPaid = parseFloat(document.getElementById("stl_amount_paid").value);
         var totalPaid =mainAmountPaid + stlAmountPaid;
@@ -527,7 +635,25 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
        
         printWindow.document.write('.stl { margin: 100px -195px; position:absolute; }');
 
-        printWindow.document.write('.mtf { margin: 100px -195px; position:absolute; }');
+        printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
+
+        if (mp === "1") {
+            printWindow.document.write('.mp { margin: 280px -130px; position:absolute; width:200px;}');
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no {display:none;}');
+            printWindow.document.write('.branch {display:none;}');
+        } else if(mp === "2") {
+            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date { margin: 320px -50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no {display:none;}');
+        }else{
+            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch {display:none;}');
+        }
+        
 
         printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 260px 240px; width:300px; position:absolute; }');
@@ -538,7 +664,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.stl-amt { text-align:right; position:absolute; }');
 
         printWindow.document.write('.stl_amount_pay { disabled:disabled; }');
-
+        
         if (mainAmountPaid === 0 && stlAmountPaid !== 0) {
             printWindow.document.write('.mtf { display: none; }');
             printWindow.document.write('.stl { display: block; }');
@@ -587,6 +713,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<tr><td>GCF Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_paid").value)) + '</td></tr>');
         printWindow.document.write('</table>');
 
+        printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
+        printWindow.document.write('<p class="branch">Bank Branch: ' + document.getElementById("branch").value + '</p>');
+        printWindow.document.write('<p class="ref_no">Reference No. : ' + document.getElementById("ref_no").value + '</p>');
+
         printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
 
@@ -596,9 +727,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.close();
         printWindow.print();
         printWindow.close();
-        }
-
-
+    }
 
     document.getElementById("printDataButton").addEventListener("click", printInputData);
 </script>
@@ -753,7 +882,7 @@ function compute_total_amt_paid(){
                 success:function(resp){
                     if(resp.status == 'success'){
                         setTimeout(()=>{
-                            //printInputData()
+                            printInputData()
                             end_loader();
                             location.reload();
                             /*  location.replace('./?page=admin/index.php&id='+resp.id_encrypt) */
@@ -780,28 +909,28 @@ function compute_total_amt_paid(){
 </script>
 
 <script>
-document.getElementById('mode_payment').addEventListener('change', function() {
+    document.getElementById('mode_payment').addEventListener('change', function() {
     var checkDetails = document.getElementById('check_details');
     var refNoDetails = document.getElementById('ref_no_details');
-    var checkDateInput = document.getElementById('check_date'); // Get the Check Date input element
-    var branchInput = document.getElementById('branch'); // Get the Branch input element
+    var checkDateInput = document.getElementById('check_date'); 
+    var branchInput = document.getElementById('branch'); 
 
 
-    if (this.value === '1' || this.value === '3') { // '1' represents 'Cash', '3' represents 'Gcash/Online'
+    if (this.value === '1' || this.value === '3') { 
         branchInput.value = null;
     }
 
-    if (this.value === '2') { // '2' represents 'Check'
+    if (this.value === '2') { 
         checkDetails.style.display = 'block';
         refNoDetails.style.display = 'none';
-            // Set the value to today's date when Check Date is displayed
+           
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
         var yyyy = today.getFullYear();
         today = yyyy + '-' + mm + '-' + dd;
         checkDateInput.value = today;
-    } else if (this.value === '3') { // '3' represents 'Gcash/Online'
+    } else if (this.value === '3') { 
         checkDetails.style.display = 'none';
         refNoDetails.style.display = 'block';
         checkDateInput.value = null;

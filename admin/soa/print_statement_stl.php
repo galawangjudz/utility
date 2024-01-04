@@ -48,6 +48,14 @@ require_once('../../includes/config.php');
         td{
             font-weight:normal;
         }
+        .form-control-sm {
+            max-width: 150px; 
+            overflow: hidden;
+            white-space: nowrap;
+            word-wrap: break-word; 
+            background-color: transparent;
+            border:none;
+        }
 
     </style>
 </head>
@@ -382,13 +390,13 @@ if(isset($_GET['id'])){
                                 ?> 
                                 <hr>
                             
-                                <td style="font-size:12px;"><label for="tot_bill" class="control-label">STL Total Due: </label>
+                                <td style="font-size:12px;"><label for="tot_bill" class="control-label"><b>STL Total Due: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
-                                <td style="font-size:12px;"><label for="tot_sur" class="control-label">STL Total Surcharge: </label>
+                                <td style="font-size:12px;"><label for="tot_sur" class="control-label"><b>STL Total Surcharge: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_stl_sur) ? format_num($total_stl_sur): 0; ?>" disabled></td>
-                                <td style="font-size:12px;"><label for="tot_paid" class="control-label">STL Total Paid: </label>
+                                <td style="font-size:12px;"><label for="tot_paid" class="control-label"><b>STL Total Paid: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
-                                <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">STL Total Discount: </label>
+                                <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label"><b>STL Total Discount: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td>
                                 <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>STL Balance:</b></label>
                                 <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>

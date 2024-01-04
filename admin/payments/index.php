@@ -67,6 +67,8 @@ if(isset($_GET['id'])){
     $mainte_edate =  date("M Y", strtotime($l_sdate));
     $mainte_due = $l_ddate;
 
+
+    $l_gcf_status = date("M Y", strtotime($l_sdate));
     $load_mtf_bill = "SELECT SUM(c_amount_due) as c_total_mtf from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%MTF%%'" ;
     $mtf_result = odbc_exec($conn2, $load_mtf_bill);
     if ($mtf_result) {
