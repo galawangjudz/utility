@@ -1,18 +1,18 @@
 <?php 
 require_once('../../includes/config.php');
+include "../includes/header.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<html lang="en">
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet"> -->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,11 +63,9 @@ require_once('../../includes/config.php');
 function format_num($number){
        return number_format($number,2);
 }
-
-
 ?>
 
-<?php include "../includes/header.php" ?>
+
 <?php
 
 if(isset($_GET['id'])){
@@ -303,18 +301,18 @@ if(isset($_GET['id'])){
                         </colgroup>
                         <thead>
                             <tr>
-                                <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
+                                <th style="text-align:left;font-size:13px;">COVER PERIOD</th>
                                 <th style="text-align:center;font-size:13px;">DUE DATE</th>
                                 <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                                <th style="text-align:center;font-size:13px;">GCF FEE</th>
-                                <th style="text-align:center;font-size:13px;">GCF SUR.</th>
-                                <th style="text-align:center;font-size:13px;">STL FEE</th>
-                                <th style="text-align:center;font-size:13px;">STL SUR.</th>
-                                <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
-                                <th style="text-align:center;font-size:13px;">DISCOUNT</th>
+                                <th style="text-align:right;font-size:13px;">GCF FEE</th>
+                                <th style="text-align:right;font-size:13px;">GCF SUR.</th>
+                                <th style="text-align:right;font-size:13px;">STL FEE</th>
+                                <th style="text-align:right;font-size:13px;">STL SUR.</th>
+                                <th style="text-align:right;font-size:13px;">AMOUNT PAID</th>
+                                <th style="text-align:right;font-size:13px;">DISCOUNT</th>
                                 <th style="text-align:center;font-size:13px;">OR #</th>
                                 <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
-                                <th style="text-align:center;font-size:13px;">BALANCE</th>
+                                <th style="text-align:right;font-size:13px;">BALANCE</th>
                             </tr>
                         </thead>
                         <tbody>
