@@ -5,14 +5,14 @@ require_once('../../includes/config.php');
 <html lang="en">
 <html lang="en">
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet"> -->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,6 +47,14 @@ require_once('../../includes/config.php');
         }
         td{
             font-weight:normal;
+        }
+        .form-control-sm {
+            max-width: 150px; 
+            overflow: hidden;
+            white-space: nowrap;
+            word-wrap: break-word; 
+            background-color: transparent;
+            border:none;
         }
 
     </style>
@@ -254,7 +262,7 @@ if(isset($_GET['id'])){
                             </colgroup>
                             <thead> 
                                 <tr>
-                                    <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
+                                    <th style="text-align:left;font-size:13px;">COVER PERIOD</th>
                                     <th style="text-align:center;font-size:13px;">DUE DATE</th>
                                     <th style="text-align:center;font-size:13px;">PAY DATE</th>
                                     <th style="text-align:center;font-size:13px;">STL AMOUNT DUE</th>
@@ -262,7 +270,7 @@ if(isset($_GET['id'])){
                                     <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
                                     <th style="text-align:center;font-size:13px;">DISCOUNT</th>
                                     <th style="text-align:center;font-size:13px;">OR #</th>
-                                    <th style="text-align:center;font-size:13px;">BALANCE</th>
+                                    <th style="text-align:right;font-size:13px;">BALANCE</th>
                                     
                                 </tr>
                             </thead>
@@ -382,13 +390,13 @@ if(isset($_GET['id'])){
                                 ?> 
                                 <hr>
                             
-                                <td style="font-size:12px;"><label for="tot_bill" class="control-label">STL Total Due: </label>
+                                <td style="font-size:12px;"><label for="tot_bill" class="control-label"><b>STL Total Due: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
-                                <td style="font-size:12px;"><label for="tot_sur" class="control-label">STL Total Surcharge: </label>
+                                <td style="font-size:12px;"><label for="tot_sur" class="control-label"><b>STL Total Surcharge: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_stl_sur) ? format_num($total_stl_sur): 0; ?>" disabled></td>
-                                <td style="font-size:12px;"><label for="tot_paid" class="control-label">STL Total Paid: </label>
+                                <td style="font-size:12px;"><label for="tot_paid" class="control-label"><b>STL Total Paid: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
-                                <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label">STL Total Discount: </label>
+                                <td style="font-size:12px;"><label for="tot_stl_disc" class="control-label"><b>STL Total Discount: </b></label>
                                 <input type="text" class= "form-control-sm" name="tot_stl_disc" id="tot_stl_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td>
                                 <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>STL Balance:</b></label>
                                 <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
