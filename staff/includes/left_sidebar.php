@@ -29,7 +29,7 @@
 					</li>
 					<li>
 						<a href="<?php echo base_url ?>staff/?page=get-soa" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-calendar1"></span><span class="mtext">Bill Report</span>
+							<span class="micon dw dw-calendar1"></span><span class="mtext">Bill Report (E-SOA)</span>
 						</a>
 					</li>
 					<?php if ($_SESSION['user_type'] == 'Cashier'): ?>
