@@ -528,6 +528,8 @@ if(isset($_GET['id'])){
 .even-row {
     background-color: #ffffff; /* You can set your desired background color */
 }
+
+
 </style>
 <script type="text/javascript">
 	function PrintPage() {

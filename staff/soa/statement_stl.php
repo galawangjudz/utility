@@ -394,5 +394,13 @@ function format_num($number){
     transform: translateY(0);
     margin-left:70%;
 }
+.form-control-sm {
+    max-width: 150px; 
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: break-word; 
+    background-color: transparent;
+    border:none;
+}
    
 </style>

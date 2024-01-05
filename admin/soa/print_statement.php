@@ -56,6 +56,8 @@ include "../includes/header.php";
             background-color: transparent;
             border:none;
         }
+       
+        
     </style>
 </head>
 <?php 
