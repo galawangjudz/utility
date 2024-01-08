@@ -5,14 +5,14 @@ require_once('../../includes/config.php');
 <html lang="en">
 <html lang="en">
 <head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Armata&display=swap" rel="stylesheet"> -->
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +48,14 @@ require_once('../../includes/config.php');
         td{
             font-weight:normal;
         }
-
+        .form-control-sm {
+            max-width: 150px; 
+            overflow: hidden;
+            white-space: nowrap;
+            word-wrap: break-word; 
+            background-color: transparent;
+            border:none;
+        }
     </style>
 </head>
 <?php 
@@ -135,7 +142,7 @@ if(isset($_GET['id'])){
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                          /*       WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                            /*     WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
                                 WHEN UPPER(c_st_or_no) LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
@@ -254,7 +261,7 @@ if(isset($_GET['id'])){
                 <h6 style="margin-top:-25px;margin-left:65px;font-weight:normal;font-size:16px;"><b>OVERDUE AMOUNT AND LAST PAYMENT RECORDS</b></h6>
 
                     <div class="container" style="margin-top:15px;">
-                        <div class="buyer_info">
+                        <div class="buyer_info" style="overflow:auto;">
                             <table style="font-size:13px;width:99.5%;border:solid 1px black;">
                                 <tr>
                                     <th style="padding-left:5px;width:150px;text-align:left;">Account No. : </th><td style="text-align:left;"><?php echo $l_acc_no; ?>
@@ -430,31 +437,31 @@ if(isset($_GET['id'])){
                         ?> 
                     <hr>
                         <tr>
-                            <td style="font-size:12px;"><label for="tot_bill" class="control-label">GCF Total Due: </label>
+                            <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">GCF Total Due: </label>
                             <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_mtf_bill) ? format_num($total_mtf_bill): 0; ?>" disabled></td>
-                            <td style="font-size:12px;"><label for="gcf_sur" class="control-label">GCF Total Surcharge: </label>
+                            <td style="font-size:12px;"><label for="gcf_sur" class="control-label" style="font-weight:bold;">GCF Total Surcharge: </label>
                             <input type="text" class= "form-control-sm" name="gcf_sur" id="gcf_sur" value="<?php echo isset($total_mtf_sur) ? format_num($total_mtf_sur): 0; ?>" disabled></td>
                           
-                            <td style="font-size:12px;"><label for="tot_paid" class="control-label">GCF Total Paid: </label>
+                            <td style="font-size:12px;"><label for="tot_paid" class="control-label" style="font-weight:bold;">GCF Total Paid: </label>
                             <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_mtf_paid) ? format_num($total_mtf_paid): 0; ?>" disabled></td> 
-                            <td style="font-size:12px;"><label for="tot_disc" class="control-label">GCF Total Discount: </label>
+                            <td style="font-size:12px;"><label for="tot_disc" class="control-label" style="font-weight:bold;">GCF Total Discount: </label>
                             <input type="text" class= "form-control-sm" name="tot_disc" id="tot_disc" value="<?php echo isset($total_mtf_disc) ? format_num($total_mtf_disc): 0; ?>" disabled></td>     
                             
-                            <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"><b>GCF Remaining Balance:</b></label>
+                            <td style="font-size:12px;"><label for="tot_amt_due" class="control-label" style="font-weight:bold;"><b>GCF Remaining Balance:</b></label>
                             <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
                         </tr>
                         
                         <tr>   
-                            <td style="font-size:12px;"><label for="tot_bill" class="control-label">STL Total Due: </label>
+                            <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">STL Total Due: </label>
                             <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
-                            <td style="font-size:12px;"><label for="stl_sur" class="control-label">STL Total Surcharge: </label>
+                            <td style="font-size:12px;"><label for="stl_sur" class="control-label" style="font-weight:bold;">STL Total Surcharge: </label>
                             <input type="text" class= "form-control-sm" name="stl_sur" id="stl_sur" value="<?php echo isset($total_stl_sur) ? format_num($total_stl_sur): 0; ?>" disabled></td>
                         
-                            <td style="font-size:12px;"><label for="tot_paid" class="control-label">STL Total Paid: </label>
+                            <td style="font-size:12px;"><label for="tot_paid" class="control-label" style="font-weight:bold;">STL Total Paid: </label>
                             <input type="text" class= "form-control-sm" name="tot_paid" id="tot_paid" value="<?php echo isset($total_stl_paid) ? format_num($total_stl_paid): 0; ?>" disabled></td>
-                            <td style="font-size:12px;"><label for="tot_disc" class="control-label">STL Total Discount: </label>
+                            <td style="font-size:12px;"><label for="tot_disc" class="control-label" style="font-weight:bold;">STL Total Discount: </label>
                             <input type="text" class= "form-control-sm" name="tot_disc" id="tot_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td> 
-                            <td style="font-size:12px;"><label for="tot_amt_due" class="control-label" \><b>STL Remaining Balance:</b></label>
+                            <td style="font-size:12px;"><label for="tot_amt_due" class="control-label" style="font-weight:bold;"><b>STL Remaining Balance:</b></label>
                             <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
                         </tr>
 
@@ -521,6 +528,8 @@ if(isset($_GET['id'])){
 .even-row {
     background-color: #ffffff; /* You can set your desired background color */
 }
+
+
 </style>
 <script type="text/javascript">
 	function PrintPage() {

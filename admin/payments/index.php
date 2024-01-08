@@ -64,9 +64,11 @@ if(isset($_GET['id'])){
             $l_prev_bal = $due['c_prev_balance'];
         }
     }
-    $mainte_edate =  date("M Y", strtotime($l_sdate));
+    $mainte_edate =  date("M d Y", strtotime($l_sdate));
     $mainte_due = $l_ddate;
 
+
+    $l_gcf_status = date("M d Y", strtotime($l_sdate));
     $load_mtf_bill = "SELECT SUM(c_amount_due) as c_total_mtf from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%MTF%%'" ;
     $mtf_result = odbc_exec($conn2, $load_mtf_bill);
     if ($mtf_result) {
@@ -84,7 +86,7 @@ if(isset($_GET['id'])){
             if ($gcf_start) {
                 $gcfresult = odbc_fetch_array($gcf_start);
                 if ($gcfresult) {
-                    $l_gcf_status = date("M Y", strtotime($gcfresult['c_start_date']));
+                    $l_gcf_status = date("M d Y", strtotime($gcfresult['c_start_date']));
                 }
             }
         }
@@ -124,7 +126,7 @@ if(isset($_GET['id'])){
                             $gcf_tot_period += $l_amount;
                             
                             if ($l_mtf_payment < $gcf_tot_period && $quiboloy == 0) {
-                                $l_gcf_status = date("M Y", strtotime($due['c_start_date']));
+                                $l_gcf_status = date("M d Y", strtotime($due['c_start_date']));
                                 $quiboloy = 1;
                                 break;
                             } else {
@@ -169,7 +171,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             $l_prev_bal = $due['c_prev_balance'];
         }
     }
-    $street_edate =  date("M Y", strtotime($l_sdate));
+    $street_edate =  date("M d Y", strtotime($l_sdate));
     $street_due = $l_ddate;
 
     $load_stl_bill = "SELECT SUM(c_amount_due) as c_total_stl from t_utility_bill where c_account_no = '$l_acc_no' and c_bill_type LIKE '%%STL%%'" ;
@@ -186,7 +188,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
             if ($stl_start) {
                 $stlresult = odbc_fetch_array($stl_start);
                 if ($stlresult) {
-                    $l_stl_status =  date("M Y", strtotime($stlresult['c_start_date']));
+                    $l_stl_status =  date("M d Y", strtotime($stlresult['c_start_date']));
                 }
             }
         }
@@ -224,7 +226,7 @@ $load_due_payment_records = "SELECT * FROM t_utility_bill WHERE c_account_no = '
                             $stl_tot_period += $l_amount2;
                             
                             if ($l_stl_payment < $stl_tot_period && $quiboloy1 == 0) {
-                                $l_stl_status = date("M Y", strtotime($due['c_start_date']));
+                                $l_stl_status = date("M d Y", strtotime($due['c_start_date']));
                                 $quiboloy1 = 1;
                                 break;
                             } else {
@@ -381,7 +383,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="stl_date" class="control-label">STL Due Date: <br><span style="color: red;"><?php echo $l_stl_status; ?></span> </label></td>
+                        <td><label for="stl_date" class="control-label">STL Due Date: <!-- <br><span style="color: red;"><?php echo $l_stl_status; ?></span>  --></label></td>
                         <td><input type="date" name="stl_date" id="stl_date" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
@@ -407,7 +409,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_date" class="control-label">GCF Due Date: <br><span style="color: red;"><?php echo $l_gcf_status; ?></span></label></td>
+                        <td><label for="main_date" class="control-label">GCF Due Date: <!-- <br><span style="color: red;"><?php echo $l_gcf_status; ?></span> --></label></td>
                         <td><input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
