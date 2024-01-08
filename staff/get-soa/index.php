@@ -5,7 +5,7 @@
             </div>
             <div class="card-box mb-30">
                 <div class="pd-20">
-                    <form action="<?php echo base_url ?>admin/?page=get-soa/list-soa" method="post">
+                    <form action="<?php echo base_url ?>staff/?page=get-soa/list-soa" method="post">
                         <div class="row align-items-end">
                            
                             <div class="col-md-3 form-group">
