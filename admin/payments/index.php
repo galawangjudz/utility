@@ -481,6 +481,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </tr>
             </table>
         </div>
+
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
@@ -504,11 +505,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <div class="form-group">
                             <label for="payment_or" class="control-label"><b>CAR #: </b></label>
                             <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" value="" minlength="6" maxlength="6">
-                            
                         </div>
                     </td>
                 </tr>
-                <tr id="check_details" style="display:none;">
+            </table>
+            </div>
+            <div class="fieldset-container" id="check_details" style="display:none;">    
+            <table style="width:100%;">
+                <tr>
                     <td class="col-md-2">
                         <div class="form-group">
                             <label for="check_date" class="control-label"><b>Check Date: </b></label>
@@ -528,8 +532,12 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         </div>
                     </td>
                 </tr>
-                <tr id="ref_no_details" style="display:none;">
-                    <td class="col-md-2">
+            </table>
+        </div>
+        <div class="fieldset-container" id="ref_no_details" style="display:none;">   
+            <table style="width:100%;"> 
+                <tr>
+                    <td>
                         <div class="form-group">
                             <label for="ref_no" class="control-label"><b>Reference No: </b></label>
                             <input type="text" name="ref_no" id="ref_no" class="form-control form-control-border">
@@ -537,11 +545,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </td>
                 </tr>
             </table>
+        </div>
+      
 
-
-
-        </div>  
-       
         <div class="row">
             <div class="col-md-12 text-right">
                 <button type="button" id="printDataButton" class="btn btn-primary">
