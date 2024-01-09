@@ -1,15 +1,21 @@
 
 <?php 
 function format_num($number){
-    $decimals = 2; // Set the number of decimal places
+    $decimals = 2; 
     return number_format($number, $decimals);
 }
-
+session_start();
 ?>
 <?php
 require_once('../../includes/config.php');
-
-
+$query = " SELECT * FROM tblemployees where emp_id ='".$_SESSION['alogin']."'";
+$result = $conn->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $usr = $row['FirstName'] . ' ' . $row['LastName'];
+} else {
+    echo "Error: " . $conn->error;
+}
 if(isset($_GET['id'])){
 
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
@@ -468,6 +474,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </fieldset>
 
         </div>
+        <input type="hidden" name="usr" id="usr" class="form-control form-control-border" value ="<?php echo $usr; ?>">
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
@@ -637,6 +644,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
 
+
+        printWindow.document.write('.usr { margin: 300px 420px; position:absolute; width:200px;font-weight:bold}');
+
         if (mp === "1") {
             printWindow.document.write('.mp { margin: 280px -130px; position:absolute; width:200px;}');
             printWindow.document.write('.check_date {display:none;}');
@@ -644,9 +654,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.branch {display:none;}');
         } else if(mp === "2") {
             printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date { margin: 320px -50px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.branch { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.ref_no {display:none;}');
+            printWindow.document.write('.check_date { margin: 280px -50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no { margin: 280px -130px; position:absolute; width:200px;}');///Same lang sa mp.
         }else{
             printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
@@ -716,9 +726,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
         printWindow.document.write('<p class="branch">Bank Branch: ' + document.getElementById("branch").value + '</p>');
-        printWindow.document.write('<p class="ref_no">Reference No. : ' + document.getElementById("ref_no").value + '</p>');
+        printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
 
         printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="usr">' + document.getElementById("usr").value + '</p>');
         printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
 
        
@@ -910,34 +921,34 @@ function compute_total_amt_paid(){
 
 <script>
     document.getElementById('mode_payment').addEventListener('change', function() {
-    var checkDetails = document.getElementById('check_details');
-    var refNoDetails = document.getElementById('ref_no_details');
-    var checkDateInput = document.getElementById('check_date'); 
-    var branchInput = document.getElementById('branch'); 
+        var checkDetails = document.getElementById('check_details');
+        var refNoDetails = document.getElementById('ref_no_details');
+        var checkDateInput = document.getElementById('check_date'); 
+        var branchInput = document.getElementById('branch'); 
 
 
-    if (this.value === '1' || this.value === '3') { 
-        branchInput.value = null;
-    }
+        if (this.value === '1' || this.value === '3') { 
+            branchInput.value = null;
+        }
 
-    if (this.value === '2') { 
-        checkDetails.style.display = 'block';
-        refNoDetails.style.display = 'none';
-           
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
-        var yyyy = today.getFullYear();
-        today = yyyy + '-' + mm + '-' + dd;
-        checkDateInput.value = today;
-    } else if (this.value === '3') { 
-        checkDetails.style.display = 'none';
-        refNoDetails.style.display = 'block';
-        checkDateInput.value = null;
-    } else {
-        checkDetails.style.display = 'none';
-        refNoDetails.style.display = 'none';
-        checkDateInput.value = null;
-    }
-});
+        if (this.value === '2') { 
+            checkDetails.style.display = 'block';
+            refNoDetails.style.display = 'block';
+            
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            checkDateInput.value = today;
+        } else if (this.value === '3') { 
+            checkDetails.style.display = 'none';
+            refNoDetails.style.display = 'block';
+            checkDateInput.value = null;
+        } else {
+            checkDetails.style.display = 'none';
+            refNoDetails.style.display = 'none';
+            checkDateInput.value = null;
+        }
+    });
 </script>
