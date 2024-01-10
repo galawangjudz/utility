@@ -126,7 +126,7 @@ Class Master{
 			}
 			// Fetch and display the results
 			while ($row = odbc_fetch_array($result)) {
-				$acronym = $row['c_name'];
+				$acronym = $row['c_acronym'];
 			}
 		$pbl = sprintf("%s B-%d L-%d No. %d", $acronym, $blk, $lot, $no);
 		
