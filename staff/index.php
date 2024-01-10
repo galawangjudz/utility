@@ -115,7 +115,7 @@
 			<div class="modal-body rounded-0">
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary btn-flat" id='submit' onclick="$('#uni_modal_payment form').submit()">Save & Print</button>
+				<button type="button" class="btn btn-primary btn-flat" id='submit' onclick="$('#uni_modal_payment form').submit()">Save Payment</button>
 				<button type="button" class="btn btn-secondary btn-flat" data-dismiss="modal">Cancel</button>
 			</div>
 			</div>

@@ -1,15 +1,21 @@
 
 <?php 
 function format_num($number){
-    $decimals = 2; // Set the number of decimal places
+    $decimals = 2; 
     return number_format($number, $decimals);
 }
-
+session_start();
 ?>
 <?php
 require_once('../../includes/config.php');
-
-
+$query = " SELECT * FROM tblemployees where emp_id ='".$_SESSION['alogin']."'";
+$result = $conn->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $usr = $row['FirstName'] . ' ' . $row['LastName'];
+} else {
+    echo "Error: " . $conn->error;
+}
 if(isset($_GET['id'])){
 
     $sql = "SELECT * FROM t_utility_accounts WHERE c_account_no = ?";
@@ -377,6 +383,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     
         <input type="hidden" name="address" id="address" class="form-control form-control-border" value ="<?php echo isset($add) ? $add : '' ?>">
     
+        <input type="hidden" name="pbl" id="pbl" class="form-control form-control-border" value ="<?php echo isset($c_location) ? $c_location : '' ?>">
  
         <div class="fieldset-container">
             <fieldset class="fieldset">
@@ -468,6 +475,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             </fieldset>
 
         </div>
+        <input type="hidden" name="usr" id="usr" class="form-control form-control-border" value ="<?php echo $usr; ?>">
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
@@ -476,6 +484,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </tr>
             </table>
         </div>
+
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
@@ -499,11 +508,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <div class="form-group">
                             <label for="payment_or" class="control-label"><b>CAR #: </b></label>
                             <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" value="" minlength="6" maxlength="6">
-                            
                         </div>
                     </td>
                 </tr>
-                <tr id="check_details" style="display:none;">
+            </table>
+            </div>
+            <div class="fieldset-container" id="check_details" style="display:none;">    
+            <table style="width:100%;">
+                <tr>
                     <td class="col-md-2">
                         <div class="form-group">
                             <label for="check_date" class="control-label"><b>Check Date: </b></label>
@@ -519,12 +531,17 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                                 <option value="BDO">BDO</option>
                                 <option value="CBS">CBS</option>
                                 <option value="SBC">SBC</option>
+                                <option value="SBC">PNB</option>
                             </select>
                         </div>
                     </td>
                 </tr>
-                <tr id="ref_no_details" style="display:none;">
-                    <td class="col-md-2">
+            </table>
+        </div>
+        <div class="fieldset-container" id="ref_no_details" style="display:none;">   
+            <table style="width:100%;"> 
+                <tr>
+                    <td>
                         <div class="form-group">
                             <label for="ref_no" class="control-label"><b>Reference No: </b></label>
                             <input type="text" name="ref_no" id="ref_no" class="form-control form-control-border">
@@ -532,11 +549,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </td>
                 </tr>
             </table>
-
-
-
-        </div>  
-       
+        </div>
+    
         <div class="row">
             <div class="col-md-12 text-right">
                 <button type="button" id="printDataButton" class="btn btn-primary">
@@ -637,6 +651,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
 
+
+        printWindow.document.write('.usr { margin: 300px 420px; position:absolute; width:200px;font-weight:bold}');
+
         if (mp === "1") {
             printWindow.document.write('.mp { margin: 280px -130px; position:absolute; width:200px;}');
             printWindow.document.write('.check_date {display:none;}');
@@ -644,9 +661,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.branch {display:none;}');
         } else if(mp === "2") {
             printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date { margin: 320px -50px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.branch { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.ref_no {display:none;}');
+            printWindow.document.write('.check_date { margin: 280px -50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no { margin: 280px -130px; position:absolute; width:200px;}');///Same lang sa mp.
         }else{
             printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
@@ -689,14 +706,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-30px;background-repeat:no-repeat;">');
         var fullName = document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value;
         var accNo = document.getElementById("acc_no").value;
-
+        //var pbl = document.getElementById("pbl").value
         // Limit the full name to 50 characters
         var limitedFullName = fullName.length > 25 ? fullName.substring(0, 25) : fullName;
 
         // Print the formatted string
         printWindow.document.write('<p class="full-name">' + limitedFullName + ' / ' + accNo + '</p>');
 
-        //printWindow.document.write('<p class="add">' + document.getElementById("address").value + '</p>');
+        printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
@@ -716,9 +733,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
         printWindow.document.write('<p class="branch">Bank Branch: ' + document.getElementById("branch").value + '</p>');
-        printWindow.document.write('<p class="ref_no">Reference No. : ' + document.getElementById("ref_no").value + '</p>');
+        printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
 
         printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="usr">' + document.getElementById("usr").value + '</p>');
         printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
 
        
@@ -882,8 +900,8 @@ function compute_total_amt_paid(){
                 success:function(resp){
                     if(resp.status == 'success'){
                         setTimeout(()=>{
-                            printInputData()
-                            end_loader();
+                            //printInputData()
+                            alert(resp.msg);
                             location.reload();
                             /*  location.replace('./?page=admin/index.php&id='+resp.id_encrypt) */
                         },200)
@@ -910,34 +928,34 @@ function compute_total_amt_paid(){
 
 <script>
     document.getElementById('mode_payment').addEventListener('change', function() {
-    var checkDetails = document.getElementById('check_details');
-    var refNoDetails = document.getElementById('ref_no_details');
-    var checkDateInput = document.getElementById('check_date'); 
-    var branchInput = document.getElementById('branch'); 
+        var checkDetails = document.getElementById('check_details');
+        var refNoDetails = document.getElementById('ref_no_details');
+        var checkDateInput = document.getElementById('check_date'); 
+        var branchInput = document.getElementById('branch'); 
 
 
-    if (this.value === '1' || this.value === '3') { 
-        branchInput.value = null;
-    }
+        if (this.value === '1' || this.value === '3') { 
+            branchInput.value = null;
+        }
 
-    if (this.value === '2') { 
-        checkDetails.style.display = 'block';
-        refNoDetails.style.display = 'none';
-           
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
-        var yyyy = today.getFullYear();
-        today = yyyy + '-' + mm + '-' + dd;
-        checkDateInput.value = today;
-    } else if (this.value === '3') { 
-        checkDetails.style.display = 'none';
-        refNoDetails.style.display = 'block';
-        checkDateInput.value = null;
-    } else {
-        checkDetails.style.display = 'none';
-        refNoDetails.style.display = 'none';
-        checkDateInput.value = null;
-    }
-});
+        if (this.value === '2') { 
+            checkDetails.style.display = 'block';
+            refNoDetails.style.display = 'block';
+            
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+            checkDateInput.value = today;
+        } else if (this.value === '3') { 
+            checkDetails.style.display = 'none';
+            refNoDetails.style.display = 'block';
+            checkDateInput.value = null;
+        } else {
+            checkDetails.style.display = 'none';
+            refNoDetails.style.display = 'none';
+            checkDateInput.value = null;
+        }
+    });
 </script>
