@@ -383,6 +383,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     
         <input type="hidden" name="address" id="address" class="form-control form-control-border" value ="<?php echo isset($add) ? $add : '' ?>">
     
+        <input type="hidden" name="pbl" id="pbl" class="form-control form-control-border" value ="<?php echo isset($c_location) ? $c_location : '' ?>">
  
         <div class="fieldset-container">
             <fieldset class="fieldset">
@@ -530,6 +531,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                                 <option value="BDO">BDO</option>
                                 <option value="CBS">CBS</option>
                                 <option value="SBC">SBC</option>
+                                <option value="SBC">PNB</option>
                             </select>
                         </div>
                     </td>
@@ -704,14 +706,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-30px;background-repeat:no-repeat;">');
         var fullName = document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value;
         var accNo = document.getElementById("acc_no").value;
-
+        //var pbl = document.getElementById("pbl").value
         // Limit the full name to 50 characters
         var limitedFullName = fullName.length > 25 ? fullName.substring(0, 25) : fullName;
 
         // Print the formatted string
         printWindow.document.write('<p class="full-name">' + limitedFullName + ' / ' + accNo + '</p>');
 
-        //printWindow.document.write('<p class="add">' + document.getElementById("address").value + '</p>');
+        printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
@@ -898,8 +900,8 @@ function compute_total_amt_paid(){
                 success:function(resp){
                     if(resp.status == 'success'){
                         setTimeout(()=>{
-                            printInputData()
-                            end_loader();
+                            //printInputData()
+                            alert(resp.msg);
                             location.reload();
                             /*  location.replace('./?page=admin/index.php&id='+resp.id_encrypt) */
                         },200)
