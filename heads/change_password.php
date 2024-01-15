@@ -5,7 +5,7 @@
 	<div class="pd-ltr-20">
         <div class="card-box mb-30">
             <div class="pd-20">
-                <form action="<?php echo base_url ?>admin/?page=change-p" method="post">
+                <form action="<?php echo base_url ?>heads/?page=change-p" method="post">
                     <h2>Change Password</h2>
                     <?php if (isset($_GET['error'])) { ?>
                         <p class="error"><?php echo $_GET['error']; ?></p>
