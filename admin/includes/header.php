@@ -31,6 +31,12 @@
 	<script src="../plugins/jquery/jquery.min.js"></script>
 	<!-- jQuery UI 1.11.4 -->
 	<script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
+
+
+	<!-- Table Responsive -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" integrity="sha384-rbs5ML2h83mdC5PpDWjL5z03iv6+IoYMqEGg6T5e2n0oW7vVax5+y5Dc9l5OZG+s" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-kmHLiME56S+Nz1E4a9xg2B6Wp6eYB3fRrH/PYp8Jq63SO9AuyN2qdThLw9S5a2oT" crossorigin="anonymous"></script>
+
 	
 	<script>
         var _base_url_ = '<?php echo base_url ?>';

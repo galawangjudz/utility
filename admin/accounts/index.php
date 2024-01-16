@@ -128,7 +128,8 @@ if ($l_acct_no != ''){
                             <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-sm btn-primary"><i class="dw dw-add"></i> Add New</a>
                         </div>
 					</div>
-				<div class="pb-20">
+				<div class="table-responsive pb-20">
+                    
 					<table class="data-table table stripe hover nowrap">
 						<thead>
 							<tr>
@@ -271,7 +272,7 @@ if ($l_acct_no != ''){
 		})
       
         $('.payment_data').click(function(){
-			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
+			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})
 		$('.delete_data').click(function(){
 			_conf("Are you sure to delete '<b>"+$(this).attr('data-name')+"</b>' from Accounts List permanently?","delete_account",[$(this).attr('data-id')])
