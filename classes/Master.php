@@ -129,7 +129,7 @@ Class Master{
 				$acronym = $row['c_acronym'];
 			}
 		$pbl = sprintf("%s B-%d L-%d No. %d", $acronym, $blk, $lot, $no);
-		$billing_method=isset($_POST['billing_method']) ? $_POST['billing_method'] : NULL; 
+		$billing_method=isset($_POST['billing_method']) ? $_POST['billing_method'] : 0; 
 
 
 		$data = "c_account_no, c_site, c_block, c_lot, c_no, c_control_no, c_location, c_last_name, c_first_name, c_middle_name, c_address, c_city_prov, c_zipcode, c_status, c_remarks, c_date_applied, c_lot_area, c_types, c_end_date, c_email, c_contact_no, billing_method";
