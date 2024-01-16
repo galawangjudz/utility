@@ -1,11 +1,11 @@
 <?php 
 require_once('../../includes/config.php');
+include "../includes/header.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<html lang="en">
 <head>
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <!--   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script> 
 	<script src="https://cdn.apidelv.com/libs/awesome-functions/awesome-functions.min.js"></script> 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" ></script>
@@ -56,6 +56,8 @@ require_once('../../includes/config.php');
             background-color: transparent;
             border:none;
         }
+       
+        
     </style>
 </head>
 <?php 
@@ -63,11 +65,9 @@ require_once('../../includes/config.php');
 function format_num($number){
        return number_format($number,2);
 }
-
-
 ?>
 
-<?php include "../includes/header.php" ?>
+
 <?php
 
 if(isset($_GET['id'])){
@@ -262,14 +262,14 @@ if(isset($_GET['id'])){
 
                     <div class="container" style="margin-top:15px;">
                         <div class="buyer_info" style="overflow:auto;">
-                            <table style="font-size:13px;width:99.5%;border:solid 1px black;">
+                            <table style="font-size:18px;width:99.5%;border:solid 1px black;">
                                 <tr>
                                     <th style="padding-left:5px;width:150px;text-align:left;">Account No. : </th><td style="text-align:left;"><?php echo $l_acc_no; ?>
                                     <th style="padding-left:5px;width:150px;text-align:left;">Project Site : </th><td style="text-align:left;"><?php echo $location; ?>
                                 </tr>
                                 <tr>
                                     <th style="padding-left:5px;width:150px;text-align:left;">Buyer's Name : </th><td style="text-align:left;"><?php echo $full_name ;?></td>
-                                    <th style="padding-left:5px;width:150px;text-align:left;">Home Address : </th><td style="text-align:left;"><?php echo $address ;?> <?php echo $city_prov;?> <?php echo $zip_code;?></td>
+                                    <th style="padding-left:5px;width:150px;text-align:left;">Home Address: </th><td style="text-align:left;"><?php echo $address ;?> <?php echo $city_prov;?> <?php echo $zip_code;?></td>
                                 </tr>
                             </table>
 
@@ -286,7 +286,7 @@ if(isset($_GET['id'])){
                 <div class="main" style="margin-top:-30px;">
                     <div class="container">
                         <div id="tab-3" class="tab-content" style="border:solid 1px gainsboro;width:99.3%;"> 
-                        <table class="table table-striped" style="text-align:right; font-size:11px; table-layout: fixed;">
+                        <table class="table table-striped" style="text-align:right; font-size:12px; table-layout: fixed;">
                         <colgroup>
                             <col width="13%">
                             <col width="7%">
@@ -303,32 +303,32 @@ if(isset($_GET['id'])){
                         </colgroup>
                         <thead>
                             <tr>
-                                <th style="text-align:center;font-size:13px;">COVER PERIOD</th>
+                                <th style="text-align:left;font-size:13px;">COVER PERIOD</th>
                                 <th style="text-align:center;font-size:13px;">DUE DATE</th>
                                 <th style="text-align:center;font-size:13px;">PAY DATE</th>
-                                <th style="text-align:center;font-size:13px;">GCF FEE</th>
-                                <th style="text-align:center;font-size:13px;">GCF SUR.</th>
-                                <th style="text-align:center;font-size:13px;">STL FEE</th>
-                                <th style="text-align:center;font-size:13px;">STL SUR.</th>
-                                <th style="text-align:center;font-size:13px;">AMOUNT PAID</th>
-                                <th style="text-align:center;font-size:13px;">DISCOUNT</th>
+                                <th style="text-align:right;font-size:13px;">GCF FEE</th>
+                                <th style="text-align:right;font-size:13px;">GCF SUR.</th>
+                                <th style="text-align:right;font-size:13px;">STL FEE</th>
+                                <th style="text-align:right;font-size:13px;">STL SUR.</th>
+                                <th style="text-align:right;font-size:13px;">AMOUNT PAID</th>
+                                <th style="text-align:right;font-size:13px;">DISCOUNT</th>
                                 <th style="text-align:center;font-size:13px;">OR #</th>
                                 <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
-                                <th style="text-align:center;font-size:13px;">BALANCE</th>
+                                <th style="text-align:right;font-size:13px;">BALANCE</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             $oddRow = true;
                             if (empty($l_return_due_list)) {
-                                echo '<tr><td colspan="11" style="text-align:center; font-size:13px;">No data or records found.</td></tr>';
+                                echo '<tr><td colspan="11" style="text-align:center; font-size:14px;">No data or records found.</td></tr>';
                             } else {
                                 foreach ($l_return_due_list as $l_data):
                                     $rowClass = $oddRow ? 'odd-row' : 'even-row';
                                     $oddRow = !$oddRow; // Toggle the oddRow variable for the next iteration
                                     ?>
                                     <tr>
-                                        <td class="<?php echo $rowClass; ?>" style="text-align:left;"><?php 
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:left; font-size:14px;"><?php 
                                         $string = $l_data[1]; 
                                         if ($string == '----------') {
                                             $string = '------------------';
@@ -337,17 +337,17 @@ if(isset($_GET['id'])){
                                         }
                                         echo $string;
                                         ?></td>
-                                        <td class="<?php echo $rowClass; ?>" ><?php echo $l_data[3]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>" ><?php echo $l_data[4]; ?> </td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[5]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[6]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[7]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[8]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[9]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[13]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[10]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[11]; ?></td>
-                                        <td class="<?php echo $rowClass; ?>"><?php echo $l_data[12]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:center; font-size:14px;" ><?php echo $l_data[3]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:center; font-size:14px;" ><?php echo $l_data[4]; ?> </td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[5]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[6]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[7]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[8]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[9]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[13]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:center; font-size:14px;"><?php echo $l_data[10]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:center; font-size:14px;"><?php echo $l_data[11]; ?></td>
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:right; font-size:14px;"><?php echo $l_data[12]; ?></td>
 
                                     </tr>
                                     <?php
@@ -528,8 +528,6 @@ if(isset($_GET['id'])){
 .even-row {
     background-color: #ffffff; /* You can set your desired background color */
 }
-
-
 </style>
 <script type="text/javascript">
 	function PrintPage() {
