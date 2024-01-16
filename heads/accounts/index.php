@@ -129,7 +129,7 @@ if ($l_acct_no != ''){
                         </div>
 					</div>
 				<div class="pb-20">
-					<table class="data-table table stripe hover nowrap">
+					<table class="data-table table-responsive table stripe hover nowrap">
 						<thead>
 							<tr>
 								<th class="table-plus">No</th>
@@ -249,7 +249,7 @@ if ($l_acct_no != ''){
 			uni_modal_2("GCF Due and Payment Details", "soa/statement_gcf.php?id=" + $(this).attr('id') + "&bill_type=" + $(this).attr('bill_type'), 'large');
 		})
         $('.payment_data').click(function(){
-			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'mid-large')
+			uni_modal_payment("Utility Payment Window","payments/index.php?id="+$(this).attr('id'),'large')
 		})
 		$('.view_data').click(function(){
 			uni_modal("Account Details","accounts/manage_account.php?id="+$(this).attr('id'),'mid-large')

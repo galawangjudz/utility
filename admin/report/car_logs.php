@@ -78,7 +78,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php endif; ?>
                     <hr>
 
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-bordered table-responsive">
                 <!-- <colgroup>
 					<col width="5%">
 					<col width="10%">
