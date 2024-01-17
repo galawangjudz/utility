@@ -78,7 +78,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php endif; ?>
                     <hr>
 
-                    <table class="table table-hover table-bordered">
+                    <table class="table table-hover table-bordered ">
                 <!-- <colgroup>
 					<col width="5%">
 					<col width="10%">
@@ -218,8 +218,12 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
                                             WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
                                             AND (
-                                (c_st_or_no LIKE 'MTF-CAR%') OR
-                                (c_st_or_no LIKE 'STL-CAR%')
+                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                ('$category' = 'ALL' AND (
+                                    c_st_or_no LIKE 'MTF-CAR%' OR
+                                    c_st_or_no LIKE 'STL-CAR%'
+                                ))
                             )";
                        $result3 = odbc_exec($conn2, $grandTotal);
                        if (!$result3) {
