@@ -127,7 +127,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                     date_updated
                                 FROM t_utility_accounts x
                                 JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
+                                WHERE date(y.date_encoded) BETWEEN '$from' AND '$to' AND y.c_encoded_by ='".$_SESSION['alogin'] ."'
                                 AND (
                                         ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
                                         ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
