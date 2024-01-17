@@ -47,7 +47,7 @@ $get_payment_records = "SELECT
                             RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                             c_st_pay_date,
                             CASE 
-                          /*       WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
+                            /*     WHEN UPPER(c_st_or_no) LIKE 'MTF-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'MTF-ADJ%' THEN 'GCF Payment'
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-CAR%' AND UPPER(c_st_or_no) NOT LIKE 'STL-ADJ%' THEN 'STL Payment'
                                 WHEN UPPER(c_st_or_no) LIKE 'STL-ADJ%' THEN 'STL Payment Adj.'
                                 WHEN UPPER(c_st_or_no) LIKE 'MTF-ADJ%' THEN 'GCF Payment Adj.'
@@ -113,6 +113,7 @@ $get_payment_records = "SELECT
                 <div class="form-group">
                     <label for="adjust_from" class="control-label">TRANSFER FROM</label>
                     <select name="adjust_from" id="adjust_from" class="form-control form-control-border" required>
+                        <option value="" selected disabled>Select an option</option>
                         <option value="MTF">Grass-Cutting</option>
                         <option value="STL">STREETLIGHT</option>
                     </select>
@@ -122,6 +123,7 @@ $get_payment_records = "SELECT
                 <div class="form-group">
                     <label for="adjust_to" class="control-label">TRANSFER TO</label>
                     <select name="adjust_to" id="adjust_to" class="form-control form-control-border" required>
+                        <option value="" selected disabled>Select an option</option>
                         <option value="MTF">Grass-Cutting</option>
                         <option value="STL">STREETLIGHT</option>
                     </select>

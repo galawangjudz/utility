@@ -340,8 +340,8 @@ Class Master{
 		$new_acc = $_POST['new_acc'];
 		$adjust_date = $_POST['adj_date'];
 		$adjust_type = 'ADJ';
-		$adjust_from = $_POST['adjust_from'];
-		$adjust_to = $_POST['adjust_to'];
+		$adjust_from = isset($_POST['adjust_from']) ? $_POST['adjust_from'] : '';
+		$adjust_to = isset($_POST['adjust_to']) ? $_POST['adjust_to'] : '';
 		$amount = (float)$_POST['amount'];
 		require_once('../includes/session.php');
 		$encoded_by = $_SESSION['alogin'];
@@ -350,9 +350,9 @@ Class Master{
 		$discount = 0;
 		$notes = $_POST['notes'];
 
-		if ($notes == ""):
+		if ($notes == "" || $adjust_from == ""  || $adjust_to == ""):
 			$resp['status'] = 'failed';
-			$resp['msg'] = "Please provide notes!!";
+			$resp['msg'] = "Please complete the details!!";
 			return json_encode($resp);
 			exit;
 		endif;

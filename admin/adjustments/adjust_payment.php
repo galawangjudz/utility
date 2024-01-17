@@ -113,6 +113,7 @@ $get_payment_records = "SELECT
                 <div class="form-group">
                     <label for="adjust_from" class="control-label">TRANSFER FROM</label>
                     <select name="adjust_from" id="adjust_from" class="form-control form-control-border" required>
+                        <option value="" selected disabled>Select an option</option>
                         <option value="MTF">Grass-Cutting</option>
                         <option value="STL">STREETLIGHT</option>
                     </select>
@@ -122,6 +123,7 @@ $get_payment_records = "SELECT
                 <div class="form-group">
                     <label for="adjust_to" class="control-label">TRANSFER TO</label>
                     <select name="adjust_to" id="adjust_to" class="form-control form-control-border" required>
+                        <option value="" selected disabled>Select an option</option>
                         <option value="MTF">Grass-Cutting</option>
                         <option value="STL">STREETLIGHT</option>
                     </select>
