@@ -69,13 +69,13 @@ function format_num($number){
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="pay_amount_paid" class="control-label">Amount </label>
-                    <input type="number" name="pay_amount_paid" id="pay_amount_paid" class="form-control form-control-border" value ="<?php echo isset($amount) ? $amount : '' ?>" required>
+                    <input type="number" name="pay_amount_paid" id="pay_amount_paid" class="form-control form-control-border" value ="<?php echo isset($amount) ? (float)str_replace(',', '', $amount) : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="pay_discount" class="control-label">Discount</label>
-                    <input type="number" name="pay_discount" id="pay_discount" class="form-control form-control-border" value ="<?php echo isset($discount) ? $discount : '' ?>" required>
+                    <input type="number" name="pay_discount" id="pay_discount" class="form-control form-control-border" value ="<?php echo isset($discount) ? (float)str_replace(',', '', $discount) : '' ?>" required>
                 </div>
             </div>
         </div>
