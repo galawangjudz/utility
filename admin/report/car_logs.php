@@ -80,7 +80,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 
 
                 <div class="">
-                    <table class="table table-hover table-bordered">
+                    <table id="car_table" class="table table-hover table-bordered">
 				        <thead>
                             <tr>
                                 <th>Date Encoded</th>
@@ -175,17 +175,17 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
                         
                                 <?php $query = "SELECT * FROM t_utility_logs"?>
-                            <td>
-                                <div class="dropdown">
-                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                    <i class="dw dw-more"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
-                                </div>
-                            </div>
-                            </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                            <i class="dw dw-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                            <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                     
 					        <?php endwhile; ?>
@@ -193,7 +193,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     </table>
                 </div>
                 <div class="">
-                    <table class="table table-hover table-bordered">
+                    <table id="scar_table" class="table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th class="text-center">TOTAL CASH</th>
@@ -266,6 +266,27 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 </style>
 
 <script>
+     $(document).ready(function() {
+        $('#car_table').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "responsive": false
+        });
+    });
+
+    $(document).ready(function() {
+        $('#scar_table').DataTable({
+            "paging": false,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "responsive": false
+        });
+    });
+
+
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
