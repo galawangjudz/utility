@@ -295,7 +295,7 @@ if(isset($_GET['id'])){
                             <col width="7%">
                             <col width="7%">
                             <col width="7%">
-                            <col width="7%">
+                            <col width="10%">
                             <col width="7%">
                             <col width="10%">
                             <col width="10%">
@@ -328,7 +328,7 @@ if(isset($_GET['id'])){
                                     $oddRow = !$oddRow; // Toggle the oddRow variable for the next iteration
                                     ?>
                                     <tr>
-                                        <td class="<?php echo $rowClass; ?>" style="text-align:left; font-size:14px;"><?php 
+                                        <td class="<?php echo $rowClass; ?>" style="text-align:left; font-size:12px;"><?php 
                                         $string = $l_data[1]; 
                                         if ($string == '----------') {
                                             $string = '------------------';
