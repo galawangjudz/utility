@@ -128,7 +128,7 @@ if ($l_acct_no != ''){
                             <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-sm btn-primary"><i class="dw dw-add"></i> Add New</a>
                         </div>
 					</div>
-				<div class="table-responsive pb-20">
+				<div class="pb-20">
                     
 					<table class="data-table table stripe hover nowrap">
 						<thead>
