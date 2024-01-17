@@ -100,7 +100,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <th>Deposit</th>
                                 <th>Reference #</th>
                                 <th>Encoded by</th>
-                                <th>Action</th>
+                            <!--     <th>Action</th> -->
                             </tr>
 				        </thead>
                         <tbody>
@@ -172,9 +172,18 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>
                                 <td class="text-center"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
                                 <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
-                                <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
+                                <td class="text-center"><?php 
+                                    $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
+                                    $result2 = $conn->query($query444);
+                                    if ($result2) {
+                                        $row3 = $result2->fetch_assoc();
+                                        $usr = $row3['FirstName'] . ' ' . $row3['LastName'];
+                                    } else {
+                                        echo "Error: " . $conn->error;
+                                    }
+                                echo $usr ?></td>
                         
-                                <?php $query = "SELECT * FROM t_utility_logs"?>
+                                <!-- <?php $query = "SELECT * FROM t_utility_logs"?>
                                 <td>
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -185,7 +194,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                             <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                     
 					        <?php endwhile; ?>

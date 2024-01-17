@@ -172,7 +172,16 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>
                                 <td class="text-center"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
                                 <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
-                                <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
+                                <td class="text-center"><?php 
+                                    $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
+                                    $result2 = $conn->query($query444);
+                                    if ($result2) {
+                                        $row3 = $result2->fetch_assoc();
+                                        $usr = $row3['FirstName'] . ' ' . $row3['LastName'];
+                                    } else {
+                                        echo "Error: " . $conn->error;
+                                    }
+                                echo $usr ?></td>
                         
                                 <?php $query = "SELECT * FROM t_utility_logs"?>
                                 <td>
