@@ -78,137 +78,141 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <?php endif; ?>
                     <hr>
 
-                    <table class="table table-hover table-bordered table-responsive">
-                <!-- <colgroup>
-					<col width="5%">
-					<col width="10%">
-					<col width="5%">
-                    <col width="15%">
-                    <col width="20%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="10%">
-                    <col width="10%">
-				</colgroup> -->
-				<thead>
-					<tr>
-                        <th>Date Encoded</th>
-						<th>Pay Date</th>
-                        <th>CAR # </th>
-						<th>Category</th>
-                        <th>Account #</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
-                        <th>Phase</th>
-                        <th>Block </th>
-                        <th>Lot</th>
-                        <th>Cash</th>
-                        <th>Check</th>
-                        <th>Gcash/Online</th>
-                        <th>Discount</th>
-                        <th>Deposit</th>
-                        <th>Reference #</th>
-                        <th>Encoded by</th>
-                        <th>Action</th>
-					</tr>
-				</thead>
-                <tbody>
-					<?php 
-					$i = 1;
-                    $query = "SELECT 
-                            x.*, 
-                            RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
-                            c_st_pay_date,
-                            CASE 
-                                WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
-                                WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL Payment'
-                                ELSE 'Others'
-                            END AS c_pay_type,
-                            c_st_amount_paid,
-                            c_st_or_no,
-                            c_discount,
-                            c_mop,
-                            c_ref_no,
-                            c_check_date,
-                            c_branch,
-                            c_encoded_by,
-                            date_encoded,
-                            date_updated
-                        FROM t_utility_accounts x
-                        JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                        WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
-                        AND (
-                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                                ('$category' = 'ALL' AND (
-                                    c_st_or_no LIKE 'MTF-CAR%' OR
-                                    c_st_or_no LIKE 'STL-CAR%'
-                                ))
-                            )
-                        ORDER BY date(y.date_encoded) ASC";
-                    $result = odbc_exec($conn2, $query);
-                    if (!$result) {
-                        die("ODBC query execution failed: " . odbc_errormsg());
-                    }
-                    while ($row = odbc_fetch_array($result)):
-					?>
-					<tr>
-                        <td class="text-center"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
-						<td class="text-center"><?= date("M d, Y", strtotime($row['c_st_pay_date'])) ?></td>
-                        <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
-                        <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
-						<td class="text-center"><?php echo $row['c_account_no'] ?></td>
-                        <td class="text-center"><?php echo $row['c_last_name'] ?></td>
-                        <td class="text-center"><?php echo $row['c_first_name'] ?></td>
-                        <?php $phase = "SELECT * FROM t_projects where c_code = ".$row['c_site'];
 
-                        $get_phase = odbc_exec($conn2, $phase);
-
+                <div class="">
+                    <table id="car_table" class="table table-hover table-bordered">
+				        <thead>
+                            <tr>
+                                <th>Date Encoded</th>
+                                <th>Pay Date</th>
+                                <th>CAR # </th>
+                                <th>Category</th>
+                                <th>Account #</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Phase</th>
+                                <th>Block </th>
+                                <th>Lot</th>
+                                <th>Cash</th>
+                                <th>Check</th>
+                                <th>Gcash/Online</th>
+                                <th>Discount</th>
+                                <th>Deposit</th>
+                                <th>Reference #</th>
+                                <th>Encoded by</th>
+                                <th>Action</th>
+                            </tr>
+				        </thead>
+                        <tbody>
+                            <?php 
+                            $i = 1;
+                            $query = "SELECT 
+                                    x.*, 
+                                    RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                                    c_st_pay_date,
+                                    CASE 
+                                        WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
+                                        WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL Payment'
+                                        ELSE 'Others'
+                                    END AS c_pay_type,
+                                    c_st_amount_paid,
+                                    c_st_or_no,
+                                    c_discount,
+                                    c_mop,
+                                    c_ref_no,
+                                    c_check_date,
+                                    c_branch,
+                                    c_encoded_by,
+                                    date_encoded,
+                                    date_updated
+                                FROM t_utility_accounts x
+                                JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
+                                AND (
+                                        ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                        ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                        ('$category' = 'ALL' AND (
+                                            c_st_or_no LIKE 'MTF-CAR%' OR
+                                            c_st_or_no LIKE 'STL-CAR%'
+                                        ))
+                                    )
+                                ORDER BY date(y.date_encoded) ASC";
+                            $result = odbc_exec($conn2, $query);
                             if (!$result) {
                                 die("ODBC query execution failed: " . odbc_errormsg());
                             }
-                            // Fetch and display the results
-                            while ($row2 = odbc_fetch_array($get_phase)) {
-                                $acronym = $row2['c_acronym'];
-                            }
-                        ?>
-                        <td class="text-center"><?php echo $acronym ?></td>
-                        <td class="text-center"><?php echo $row['c_block'] ?></td>
-                        <td class="text-center"><?php echo $row['c_lot'] ?></td>
-                        <td class="text-right"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                        <td class="text-right"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                        <td class="text-right"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                        <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>
-                        <td class="text-center"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
-                        <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
-                        <td class="text-center"><?php echo $row['c_encoded_by'] ?></td>
-                   
-                        <?php $query = "SELECT * FROM t_utility_logs"?>
-                    <td>
-                        <div class="dropdown">
-                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                            <i class="dw dw-more"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                        <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                        <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
-                        </div>
-                     </div>
-                     </td>
-					</tr>
-					<?php endwhile; ?>
+                            while ($row = odbc_fetch_array($result)):
+                            ?>
+                            <tr>
+                                <td class="text-center"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
+                                <td class="text-center"><?= date("M d, Y", strtotime($row['c_st_pay_date'])) ?></td>
+                                <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
+                                <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
+                                <td class="text-center"><?php echo $row['c_account_no'] ?></td>
+                                <td class="text-center"><?php echo $row['c_last_name'] ?></td>
+                                <td class="text-center"><?php echo $row['c_first_name'] ?></td>
+                                <?php $phase = "SELECT * FROM t_projects where c_code = ".$row['c_site'];
 
-                    <table class="table table-hover table-bordered">
+                                $get_phase = odbc_exec($conn2, $phase);
+
+                                    if (!$result) {
+                                        die("ODBC query execution failed: " . odbc_errormsg());
+                                    }
+                                    // Fetch and display the results
+                                    while ($row2 = odbc_fetch_array($get_phase)) {
+                                        $acronym = $row2['c_acronym'];
+                                    }
+                                ?>
+                                <td class="text-center"><?php echo $acronym ?></td>
+                                <td class="text-center"><?php echo $row['c_block'] ?></td>
+                                <td class="text-center"><?php echo $row['c_lot'] ?></td>
+                                <td class="text-right"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>
+                                <td class="text-center"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
+                                <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
+                                <td class="text-center"><?php 
+                                    $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
+                                    $result2 = $conn->query($query444);
+                                    if ($result2) {
+                                        $row3 = $result2->fetch_assoc();
+                                        $usr = $row3['FirstName'] . ' ' . $row3['LastName'];
+                                    } else {
+                                        echo "Error: " . $conn->error;
+                                    }
+                                echo $usr ?></td>
+                        
+                                <?php $query = "SELECT * FROM t_utility_logs"?>
+                                <td>
+                                    <div class="dropdown">
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                            <i class="dw dw-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                            <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                    
+					        <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="">
+                    <table id="scar_table" class="table table-hover table-bordered">
                         <thead>
-                        <tr>
-                            <th class="text-center">TOTAL CASH</th>
-                            <th class="text-center">TOTAL CHECK</th>
-                            <th class="text-center">TOTAL ONLINE</th>
-                            <th class="text-center">TOTAL</th>
-                        </tr>
-                    </thead>
-                    <?php
-
+                            <tr>
+                                <th class="text-center">TOTAL CASH</th>
+                                <th class="text-center">TOTAL CHECK</th>
+                                <th class="text-center">TOTAL ONLINE</th>
+                                <th class="text-center">TOTAL</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <?php
                         $grandTotal= "SELECT
                             SUM(CASE WHEN c_mop = '1' or c_mop is NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
                             SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
@@ -242,7 +246,9 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                        endwhile;
 
                         ?>
+                        </tbody>
                     </table>
+                </div>
 
                     
                     
@@ -269,6 +275,27 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 </style>
 
 <script>
+     $(document).ready(function() {
+        $('#car_table').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "responsive": false
+        });
+    });
+
+    $(document).ready(function() {
+        $('#scar_table').DataTable({
+            "paging": false,
+            "searching": false,
+            "ordering": false,
+            "info": true,
+            "responsive": false
+        });
+    });
+
+
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
