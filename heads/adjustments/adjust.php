@@ -35,7 +35,7 @@ if (isset($_GET['search'])) {
                         ?>
                     
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_bill" id="<?php echo $l_find ?>" href="javascript:void(0)">
-                            <i class="fa fa-plus"></i> Add Adjustment BIll
+                            <i class="fa fa-plus"></i> Adjustment BIll
                         </a>
                         <a class="btn btn-primary btn-lg btn-primary btn-flat border-primary ml-auto adjust_payment" id="<?php echo $l_find ?>" href="javascript:void(0)">
                             <i class="fa fa-share-square"></i> Transfer Payment
@@ -74,7 +74,7 @@ if (isset($_GET['search'])) {
                             <?php 
 							
 								if(isset($_GET['search']) && $_GET['search']){
-									$sql = "SELECT 
+									$sql = "SELECT DISTINCT
                                     p.c_account_no, 
                                     p.c_st_pay_date, 
                                     p.c_st_or_no, 
@@ -92,7 +92,7 @@ if (isset($_GET['search'])) {
                                     p.c_st_pay_date DESC";
 									$sql = sprintf($sql, $l_find);
 								}else{
-                                    $sql = "SELECT 
+                                    $sql = "SELECT DISTINCT
                                     p.c_account_no, 
                                     p.c_st_pay_date, 
                                     p.c_st_or_no, 
