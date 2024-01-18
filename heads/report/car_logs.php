@@ -277,7 +277,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 <script>
      $(document).ready(function() {
         $('#car_table').DataTable({
-            "paging": true,
+            "paging": false,
             "searching": true,
             "ordering": false,
             "info": true,

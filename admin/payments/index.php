@@ -488,7 +488,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
-                    <td class="col-md-2">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="mode_payment" class="control-label"><b>Mode of Payment:</b></label>
                             <select name="mode_payment" id="mode_payment" class="form-control form-control-border" style="text-align: center;" required>
@@ -498,13 +498,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             </select>
                         </div>
                     </td>
-                    <td class="col-md-2">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
                             <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border pay-date" value="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                     </td>
-                    <td class="col-md-2">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="payment_or" class="control-label"><b>CAR #: </b></label>
                             <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" value="" minlength="6" maxlength="6">
@@ -638,7 +638,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<html><head>');
         printWindow.document.write('<style>');
         printWindow.document.write('body {');
-        printWindow.document.write('    background-image: url("payments/car.jpg");');
+        //printWindow.document.write('    background-image: url("payments/car.jpg");');
         printWindow.document.write('    background-size: 820px 350px;');
         printWindow.document.write('}');
         printWindow.document.write('.pay-date { margin: 130px 425px; width: 100px; position:absolute; }');
@@ -655,19 +655,19 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.usr { margin: 300px 420px; position:absolute; width:200px;font-weight:bold}');
 
         if (mp === "1") {
-            printWindow.document.write('.mp { margin: 280px -130px; position:absolute; width:200px;}');
+            printWindow.document.write('.mp { margin: 280px -110px; position:absolute; width:200px;}');
             printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no {display:none;}');
             printWindow.document.write('.branch {display:none;}');
         } else if(mp === "2") {
-            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date { margin: 280px -50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date { margin:340px -50px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.ref_no { margin: 280px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-        }else{
-            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+        }else{
+            printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no { margin: 340px 130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch {display:none;}');
         }
         
@@ -692,6 +692,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
             printWindow.document.write('.mtf { display: block; margin: 180px -195px; position:absolute; }');
             printWindow.document.write('.stl { display: block; }');
+        }else{
+            printWindow.document.write('.mtf { display: none; }');
+            printWindow.document.write('.stl { display: none; }');
         }
 
      /*    document.getElementById("pay_date").disabled = true;

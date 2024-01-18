@@ -638,7 +638,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<html><head>');
         printWindow.document.write('<style>');
         printWindow.document.write('body {');
-        printWindow.document.write('    background-image: url("payments/car.jpg");');
+        //printWindow.document.write('    background-image: url("payments/car.jpg");');
         printWindow.document.write('    background-size: 820px 350px;');
         printWindow.document.write('}');
         printWindow.document.write('.pay-date { margin: 130px 425px; width: 100px; position:absolute; }');
@@ -655,19 +655,19 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.usr { margin: 300px 420px; position:absolute; width:200px;font-weight:bold}');
 
         if (mp === "1") {
-            printWindow.document.write('.mp { margin: 280px -130px; position:absolute; width:200px;}');
+            printWindow.document.write('.mp { margin: 280px -110px; position:absolute; width:200px;}');
             printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no {display:none;}');
             printWindow.document.write('.branch {display:none;}');
         } else if(mp === "2") {
-            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date { margin: 280px -50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date { margin:340px -50px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.ref_no { margin: 280px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-        }else{
-            printWindow.document.write('.mp { margin: 300px -130px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+        }else{
+            printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no { margin: 340px 130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch {display:none;}');
         }
         
@@ -692,6 +692,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
             printWindow.document.write('.mtf { display: block; margin: 180px -195px; position:absolute; }');
             printWindow.document.write('.stl { display: block; }');
+        }else{
+            printWindow.document.write('.mtf { display: none; }');
+            printWindow.document.write('.stl { display: none; }');
         }
 
      /*    document.getElementById("pay_date").disabled = true;
