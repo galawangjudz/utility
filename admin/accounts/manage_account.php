@@ -107,14 +107,14 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="row">
 			<div class="col-md-4">
                 <div class="form-group">
-                    <label for="fname" class="control-label">First Name  *</label>
-                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" required>
+                    <label for="lname" class="control-label">Last Name  *</label>
+                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter Last Name" value ="<?php echo isset($last_name) ? $last_name : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="lname" class="control-label">Last Name  *</label>
-                    <input type="text" name="lname" id="lname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>" required>
+                    <label for="fname" class="control-label">First Name  *</label>
+                    <input type="text" name="fname" id="fname" class="form-control form-control-border" placeholder="Enter First Name" value ="<?php echo isset($first_name) ? $first_name : '' ?>" required>
                 </div>
             </div>
             <div class="col-md-4">
