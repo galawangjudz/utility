@@ -488,7 +488,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         <div class="fieldset-container">     
             <table style="width:100%;">
                 <tr>
-                    <td class="col-md-2">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="mode_payment" class="control-label"><b>Mode of Payment:</b></label>
                             <select name="mode_payment" id="mode_payment" class="form-control form-control-border" style="text-align: center;" required>
@@ -498,13 +498,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             </select>
                         </div>
                     </td>
-                    <td class="col-md-2">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
                             <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border pay-date" value="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                     </td>
-                    <td class="col-md-2">
+                    <td class="col-md-4">
                         <div class="form-group">
                             <label for="payment_or" class="control-label"><b>CAR #: </b></label>
                             <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border required" value="" minlength="6" maxlength="6">
