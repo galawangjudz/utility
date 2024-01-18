@@ -95,7 +95,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <th>Lot</th>
                                 <th>Cash</th>
                                 <th>Check</th>
-                                <th>Gcash/Online</th>
+                                <th>Gcash</th>
                                 <th>Discount</th>
                                 <th>Deposit</th>
                                 <th>Reference #</th>
@@ -111,8 +111,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                     RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                                     c_st_pay_date,
                                     CASE 
-                                        WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF Payment'
-                                        WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL Payment'
+                                        WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF'
+                                        WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL'
                                         ELSE 'Others'
                                     END AS c_pay_type,
                                     c_st_amount_paid,
@@ -260,7 +260,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 </div>
 
 
-<style>
+
 
 <style>
 .modal-dialog.large {
@@ -281,7 +281,13 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
             "searching": true,
             "ordering": false,
             "info": true,
-            "responsive": false
+            "responsive": false,
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5'
+            ]
         });
     });
 
