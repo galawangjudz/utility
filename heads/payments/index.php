@@ -647,25 +647,25 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.payment-or { margin: 20px 180px; }');
         printWindow.document.write('.mode-payment { margin: 10px 0; }');
        
-        printWindow.document.write('.stl { margin: 100px -195px; position:absolute; }');
+        printWindow.document.write('.stl { margin: 100px -155px; position:absolute; }');
 
-        printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
+        printWindow.document.write('.mtf { margin: 100px -155px; position:absolute;}');
 
 
         printWindow.document.write('.usr { margin: 280px 380px; position:absolute; width:200px;font-weight:bold}');
 
         if (mp === "1") {
-            printWindow.document.write('.mp { margin: 280px -110px; position:absolute; width:200px;}');
+            printWindow.document.write('.mp { margin: 270px -110px; position:absolute; width:200px;}');
             printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no {display:none;}');
             printWindow.document.write('.branch {display:none;}');
         } else if(mp === "2") {
-            printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.mp { margin: 290px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date { margin:340px -50px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.ref_no { margin: 340px -130px; position:absolute; width:200px;}');///Same lang sa mp.
         }else{
-            printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.mp { margin: 290px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no { margin: 300px 130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch {display:none;}');
