@@ -81,6 +81,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <thead>
                             <tr>
                               <!--   <th>Date Encoded</th> -->
+                               <th>No.</th>
                                <th class="text-center">Pay Date</th>
                                <th class="text-center">CAR # </th>
                                <th class="text-center">Category</th>
@@ -138,10 +139,11 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             if (!$result) {
                                 die("ODBC query execution failed: " . odbc_errormsg());
                             }
+                            $i = 1;
                             while ($row = odbc_fetch_array($result)):
                             ?>
                             <tr>
-                               <!--   -->
+                                <td class="text-center"><?= $i++ ?></td>
                                 <td class="text-center"><?= date("Y-m-d", strtotime($row['c_st_pay_date'])) ?></td>
                                 <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
                                 <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
@@ -293,7 +295,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
             "paging": false,
             "searching": false,
             "ordering": false,
-            "info": true,
+            "info": false,
             "responsive": false
         });
     });
