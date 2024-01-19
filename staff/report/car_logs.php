@@ -1,3 +1,4 @@
+
 <?php
 
 function format_num($number){
@@ -16,13 +17,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 
 
 <div class="main-container">
-		<div class="pd-ltr-20">
-			<div class="title pb-20">
-				<h2 class="h3 mb-0">Cash Acknowledgement Receipts</h2>
-			</div>
-		
-        </div>
-
+	
         <div class="card-box mb-30">
             <div class="pd-20">
             <h4 class="text-muted">Filter Date</h4>
@@ -63,7 +58,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     }
                 </style>
                     
-                    <h4 class="text-center"><b>List Of CAR</b></h4>
+                    <h4 class="text-center"><b>CASH ACKNOWLEDGEMENT RECEIPT REPORT</b></h4>
                     <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
                      <?php elseif($category == 'GCF'): ?>
@@ -72,35 +67,37 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <p class="m-0 text-center">Streetlight & Grass-Cutting Fee</p>
                     <?php endif; ?>
                     <?php if ($from == $to): ?>
-                        <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) ?></p>
+                       <!--  <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) ?></p> -->
+                        <p class="m-0 text-center"><?= date("l, F d, Y", strtotime($from)) ?></p>
                     <?php else: ?>
-                        <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) . ' - ' . date("M d, Y g:i A", strtotime($to)) ?></p>
+                        <p class="m-0 text-center"><?= date("l, F d, Y", strtotime($from)) . ' - ' . date("l, F d, Y", strtotime($to)) ?></p>
                     <?php endif; ?>
                     <hr>
 
 
-                <div class="">
+                <div style="height: 500px; overflow-y: auto;">
                     <table id="car_table" class="table table-hover table-bordered">
-				        <thead>
+                        
+                        <thead>
                             <tr>
-                                <th>Date Encoded</th>
-                                <th>Pay Date</th>
-                                <th>CAR # </th>
-                                <th>Category</th>
-                                <th>Account #</th>
-                                <th>Last Name</th>
-                                <th>First Name</th>
-                                <th>Phase</th>
-                                <th>Block </th>
-                                <th>Lot</th>
-                                <th>Cash</th>
-                                <th>Check</th>
-                                <th>Online</th>
-                                <th>Discount</th>
-                                <th>Deposit</th>
-                                <th>Reference #</th>
-                                <th>Encoded by</th>
-                            <!--     <th>Action</th> -->
+                              <!--   <th>Date Encoded</th> -->
+                               <th class="text-center">Pay Date</th>
+                               <th class="text-center">CAR # </th>
+                               <th class="text-center">Category</th>
+                               <th class="text-center">Account #</th>
+                               <th class="text-center">Last Name</th>
+                               <th class="text-center">First Name</th>
+                               <th class="text-center">Phase</th>
+                               <th class="text-center">Block </th>
+                               <th class="text-center">Lot</th>
+                               <th class="text-center">Cash</th>
+                               <th class="text-center">Check</th>
+                               <th class="text-center">Online</th>
+                               <th class="text-center">Discount</th>
+                               <th class="text-center">Deposit</th>
+                               <th class="text-center">Reference #</th>
+                               <th class="text-center">Encoded by</th>
+                           <!--     <th class="text-center">Action</th> -->
                             </tr>
 				        </thead>
                         <tbody>
@@ -136,7 +133,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                             c_st_or_no LIKE 'STL-CAR%'
                                         ))
                                     )
-                                ORDER BY date(y.date_encoded) ASC";
+                                ORDER BY y.c_st_or_no ASC";
                             $result = odbc_exec($conn2, $query);
                             if (!$result) {
                                 die("ODBC query execution failed: " . odbc_errormsg());
@@ -144,8 +141,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             while ($row = odbc_fetch_array($result)):
                             ?>
                             <tr>
-                                <td class="text-center"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
-                                <td class="text-center"><?= date("M d, Y", strtotime($row['c_st_pay_date'])) ?></td>
+                               <!--   -->
+                                <td class="text-center"><?= date("Y-m-d", strtotime($row['c_st_pay_date'])) ?></td>
                                 <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
                                 <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
                                 <td class="text-center"><?php echo $row['c_account_no'] ?></td>
@@ -183,8 +180,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                     }
                                 echo $usr ?></td>
                         
-                                <!-- <?php $query = "SELECT * FROM t_utility_logs"?>
-                                <td>
+                              
+                               <!--  <td>
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
