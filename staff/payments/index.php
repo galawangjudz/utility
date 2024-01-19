@@ -531,7 +531,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                                 <option value="BDO">BDO</option>
                                 <option value="CBS">CBS</option>
                                 <option value="SBC">SBC</option>
-                                <option value="SBC">PNB</option>
+                                <option value="PNB">PNB</option>
                             </select>
                         </div>
                     </td>
