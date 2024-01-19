@@ -4,7 +4,7 @@
 <?php include('includes/head_session.php')?>
 
 <body>
-<!-- 	<div class="pre-loader">
+	<div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo"><img src="../vendors/images/deskapp-logo-svg.png" alt=""></div>
 			<div class='loader-progress' id="progress_div">
@@ -15,7 +15,7 @@
 				Loading...
 			</div>
 		</div>
-	</div> -->
+	</div>
 
 	<?php include('includes/navbar.php')?>
 
