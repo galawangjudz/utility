@@ -195,6 +195,12 @@ Class Master{
 		$car_no = $_POST['car_no'];
 		$pay_date = $_POST['pay_date'];
 		$or_no = isset($_POST['payment_or']) ? $_POST['payment_or'] : '';
+		$mode = isset($_POST['mop']) ? $_POST['mop'] : '';
+		$check_date = isset($_POST['check_date']) ? $_POST['check_date'] : NULL;
+		$branch = isset($_POST['branch']) ? $_POST['branch'] : NULL;
+		$ref = isset($_POST['ref_no']) ? $_POST['ref_no'] : NULL;
+
+
 
 		if ($car_no != $or_no) {
 			$checking = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$or_no'";
@@ -212,7 +218,7 @@ Class Master{
 		$date_updated = date('Y-m-d H:i:s');
 
 
-		$sql = "UPDATE t_utility_payments SET date_updated = '$date_updated', c_st_or_no = '$or_no', c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount' WHERE c_account_no = '$acc_no' and c_st_or_no = '$car_no'";
+		$sql = "UPDATE t_utility_payments SET c_check_date = " . ($check_date ? "'$check_date'" : 'NULL') . ", date_updated = '$date_updated', c_st_or_no = '$or_no', c_st_pay_date = '$pay_date', c_st_amount_paid = '$pay_amount_paid', c_discount = '$pay_discount', c_branch = '$branch', c_ref_no = '$ref', c_mop = '$mode' WHERE c_account_no = '$acc_no' and c_st_or_no = '$car_no'";
 		$update = odbc_exec($this->conn2, $sql);
 		//echo $sql;
 		if ($update) {

@@ -1,5 +1,11 @@
 <?php
 require_once('../../includes/config.php');
+
+
+function format_num($number){
+    $decimals = 2; // Set the number of decimal places
+    return number_format($number, $decimals);
+}
 if(isset($_GET['id'])){
     $or_no = $_GET['data-car'];
     $query = "SELECT * from t_utility_payments where c_st_or_no = '".$or_no."' and c_account_no = ".$_GET['id'];
@@ -11,6 +17,10 @@ if(isset($_GET['id'])){
                 $account_no = $row['c_account_no'];
                 $pay_date = $row['c_st_pay_date'];
                 $l_car_no = $row['c_st_or_no'];
+                $l_mop = $row['c_mop'];
+                $l_ref = $row['c_ref_no'];
+                $l_branch = $row['c_branch'];
+                $l_check_date = $row['c_check_date'];
                 $amount = format_num($row['c_st_amount_paid']);
                 $discount = format_num($row['c_discount']);
 
@@ -33,24 +43,30 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $ctrfield = false;
     $pblfield = false;
 }
-
-function format_num($number){
-    $decimals = 2; // Set the number of decimal places
-    return number_format($number, $decimals);
-}
 ?>
 <div class="container-fluid">
 <form action="" id="pay-form">
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <input type="hidden" name="car_no" value="<?php echo isset($l_car_no) ? $l_car_no : '' ?>">
         <div class="row">
-			<div class="col-md-6">
+			<div class="col-md-4">
                 <div class="form-group">
                     <label for="acc_no" class="control-label">Account No</label>
                     <input type="text" name="acc_no" id="acc_no" class="form-control form-control-border" value ="<?php echo isset($account_no) ? $account_no : '' ?>"readonly required>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="form-group">
+
+                    <label for="mop" class="control-label">Mode of Payment</label>
+                    <select name="mop" id="mop" class="form-control form-control-border" required>
+                        <option value="1" <?= isset($l_mop) && $l_mop == '1' ? 'selected' : '' ?>>Cash</option>
+                        <option value="2" <?= isset($l_mop) && $l_mop == '2' ? 'selected' : '' ?>>Check</option>
+                        <option value="3" <?= isset($l_mop) && $l_mop == '3' ? 'selected' : '' ?>>Gcash/Online</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
                 <label for="payment_or" class="control-label">CAR No.</label>
                 <input type="text" name="payment_or" id="payment_or" class="form-control form-control-border" value ="<?php echo isset($l_car_no) ? $l_car_no : '' ?>" required>
@@ -76,6 +92,36 @@ function format_num($number){
                 <div class="form-group">
                     <label for="pay_discount" class="control-label">Discount</label>
                     <input type="number" name="pay_discount" id="pay_discount" class="form-control form-control-border" value ="<?php echo isset($discount) ? (float)str_replace(',', '', $discount) : '' ?>" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="check_date" class="control-label">Check Date</label>
+                    <input type="date" name="check_date" id="check_date" class="form-control form-control-border" value ="<?php echo isset($l_check_date) ? $l_check_date : '' ?>" required>
+                
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="branch" class="control-label">Branch</label>
+                    <select name="branch" id="branch" class="form-control form-control-border" required>
+                        <option value="" <?= isset($l_branch) && $l_branch == '' ? 'selected' : '' ?>>--SELECT BANK--</option>
+                        <option value="BPI" <?= isset($l_branch) && $l_branch == 'BPI' ? 'selected' : '' ?>>BPI</option>
+                        <option value="BDO" <?= isset($l_branch) && $l_branch == 'BDO' ? 'selected' : '' ?>>BDO</option>
+                        <option value="CBS" <?= isset($l_branch) && $l_branch == 'CBS' ? 'selected' : '' ?>>CBS</option>
+                        <option value="SBC" <?= isset($l_branch) && $l_branch == 'SBC' ? 'selected' : '' ?>>SBC</option>
+                        <option value="PNB" <?= isset($l_branch) && $l_branch == 'PNB' ? 'selected' : '' ?>>PNB</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="ref_no" class="control-label">Reference/Check No</label>
+                    <input type="text" name="ref_no" id="ref_no" class="form-control form-control-border" value ="<?php echo isset($l_ref) ? $l_ref : '' ?>" required>
                 </div>
             </div>
         </div>

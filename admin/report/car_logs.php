@@ -95,7 +95,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <th>Lot</th>
                                 <th>Cash</th>
                                 <th>Check</th>
-                                <th>Gcash</th>
+                                <th>Online</th>
                                 <th>Discount</th>
                                 <th>Deposit</th>
                                 <th>Reference #</th>
