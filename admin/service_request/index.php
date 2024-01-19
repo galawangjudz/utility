@@ -128,8 +128,8 @@ while ($row = odbc_fetch_array($result)) {
                                             JOIN tblemployees c ON t.employee_id = c.emp_id
                                             JOIN tbldepartments d ON t.department_id = d.id ";
 
-                                $where = "WHERE t.department_id =" .$dept_id; // Add condition for customer ID
-                                //$where = "";
+                                //$where = "WHERE t.department_id =" .$dept_id; // Add condition for customer ID
+                                $where = "";
                                 $params = array($_SESSION['alogin']); // Parameters for prepared statement
 
                                 if (isset($timeRange)) {
