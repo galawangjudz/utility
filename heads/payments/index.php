@@ -652,7 +652,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
 
 
-        printWindow.document.write('.usr { margin: 300px 420px; position:absolute; width:200px;font-weight:bold}');
+        printWindow.document.write('.usr { margin: 280px 380px; position:absolute; width:200px;font-weight:bold}');
 
         if (mp === "1") {
             printWindow.document.write('.mp { margin: 280px -110px; position:absolute; width:200px;}');
