@@ -162,6 +162,9 @@ if ($l_acct_no != ''){
                                 $sql = sprintf($sql, $l_find);
 
                                 $qry = odbc_exec($conn2,$sql);
+                                if (odbc_num_rows($qry) == 0) {
+                                    echo '<tr><td colspan="11" style="text-align:center;font-size:20px;">No records matching the criteria were found.</td></tr>';
+                                }
                                 while(odbc_fetch_row($qry)):
                                     $ctr = odbc_result($qry, "c_control_no");
                                     $acc = odbc_result($qry, "c_account_no");

@@ -81,24 +81,24 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <thead>
                             <tr>
                               <!--   <th>Date Encoded</th> -->
-                               <th>No.</th>
-                               <th class="text-center">Pay Date</th>
-                               <th class="text-center">CAR # </th>
-                               <th class="text-center">Category</th>
-                               <th class="text-center">Account #</th>
-                               <th class="text-center">Last Name</th>
-                               <th class="text-center">First Name</th>
-                               <th class="text-center">Phase</th>
-                               <th class="text-center">Block </th>
-                               <th class="text-center">Lot</th>
-                               <th class="text-center">Cash</th>
-                               <th class="text-center">Check</th>
-                               <th class="text-center">Online</th>
-                               <th class="text-center">Discount</th>
-                               <th class="text-center">Deposit</th>
-                               <th class="text-center">Reference #</th>
-                               <th class="text-center">Encoded by</th>
-                               <th class="text-center">Action</th>
+                               <th style="text-align:center;font-size:10px;">No.</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Payment Date</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">CAR # </th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Category</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Account #</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Last Name</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">First Name</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Phase</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Block </th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Lot</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Cash</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Check</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Online</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Discount</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
                             </tr>
 				        </thead>
                         <tbody>
@@ -143,13 +143,13 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             while ($row = odbc_fetch_array($result)):
                             ?>
                             <tr>
-                                <td class="text-center"><?= $i++ ?></td>
-                                <td class="text-center"><?= date("Y-m-d", strtotime($row['c_st_pay_date'])) ?></td>
-                                <td class="text-center"><?php echo $row['st_or_no_clear'] ?></td>
-                                <td class="text-center"><?php echo $row['c_pay_type'] ?></td>
-                                <td class="text-center"><?php echo $row['c_account_no'] ?></td>
-                                <td class="text-center"><?php echo $row['c_last_name'] ?></td>
-                                <td class="text-center"><?php echo $row['c_first_name'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= $i++ ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['c_st_pay_date'])) ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['st_or_no_clear'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_pay_type'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_account_no'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_last_name'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_first_name'] ?></td>
                                 <?php $phase = "SELECT * FROM t_projects where c_code = ".$row['c_site'];
 
                                 $get_phase = odbc_exec($conn2, $phase);
@@ -162,16 +162,16 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                         $acronym = $row2['c_acronym'];
                                     }
                                 ?>
-                                <td class="text-center"><?php echo $acronym ?></td>
-                                <td class="text-center"><?php echo $row['c_block'] ?></td>
-                                <td class="text-center"><?php echo $row['c_lot'] ?></td>
-                                <td class="text-right"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                                <td class="text-right"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                                <td class="text-right"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                                <td class="text-right"><?php echo format_num($row['c_discount']) ?></td>
-                                <td class="text-center"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
-                                <td class="text-center"><?php echo $row['c_ref_no'] ?></td>
-                                <td class="text-center"><?php 
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $acronym ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_block'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_lot'] ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($row['c_discount']) ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_ref_no'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?php 
                                     $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
                                     $result2 = $conn->query($query444);
                                     if ($result2) {
