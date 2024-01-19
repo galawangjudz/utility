@@ -652,7 +652,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.mtf { margin: 100px -195px; position:absolute;}');
 
 
-        printWindow.document.write('.usr { margin: 300px 420px; position:absolute; width:200px;font-weight:bold}');
+        printWindow.document.write('.usr { margin: 280px 380px; position:absolute; width:200px;font-weight:bold}');
 
         if (mp === "1") {
             printWindow.document.write('.mp { margin: 280px -110px; position:absolute; width:200px;}');
@@ -667,7 +667,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         }else{
             printWindow.document.write('.mp { margin: 300px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
-            printWindow.document.write('.ref_no { margin: 340px 130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no { margin: 300px 130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch {display:none;}');
         }
         
