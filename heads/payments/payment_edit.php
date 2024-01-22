@@ -110,11 +110,17 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <label for="branch" class="control-label">Branch</label>
                     <select name="branch" id="branch" class="form-control form-control-border" required>
                         <option value="" <?= isset($l_branch) && $l_branch == '' ? 'selected' : '' ?>>--SELECT BANK--</option>
+                        <option value="RobinsonBank" <?= isset($l_branch) && $l_branch == 'RobinsonBank' ? 'selected' : '' ?>>Robinson Bank</option>
                         <option value="BPI" <?= isset($l_branch) && $l_branch == 'BPI' ? 'selected' : '' ?>>BPI</option>
                         <option value="BDO" <?= isset($l_branch) && $l_branch == 'BDO' ? 'selected' : '' ?>>BDO</option>
                         <option value="CBS" <?= isset($l_branch) && $l_branch == 'CBS' ? 'selected' : '' ?>>CBS</option>
                         <option value="SBC" <?= isset($l_branch) && $l_branch == 'SBC' ? 'selected' : '' ?>>SBC</option>
                         <option value="PNB" <?= isset($l_branch) && $l_branch == 'PNB' ? 'selected' : '' ?>>PNB</option>
+                        <option value="PSB" <?= isset($l_branch) && $l_branch == 'PSB' ? 'selected' : '' ?>>PSB</option>
+                        <option value="EWB" <?= isset($l_branch) && $l_branch == 'EWB' ? 'selected' : '' ?>>EWB</option>
+                        <option value="BOC" <?= isset($l_branch) && $l_branch == 'BOC' ? 'selected' : '' ?>>BOC</option>
+                        <option value="RCBC"<?= isset($l_branch) && $l_branch == 'RCBC' ? 'selected' : '' ?>>RCBC</option>
+                        <option value="LB"  <?= isset($l_branch) && $l_branch == 'LB' ? 'selected' : '' ?>>LB</option>
                     </select>
                 </div>
             </div>
