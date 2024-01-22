@@ -98,7 +98,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
+                         
                             </tr>
 				        </thead>
                         <tbody>
@@ -134,7 +134,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                             c_st_or_no LIKE 'STL-CAR%'
                                         ))
                                     )
-                                ORDER BY y.c_st_or_no ASC";
+                                ORDER BY SUBSTRING(y.c_st_or_no, 5) ASC";
                             $result = odbc_exec($conn2, $query);
                             if (!$result) {
                                 die("ODBC query execution failed: " . odbc_errormsg());
