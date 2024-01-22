@@ -8,11 +8,14 @@ function format_num($number){
 // Set default date and time range
 $defaultFromTime = '08:00:00';
 $defaultToTime = '16:00:00';
+$default_encoder = $_SESSION['alogin'];
 
 $from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d"). " " . $defaultFromTime;
 $to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d"). " " . $defaultToTime;
 
 $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
+$encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
+echo $encoder;
 ?>
 
 
@@ -31,13 +34,52 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <label for="to" class="control-label">Date To</label>
                     <input type="datetime-local" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-2 form-group">
                     <label for="category" class="control-label">Category</label>
                     <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
                         <option value="ALL" <?php echo ($category == 'ALL') ? 'selected' : ''; ?>>ALL</option>
-                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>Grass-Cutting</option>
+                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
                         <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
                     </select>
+                </div>
+
+                <div class="col-md-2 form-group">
+
+
+
+                    <label for="encoder" class="control-label">Encoder</label>
+                    <select name="encoder" id="encoder" class="form-control form-control-sm rounded-0" required>
+
+                        
+                    <?php 
+                    // Query to get distinct c_encoded_by values from t_utility_payments in PostgreSQL
+                        $distinctQuery = "SELECT DISTINCT c_encoded_by FROM t_utility_payments";
+                        $result2 = odbc_exec($conn2, $distinctQuery);
+
+                        if (!$result2) {
+                            echo "<option value=\"\">Error: " . odbc_errormsg($conn2) . "</option>";
+                        } else {
+                            while ($row2 = odbc_fetch_array($result2)) {
+                                $encodedBy = $row2['c_encoded_by'];
+
+                                // Query to get employee information based on c_encoded_by
+                                $employeeQuery = "SELECT * FROM tblemployees WHERE emp_id = '$encodedBy'";
+                                $employeeResult = $conn->query($employeeQuery);
+
+                                if ($employeeResult && $employeeResult->num_rows > 0) {
+                                    $employeeRow = $employeeResult->fetch_assoc();
+                                    $usr = $employeeRow['FirstName'] . ' ' . $employeeRow['LastName'];
+                                    $selected = ($encodedBy == $encoder) ? 'selected' : '';
+                                    echo "<option value=\"$encodedBy\" $selected>$usr</option>";
+                                } else {
+                                    echo "<option value=\"$encodedBy\">Unknown Employee</option>";
+                                }
+                            }
+                        }
+
+                        ?>
+                  
+                        </select>
                 </div>
               
                 <div class="col-md-4 form-group">
@@ -103,7 +145,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 				        </thead>
                         <tbody>
                             <?php 
-                            $i = 1;
+                          
+                           
                             $query = "SELECT 
                                     x.*, 
                                     RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
@@ -134,7 +177,11 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                             c_st_or_no LIKE 'STL-CAR%'
                                         ))
                                     )
+                                    AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
                                 ORDER BY y.c_st_or_no ASC";
+
+                        
+                            
                             $result = odbc_exec($conn2, $query);
                             if (!$result) {
                                 die("ODBC query execution failed: " . odbc_errormsg());
@@ -219,7 +266,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
+                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to' AND y.c_encoded_by ='$encoder'
                                             AND (
                                 ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
                                 ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
