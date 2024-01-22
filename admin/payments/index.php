@@ -528,6 +528,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             <select name="branch" id="branch" class="form-control form-control-border custom" style="text-align: center;">
                                 <option value="" selected>--SELECT BANK--</option>
                                 <option value="RobinsonBank">Robinson Bank</option>
+                                <option value="UB">UB</option>
                                 <option value="BPI">BPI</option>
                                 <option value="BDO">BDO</option>
                                 <option value="CBS">CBS</option>

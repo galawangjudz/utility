@@ -111,6 +111,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <select name="branch" id="branch" class="form-control form-control-border" required>
                         <option value="" <?= isset($l_branch) && $l_branch == '' ? 'selected' : '' ?>>--SELECT BANK--</option>
                         <option value="RobinsonBank" <?= isset($l_branch) && $l_branch == 'RobinsonBank' ? 'selected' : '' ?>>Robinson Bank</option>
+                        <option value="UB" <?= isset($l_branch) && $l_branch == 'UB' ? 'selected' : '' ?>>UB</option>
                         <option value="BPI" <?= isset($l_branch) && $l_branch == 'BPI' ? 'selected' : '' ?>>BPI</option>
                         <option value="BDO" <?= isset($l_branch) && $l_branch == 'BDO' ? 'selected' : '' ?>>BDO</option>
                         <option value="CBS" <?= isset($l_branch) && $l_branch == 'CBS' ? 'selected' : '' ?>>CBS</option>
