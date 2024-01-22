@@ -178,7 +178,7 @@ echo $encoder;
                                         ))
                                     )
                                     AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
-                                ORDER BY y.c_st_or_no ASC";
+                                ORDER BY SUBSTRING(y.c_st_or_no, 5) ASC";
 
                         
                             
