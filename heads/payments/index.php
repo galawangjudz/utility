@@ -526,18 +526,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <div class="form-group">
                             <label for="branch" class="control-label"><b>Branch: </b></label>
                             <select name="branch" id="branch" class="form-control form-control-border custom" style="text-align: center;">
-                                <option value="" selected>--SELECT BANK--</option>
+                            <option value="" selected>--SELECT BANK--</option>
                                 <option value="RobinsonBank">Robinson Bank</option>
                                 <option value="BPI">BPI</option>
                                 <option value="BDO">BDO</option>
                                 <option value="CBS">CBS</option>
                                 <option value="SBC">SBC</option>
                                 <option value="PNB">PNB</option>
-                                <option value="PSBank">PSBank</option>
-                                <option value="Eastwest">Eastwest</option>
+                                <option value="PSB">PSB</option>
+                                <option value="EWB">EWB</option>
                                 <option value="BOC">BOC</option>
-                                <option value="RCBC">BOC</option>
-                                <option value="Landbank">Landbank</option>
+                                <option value="RCBC">RCBC</option>
+                                <option value="LB">LB</option>
                             </select>
                         </div>
                     </td>
