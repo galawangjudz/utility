@@ -146,8 +146,7 @@ echo $encoder;
                         <tbody>
                             <?php 
                           
-                           
-                            $query = "SELECT 
+                               /*    $query = "SELECT 
                                     x.*, 
                                     RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                                     c_st_pay_date,
@@ -179,6 +178,76 @@ echo $encoder;
                                     )
                                     AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
                                 ORDER BY SUBSTRING(y.c_st_or_no, 5) ASC";
+                            */
+                            $query = "SELECT 
+                                        x.*, 
+                                        RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                                        c_st_pay_date,
+                                        CASE 
+                                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF'
+                                            WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL'
+                                            ELSE 'Others'
+                                        END AS c_pay_type,
+                                        c_st_amount_paid,
+                                        c_st_or_no,
+                                        c_discount,
+                                        c_mop,
+                                        c_ref_no,
+                                        c_check_date,
+                                        c_branch,
+                                        c_encoded_by,
+                                        date_encoded,
+                                        date_updated,
+                                        SUBSTRING(c_st_or_no FROM 5) AS substring_col  -- Add a column alias for the substring
+                                    FROM t_utility_accounts x
+                                    JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                    WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
+                                        AND (
+                                            ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                            ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                            ('$category' = 'ALL' AND (
+                                                c_st_or_no LIKE 'MTF-CAR%' OR
+                                                c_st_or_no LIKE 'STL-CAR%'
+                                            ))
+                                        )
+                                        AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
+                                    
+                                    UNION
+                                    
+                                    SELECT 
+                                        x.*, 
+                                        RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                                        cancelled_date AS c_st_pay_date,
+                                        CASE 
+                                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF-CANCELLED'
+                                            WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL-CANCELLED'
+                                            ELSE 'Others'
+                                        END AS c_pay_type,
+                                        c_st_amount_paid,
+                                        c_st_or_no,
+                                        c_discount,
+                                        c_mop,
+                                        c_ref_no,
+                                        c_check_date,
+                                        c_branch,
+                                        c_encoded_by,
+                                        date_encoded,
+                                        date_updated,
+                                        NULL AS substring_col  -- Add a NULL column alias to match the first SELECT
+                                    FROM t_utility_accounts x
+                                    JOIN t_cancelled_payments z ON x.c_account_no = z.c_account_no
+                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$to'
+                                        AND (
+                                            ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                            ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                            '$category' = 'ALL' AND (
+                                            z.c_st_or_no LIKE 'MTF-CAR%' OR
+                                            z.c_st_or_no LIKE 'STL-CAR%'
+                                        ))
+                                        AND ('$encoder' IS NULL OR z.c_encoded_by = '$encoder')
+                                    ORDER BY substring_col ASC;  -- Use the alias directly in ORDER BY                        
+                                                
+                               ";
 
                         
                             
