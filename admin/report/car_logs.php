@@ -140,6 +140,7 @@ echo $encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Date Encoded</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
                             </tr>
 				        </thead>
