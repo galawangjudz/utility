@@ -37,16 +37,22 @@ Class Master{
 		$params = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','$loginID','$status', '$date_created'";
 		if (empty($id)) {
 			$ticket_query = "INSERT INTO tickets (request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, employee_id,status, date_created) VALUES ($params)";
-			
+			$update = 0;
 		}else{
 			$data ="request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, status";
 			$values = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','0'";
 			$ticket_query = "UPDATE tickets SET ($data) = ($values) WHERE id = ".$id;
+			$update = 1;
 		}
 		if (odbc_exec($this->conn2, $ticket_query)) {
-			/* $this->log_log('Utility Bill', "DELETE - $date : $type : $id "); */
 			$resp['status'] = 'success';
-			$resp['msg'] = "Utility Ticket has been successfully saved.";
+			if ($update == 1){
+				$this->log_log('Ticket Add', "Update - $id : $request : $acc_no ");
+				$resp['msg'] = "Utility Ticket has been successfully updated.";
+			}else{
+				$this->log_log('Ticket Add', "ADD : $request : $acc_no ");
+				$resp['msg'] = "Account has been successfully added.";
+			}
 		} else {
 			$resp['status'] = 'failed';
 			$resp['msg'] = "An error occurred.";
@@ -88,7 +94,7 @@ Class Master{
 		$ticket_query = "UPDATE tickets SET status = '" .$ticket_status. "' WHERE id = ".$id;
 		
 		if (odbc_exec($this->conn2, $ticket_query)) {
-			/* $this->log_log('Utility Bill', "DELETE - $date : $type : $id "); */
+			$this->log_log('Ticket Updated', "ADD - $id : $request : $acc_no ");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Utility Ticket has been successfully updated.";
 		} else {
@@ -235,7 +241,11 @@ Class Master{
 	function delete_payment(){
 		
 		extract($_POST);
-		$del_details = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$id'";
+		$cancel_reason =  $_POST['cancel_reason'];
+		$cancel_date = date('Y-m-d H:i:s');
+		require_once('../includes/session.php');
+		$cancel_by = $_SESSION['alogin'];
+		$del_details = "SELECT * FROM t_utility_payments WHERE c_st_or_no = '$car_no'";
 		$result = odbc_exec($this->conn2, $del_details);
 		if (!$result) {
 			die("ODBC query execution failed: " . odbc_errormsg());
@@ -246,14 +256,67 @@ Class Master{
 			$pay_date = $row['c_st_pay_date'];
 			$pay_amount_paid = $row['c_st_amount_paid'];
 			$pay_discount = $row['c_discount'];
+			$mop = $row['c_mop'];
+			$ref_no = isset($row['c_ref_no']) ? $row['c_ref_no'] : '';
+			$branch = isset($row['c_branch']) ? $row['c_branch'] : '';
+			$check_date =  $row['c_check_date'];
+			$encoded_by = $row['c_encoded_by'];
+			$date_encoded = $row['date_encoded'];
+			$date_updated = $row['date_updated'];
+			$payment_type = $row['payment_type'];
+
 		}
-		$sql = "DELETE FROM t_utility_payments WHERE c_st_or_no = '$id'";
+		$sql = "DELETE FROM t_utility_payments WHERE c_st_or_no = '$car_no'";
+	
 		$delete = odbc_exec($this->conn2, $sql);
 		//echo $sql;
 		if ($delete) {
-			$this->log_log('Utility Payment', "DELETE - $acc_no : $or_no : $pay_date : $pay_amount_paid : $pay_discount");
-			$resp['status'] = 'success';
-			$resp['msg'] = "CAR has been deleted successfully.";
+			$cancelled = "INSERT INTO t_cancelled_payments (c_account_no,
+									c_st_or_no,
+									c_st_pay_date,
+									c_st_amount_paid,
+									c_discount,
+									c_mop,
+									c_ref_no,
+									c_branch,
+									c_check_date,
+									c_encoded_by,
+									date_encoded,
+									date_updated,
+									payment_type,
+									cancelled_date,
+									cancel_reason,
+									cancel_by) 
+									VALUES (
+										'$acc_no',
+										'$or_no',
+										'$pay_date',
+										$pay_amount_paid,
+										$pay_discount,
+										'$mop',
+										'$ref_no',
+										'$branch',
+										". ($check_date !== NULL ? "'$check_date'" : 'NULL') .",
+										'$encoded_by',
+										'$date_encoded',
+										'$date_updated',
+										'$payment_type',
+										'$cancel_date',
+										'$cancel_reason',
+										'$cancel_by'
+									)";
+			//echo $cancelled;
+       		if (odbc_exec($this->conn2, $cancelled)) {
+				$this->log_log('Payment Cancelled', "Cancelled payment with OR No.: $or_no");
+				$resp['status'] = 'success';
+				$resp['msg'] = "Paymnet has been cancelled successfully.";
+				
+			} else {
+				// Handle INSERT query error
+				$resp['status'] = 'error';
+				$resp['msg'] = "Error in inserting into t_cancelled_payments: " . odbc_errormsg($this->conn2);
+			}
+			
 		} else {
 			$resp['status'] = 'failed';
 			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";

@@ -140,14 +140,14 @@ echo $encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Date Encoded</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
                             </tr>
 				        </thead>
                         <tbody>
                             <?php 
                           
-                           
-                            $query = "SELECT 
+                               /*    $query = "SELECT 
                                     x.*, 
                                     RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
                                     c_st_pay_date,
@@ -179,6 +179,76 @@ echo $encoder;
                                     )
                                     AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
                                 ORDER BY SUBSTRING(y.c_st_or_no, 5) ASC";
+                            */
+                            $query = "SELECT 
+                                        x.*, 
+                                        RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                                        c_st_pay_date,
+                                        CASE 
+                                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF'
+                                            WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL'
+                                            ELSE 'Others'
+                                        END AS c_pay_type,
+                                        c_st_amount_paid,
+                                        c_st_or_no,
+                                        c_discount,
+                                        c_mop,
+                                        c_ref_no,
+                                        c_check_date,
+                                        c_branch,
+                                        c_encoded_by,
+                                        date_encoded,
+                                        date_updated,
+                                        SUBSTRING(c_st_or_no FROM 5) AS substring_col  -- Add a column alias for the substring
+                                    FROM t_utility_accounts x
+                                    JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                    WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
+                                        AND (
+                                            ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                            ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                            ('$category' = 'ALL' AND (
+                                                c_st_or_no LIKE 'MTF-CAR%' OR
+                                                c_st_or_no LIKE 'STL-CAR%'
+                                            ))
+                                        )
+                                        AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
+                                    
+                                    UNION
+                                    
+                                    SELECT 
+                                        x.*, 
+                                        RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
+                                        cancelled_date AS c_st_pay_date,
+                                        CASE 
+                                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF-CANCELLED'
+                                            WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL-CANCELLED'
+                                            ELSE 'Others'
+                                        END AS c_pay_type,
+                                        c_st_amount_paid,
+                                        c_st_or_no,
+                                        c_discount,
+                                        c_mop,
+                                        c_ref_no,
+                                        c_check_date,
+                                        c_branch,
+                                        c_encoded_by,
+                                        date_encoded,
+                                        date_updated,
+                                        NULL AS substring_col  -- Add a NULL column alias to match the first SELECT
+                                    FROM t_utility_accounts x
+                                    JOIN t_cancelled_payments z ON x.c_account_no = z.c_account_no
+                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$to'
+                                        AND (
+                                            ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                            ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                            '$category' = 'ALL' AND (
+                                            z.c_st_or_no LIKE 'MTF-CAR%' OR
+                                            z.c_st_or_no LIKE 'STL-CAR%'
+                                        ))
+                                        AND ('$encoder' IS NULL OR z.c_encoded_by = '$encoder')
+                                    ORDER BY substring_col ASC;  -- Use the alias directly in ORDER BY                        
+                                                
+                               ";
 
                         
                             
@@ -218,7 +288,10 @@ echo $encoder;
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($row['c_discount']) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_ref_no'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php 
+                                
+                                <td class="text-center" style="text-align:center;font-size:10px;">
+                                
+                                <?php 
                                     $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
                                     $result2 = $conn->query($query444);
                                     if ($result2) {
@@ -229,7 +302,7 @@ echo $encoder;
                                     }
                                 echo $usr ?></td>
                         
-                              
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
                                 <td>
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -237,7 +310,7 @@ echo $encoder;
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
                                             <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
                                     </div>
                                 </td>
@@ -389,7 +462,9 @@ echo $encoder;
 			uni_modal("Update Payment Details","payments/payment_edit.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
 		})
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
+        	uni_modal("Cancel Payment","report/cancel_payment.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
+	
+			//_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
 		})
 
         
