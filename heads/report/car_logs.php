@@ -140,6 +140,7 @@ echo $encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Date Encoded</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
                             </tr>
 				        </thead>
@@ -229,6 +230,7 @@ echo $encoder;
                                     }
                                 echo $usr ?></td>
                         
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
                               
                                 <td>
                                     <div class="dropdown">

@@ -219,7 +219,10 @@ echo $encoder;
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($row['c_discount']) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_ref_no'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php 
+                                
+                                <td class="text-center" style="text-align:center;font-size:10px;">
+                                
+                                <?php 
                                     $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
                                     $result2 = $conn->query($query444);
                                     if ($result2) {
@@ -230,7 +233,7 @@ echo $encoder;
                                     }
                                 echo $usr ?></td>
                         
-                              
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
                                 <td>
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
