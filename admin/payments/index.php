@@ -459,7 +459,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <fieldset class="fieldset">
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_amount_paid" class="control-label"><b>Payment for Grass-Cutting Amount: </b></label></td>
+                        <td><label for="main_amount_pay" class="control-label"><b>Payment for Grass-Cutting Amount: </b></label></td>
                         <td><input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="" required></td>
                     </tr>
                     <tr>
@@ -870,8 +870,8 @@ function compute_total_amt_paid(){
     var mtf_pay = $('.main_amount_pay').val();
     var mtf_discount = $('.main_discount').val();
 
-    var stlAmount = stl_pay - stl_discount;
-    var mtfAmount = mtf_pay - mtf_discount;
+    var stlAmount = parseFloat((stl_pay - stl_discount).toFixed(2));
+    var mtfAmount = parseFloat((mtf_pay - mtf_discount).toFixed(2));
 
     total = (stlAmount + mtfAmount);
     total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

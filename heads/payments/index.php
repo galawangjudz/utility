@@ -459,7 +459,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <fieldset class="fieldset">
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_amount_paid" class="control-label"><b>Payment for Grass-Cutting Amount: </b></label></td>
+                        <td><label for="main_amount_pay" class="control-label"><b>Payment for Grass-Cutting Amount: </b></label></td>
                         <td><input type="number" name="main_amount_pay" id="main_amount_pay" class="form-control form-control-border main_amount_pay" value ="" required></td>
                     </tr>
                     <tr>
@@ -671,7 +671,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.mp { margin: 290px -95px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date { margin:310px -10px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.ref_no { margin: 310px -110px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no { margin: 310px -100px; position:absolute; width:200px;}');///Same lang sa mp.
         }else{
             printWindow.document.write('.mp { margin: 290px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
@@ -870,8 +870,8 @@ function compute_total_amt_paid(){
     var mtf_pay = $('.main_amount_pay').val();
     var mtf_discount = $('.main_discount').val();
 
-    var stlAmount = stl_pay - stl_discount;
-    var mtfAmount = mtf_pay - mtf_discount;
+    var stlAmount = parseFloat((stl_pay - stl_discount).toFixed(2));
+    var mtfAmount = parseFloat((mtf_pay - mtf_discount).toFixed(2));
 
     total = (stlAmount + mtfAmount);
     total = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
