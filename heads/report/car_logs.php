@@ -10,12 +10,12 @@ $defaultFromTime = '08:00:00';
 $defaultToTime = '16:00:00';
 $default_encoder = $_SESSION['alogin'];
 
-$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d"). " " . $defaultFromTime;
-$to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d"). " " . $defaultToTime;
+$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d");
+$to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
 
 $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
-echo $encoder;
+
 ?>
 
 
@@ -28,11 +28,11 @@ echo $encoder;
             <div class="row align-items-end">
                 <div class="col-md-2 form-group">
                     <label for="from" class="control-label">Date From</label>
-                    <input type="datetime-local" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
+                    <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
                 <div class="col-md-2 form-group">
                     <label for="to" class="control-label">Date To</label>
-                    <input type="datetime-local" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
+                    <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
                 </div>
                 <div class="col-md-2 form-group">
                     <label for="category" class="control-label">Category</label>
@@ -42,46 +42,6 @@ echo $encoder;
                         <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
                     </select>
                 </div>
-
-                <div class="col-md-2 form-group">
-
-
-
-                    <label for="encoder" class="control-label">Encoder</label>
-                    <select name="encoder" id="encoder" class="form-control form-control-sm rounded-0" required>
-
-                        
-                    <?php 
-                    // Query to get distinct c_encoded_by values from t_utility_payments in PostgreSQL
-                        $distinctQuery = "SELECT DISTINCT c_encoded_by FROM t_utility_payments";
-                        $result2 = odbc_exec($conn2, $distinctQuery);
-
-                        if (!$result2) {
-                            echo "<option value=\"\">Error: " . odbc_errormsg($conn2) . "</option>";
-                        } else {
-                            while ($row2 = odbc_fetch_array($result2)) {
-                                $encodedBy = $row2['c_encoded_by'];
-
-                                // Query to get employee information based on c_encoded_by
-                                $employeeQuery = "SELECT * FROM tblemployees WHERE emp_id = '$encodedBy'";
-                                $employeeResult = $conn->query($employeeQuery);
-
-                                if ($employeeResult && $employeeResult->num_rows > 0) {
-                                    $employeeRow = $employeeResult->fetch_assoc();
-                                    $usr = $employeeRow['FirstName'] . ' ' . $employeeRow['LastName'];
-                                    $selected = ($encodedBy == $encoder) ? 'selected' : '';
-                                    echo "<option value=\"$encodedBy\" $selected>$usr</option>";
-                                } else {
-                                    echo "<option value=\"$encodedBy\">Unknown Employee</option>";
-                                }
-                            }
-                        }
-
-                        ?>
-                  
-                        </select>
-                </div>
-              
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
 			        <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
@@ -99,8 +59,9 @@ echo $encoder;
                         padding: 0 !important;
                     }
                 </style>
-                    
-                    <h4 class="text-center"><b>CASH ACKNOWLEDGEMENT RECEIPT REPORT</b></h4>
+                    <h3 class="text-center"><b>ASIAN LAND STRATEGIES CORPORATION</b></h3>
+                    <h5 class="text-center"><b>CASH ACKNOWLEDGEMENT RECEIPT REPORT</b></h5>
+                    <h5 class="text-center"><b>DAILY COLLECTION & DEPOSIT REPORT </b></h5>
                     <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
                      <?php elseif($category == 'GCF'): ?>
@@ -146,40 +107,6 @@ echo $encoder;
 				        </thead>
                         <tbody>
                             <?php 
-                          
-                               /*    $query = "SELECT 
-                                    x.*, 
-                                    RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
-                                    c_st_pay_date,
-                                    CASE 
-                                        WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF'
-                                        WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL'
-                                        ELSE 'Others'
-                                    END AS c_pay_type,
-                                    c_st_amount_paid,
-                                    c_st_or_no,
-                                    c_discount,
-                                    c_mop,
-                                    c_ref_no,
-                                    c_check_date,
-                                    c_branch,
-                                    c_encoded_by,
-                                    date_encoded,
-                                    date_updated
-                                FROM t_utility_accounts x
-                                JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
-                                AND (
-                                        ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                                        ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                                        ('$category' = 'ALL' AND (
-                                            c_st_or_no LIKE 'MTF-CAR%' OR
-                                            c_st_or_no LIKE 'STL-CAR%'
-                                        ))
-                                    )
-                                    AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
-                                ORDER BY SUBSTRING(y.c_st_or_no, 5) ASC";
-                            */
                             $query = "SELECT 
                                         x.*, 
                                         RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
@@ -211,8 +138,7 @@ echo $encoder;
                                                 c_st_or_no LIKE 'STL-CAR%'
                                             ))
                                         )
-                                        AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
-                                    
+                                       
                                     UNION
                                     
                                     SELECT 
@@ -245,7 +171,7 @@ echo $encoder;
                                             z.c_st_or_no LIKE 'MTF-CAR%' OR
                                             z.c_st_or_no LIKE 'STL-CAR%'
                                         ))
-                                        AND ('$encoder' IS NULL OR z.c_encoded_by = '$encoder')
+                                      
                                     ORDER BY substring_col ASC;  -- Use the alias directly in ORDER BY                        
                                                 
                                ";
@@ -263,7 +189,7 @@ echo $encoder;
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= $i++ ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['c_st_pay_date'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['st_or_no_clear'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_pay_type'] ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;" <?php echo (strpos($row['c_pay_type'], 'CANCELLED') !== false) ? 'color: red;' : ''; ?>><?php echo $row['c_pay_type'] ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_account_no'] ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_last_name'] ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_first_name'] ?></td>
@@ -339,7 +265,7 @@ echo $encoder;
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to' AND y.c_encoded_by ='$encoder'
+                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
                                             AND (
                                 ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
                                 ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
