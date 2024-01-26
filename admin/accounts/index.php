@@ -156,7 +156,7 @@ if ($l_acct_no != ''){
                                 if ($l_find == "00000000" && $l_acct_no == "" && $last_name == ""):
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active' ORDER BY c_date_applied DESC limit 10 ";
                                 elseif($last_name != ""):
-                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_last_name ~*'^%s' ORDER BY c_last_name, c_location";
+                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_last_name ~*'^%s' ORDER BY c_last_name, c_first_name, c_location";
                                 else:
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_account_no::text ~* '^%s' ORDER BY c_account_no";
                                 endif;
