@@ -413,7 +413,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <legend style="text-align:center;font-weight:bold;font-size:16px;">STL (Streetlight) Details</legend>
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="stl_date" class="control-label">STL Due Date: <br><span style="color: red;"><?php echo $l_stl_status . " (". $months_street . " months)"; ?></span> </label></td>
+                        <td><label for="stl_date" class="control-label">STL Due Date: <br><span style="color: red;"><?php echo $l_stl_status; ?></span> </label></td>
                         <td><input type="date" name="stl_date" id="stl_date" class="form-control" value ="<?php echo isset($street_due) ? $street_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
@@ -439,7 +439,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             
                 <table style="width:100%;">
                     <tr>
-                        <td><label for="main_date" class="control-label">GCF Due Date: <br><span style="color: red;"><?php echo $l_gcf_status . " (". $months_mainte . " months)"; ?></span></label></td>
+                        <td><label for="main_date" class="control-label">GCF Due Date: <br><span style="color: red;"><?php echo $l_gcf_status ; ?></span></label></td>
                         <td><input type="date" name="main_date" id="main_date" class="form-control form-control-border" value ="<?php echo isset($mainte_due) ? $mainte_due : date('Y-m-d'); ?>"readonly required></td>
                     </tr>
                     <tr>
