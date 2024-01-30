@@ -94,7 +94,7 @@ Class Master{
 		$ticket_query = "UPDATE tickets SET status = '" .$ticket_status. "' WHERE id = ".$id;
 		
 		if (odbc_exec($this->conn2, $ticket_query)) {
-			$this->log_log('Ticket Updated', "ADD - $id : $request : $acc_no ");
+			$this->log_log('Ticket Updated', "ADD - $id : $ticket_status");
 			$resp['status'] = 'success';
 			$resp['msg'] = "Utility Ticket has been successfully updated.";
 		} else {
