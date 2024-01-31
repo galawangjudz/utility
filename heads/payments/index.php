@@ -59,6 +59,7 @@ if(isset($_GET['id'])){
     if ($due_count == 0) {
         $l_ddate = "1990-01-01";
         $l_sdate = "";
+        $l_edate = "";
     }else{
         while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y-m-d", strtotime($due['c_end_date']));
@@ -166,6 +167,7 @@ if(isset($_GET['id'])){
     if ($due_count == 0) {
         $l_ddate = "1990-01-01";
         $l_sdate = "";
+        $l_edate = "";
     }else{
         while ($due = odbc_fetch_array($result)) {
             $l_edate1 = date("Y-m-d", strtotime($due['c_end_date']));
@@ -749,12 +751,12 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         var accNo = document.getElementById("acc_no").value;
         //var pbl = document.getElementById("pbl").value
         // Limit the full name to 50 characters
-        var limitedFullName = fullName.length > 60 ? fullName.substring(0, 60) : fullName;
+        var limitedFullName = fullName.length > 65 ? fullName.substring(0, 65) + ' ...' : fullName;
 
         
 
         // Print the formatted string
-        printWindow.document.write('<p class="full-name">' + limitedFullName + '...' '</p>');
+        printWindow.document.write('<p class="full-name">' + limitedFullName + '</p>');
 
         printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + ' / ' + accNo + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("trans_date").value + '</p>');
