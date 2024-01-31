@@ -130,7 +130,7 @@ if ($l_acct_no != ''){
 					</div>
 				<div class="pb-20">
                     
-					<table class="data-table table stripe hover nowrap">
+					<table id="account-table" class="data-table table stripe hover nowrap">
 						<thead>
 							<tr>
 								<th class="table-plus">No</th>
@@ -144,8 +144,7 @@ if ($l_acct_no != ''){
 						</thead>
 						<tbody>
                    
-							<tr>
-								
+						
                             <?php 
                                 $i = 1;
                             
@@ -175,7 +174,7 @@ if ($l_acct_no != ''){
                                     $lname = odbc_result($qry, "c_last_name");
                                     $types = odbc_result($qry, "c_types");
                                     $status = odbc_result($qry, "c_status");
-                            ?>
+                                    ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class=""><?php echo $acc ?></td>
@@ -221,24 +220,9 @@ if ($l_acct_no != ''){
                                             <?php endif; ?>
                                         </div>
                                     </div>
-                                   
-                      <!-- 
-                                        <a class="btn view_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-eye text-info"></span></a>
-                                       
-                                        <a class="btn stl_bill_data" href="javascript:void(0)" id ="<?php echo $acc ?>" bill_type ="STL"><span class="fa fa-lightbulb text-dark"></span></a>
-                                        <a class="btn stl_payment_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-wallet text-success"></span></a>
-                                     
-                                       
-                                        <a class="btn mtf_bill_data" href="javascript:void(0)" id ="<?php echo $acc ?>" bill_type ="MTF"><span class="fa fa-leaf text-dark"></span></a>
-                                        <a class="btn mtf_payment_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-wallet text-success"></span></a>
-                                      
-                                        <a class="btn edit_data" href="javascript:void(0)" id ="<?php echo $acc ?>"><span class="fa fa-edit text-primary"></span></a>
-                                        <a class="btn delete_data" href="javascript:void(0)" id="<?php echo $acc ?>"><span class="fa fa-trash text-danger"></span></a>
-                                       
-                                        </div> -->
 
                                     </td>
-                                </tr>
+                                </tr>            
                             <?php endwhile; ?>
 						</tbody>
 					</table>
@@ -257,6 +241,16 @@ if ($l_acct_no != ''){
 </style>
 
 <script>
+
+    $(document).ready(function() {
+        $('#account-table').DataTable({
+            "paging": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "responsive": false
+        });
+    });
     $(document).ready(function(){
 
 

@@ -505,6 +505,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <td><label for="total_amount_paid" class="control-label"><b>Total Amount Paid: </b></label></td>
                     <td><input type="text" name="total_amount_paid" id="total_amount_paid" class="form-control form-control-border" value ="0" readonly required></td>
                 </tr>
+                <tr>
+                    <td><label for="remarks" class="control-label"><b>Remarks </b></label></td>
+                    <td><input type="text" name="remarks" id="remarks" class="form-control form-control-border" placeholder ="ex. (Jan 6, 2024 - Feb 5, 2024 - Full payment)" required></td>
+                </tr>
             </table>
         </div>
 
@@ -524,6 +528,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <td class="col-md-4">
                         <div class="form-group">
                             <label for="pay_date" class="control-label"><b>Pay Date: </b></label>
+                            <input type="date" name="trans_date" id="trans_date" class="form-control form-control-border pay-date" value="<?php echo date('Y-m-d'); ?>" style="display: none;" required>
                             <input type="date" name="pay_date" id="pay_date" class="form-control form-control-border pay-date" value="<?php echo date('Y-m-d'); ?>" required>
                         </div>
                     </td>
@@ -657,11 +662,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         var paymentForText;
 
         if (mainAmountPaid === 0) {
-            paymentForText = 'Streetlight Fee';
+            paymentForText = 'STL Fee';
         } else if (stlAmountPaid === 0) {
-            paymentForText = 'Grass-Cutting Fee';
+            paymentForText = 'GCF Fee';
         }else{
-            paymentForText = 'Grass-Cutting and Streetlight Fee';
+            paymentForText = 'GCF and STL Fee';
         }
 
         var printWindow = window.open('', '_blank');
@@ -701,10 +706,12 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.ref_no { margin: 300px 130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch {display:none;}');
         }
+
         
+        printWindow.document.write('.remarks { margin: 260px 360px ; position:absolute; width:250px;}');
 
         printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
-        printWindow.document.write('.payment-for { margin: 260px 240px; width:300px; position:absolute; }');
+        printWindow.document.write('.payment-for { margin: 260px 230px; width:300px; position:absolute; }');
         printWindow.document.write('.numtowords { margin: 215px 160px; width:400px; position:absolute; }');
 
         printWindow.document.write('.stl-pay { text-align:right; position:absolute; }');
@@ -748,7 +755,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<p class="full-name">' + limitedFullName + ' / ' + accNo + '</p>');
 
         printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + '</p>');
-        printWindow.document.write('<p class="pay-date">' + document.getElementById("pay_date").value + '</p>');
+        printWindow.document.write('<p class="pay-date">' + document.getElementById("trans_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
         
@@ -768,6 +775,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
         printWindow.document.write('<p class="branch">Bank Branch: ' + document.getElementById("branch").value + '</p>');
         printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
+
+        printWindow.document.write('<p class="remarks">' + document.getElementById("remarks").value + '</p>');
 
         printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="usr">' + document.getElementById("usr").value + '</p>');
