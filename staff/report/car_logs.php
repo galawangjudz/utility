@@ -27,13 +27,13 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
             <form action="" id="filter">
             <div class="row align-items-end">
                 <div class="col-md-2 form-group">
-                    <label for="from" class="control-label">Transaction Date From</label>
+                    <label for="from" class="control-label">Transaction Date</label>
                     <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
-                <div class="col-md-2 form-group">
+                <!--   <div class="col-md-2 form-group">
                     <label for="to" class="control-label">Transaction Date To</label>
                     <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
-                </div>
+                </div> -->
                 <div class="col-md-2 form-group">
                     <label for="category" class="control-label">Category</label>
                     <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
