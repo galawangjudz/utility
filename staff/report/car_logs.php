@@ -164,7 +164,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                         NULL AS substring_col  -- Add a NULL column alias to match the first SELECT
                                     FROM t_utility_accounts x
                                     JOIN t_cancelled_payments z ON x.c_account_no = z.c_account_no
-                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$to'
+                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$from'
                                         AND (
                                             ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
                                             ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
