@@ -677,8 +677,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         //printWindow.document.write('    background-image: url("payments/car.jpg");');
         printWindow.document.write('    background-size: 820px 350px;');
         printWindow.document.write('}');
-        printWindow.document.write('.pay-date { margin: 130px 390px; width: 100px; position:absolute; }');
-        printWindow.document.write('.full-name { margin: 160px 180px; width: 350px; position:absolute; }');
+        printWindow.document.write('.pay-date { margin: 133px 390px; width: 100px; position:absolute; }');
+        printWindow.document.write('.full-name { margin: 155px 180px; width: 250px; position:absolute; }');
         printWindow.document.write('.add { margin: 190px 150px; width: 350px; position:absolute; }');
         printWindow.document.write('.payment-or { margin: 20px 180px; }');
         printWindow.document.write('.mode-payment { margin: 10px 0; }');
@@ -745,16 +745,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('</style>');
 
         printWindow.document.write('</head><body style="border:none;margin-left:190px;margin-top:-30px;background-repeat:no-repeat;">');
-        var fullName = document.getElementById("fname").value + ' ' + document.getElementById("mname").value + ' ' + document.getElementById("lname").value;
+        var fullName =  document.getElementById("lname").value + ', ' + document.getElementById("fname").value + ' ' + document.getElementById("mname").value ;
         var accNo = document.getElementById("acc_no").value;
         //var pbl = document.getElementById("pbl").value
         // Limit the full name to 50 characters
-        var limitedFullName = fullName.length > 25 ? fullName.substring(0, 25) : fullName;
+        var limitedFullName = fullName.length > 60 ? fullName.substring(0, 60) : fullName;
+
+        
 
         // Print the formatted string
-        printWindow.document.write('<p class="full-name">' + limitedFullName + ' / ' + accNo + '</p>');
+        printWindow.document.write('<p class="full-name">' + limitedFullName + '...' '</p>');
 
-        printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + '</p>');
+        printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + ' / ' + accNo + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("trans_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
