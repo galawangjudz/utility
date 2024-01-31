@@ -85,6 +85,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             <tr>
                               <!--   <th>Date Encoded</th> -->
                                <th style="text-align:center;font-size:10px;">No.</th>
+                               <th class="text-center" style="text-align:center;font-size:8px;">Transaction Date</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Payment Date</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">CAR # </th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Category</th>
@@ -101,7 +102,6 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Date Encoded</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
                             </tr>
 				        </thead>
@@ -187,6 +187,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             ?>
                             <tr>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= $i++ ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['c_st_pay_date'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['st_or_no_clear'] ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;" <?php echo (strpos($row['c_pay_type'], 'CANCELLED') !== false) ? 'color: red;' : ''; ?>><?php echo $row['c_pay_type'] ?></td>
@@ -228,7 +229,6 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                     }
                                 echo $usr ?></td>
                         
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
                                 <td>
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">

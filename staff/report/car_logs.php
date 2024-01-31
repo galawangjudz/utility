@@ -27,11 +27,11 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
             <form action="" id="filter">
             <div class="row align-items-end">
                 <div class="col-md-2 form-group">
-                    <label for="from" class="control-label">Date From</label>
+                    <label for="from" class="control-label">Transaction Date From</label>
                     <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
                 <div class="col-md-2 form-group">
-                    <label for="to" class="control-label">Date To</label>
+                    <label for="to" class="control-label">Transaction Date To</label>
                     <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
                 </div>
                 <div class="col-md-2 form-group">
@@ -85,6 +85,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             <tr>
                               <!--   <th>Date Encoded</th> -->
                                <th style="text-align:center;font-size:10px;">No.</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Transaction Date</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Payment Date</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">CAR # </th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Category</th>
@@ -187,6 +188,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             ?>
                             <tr>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= $i++ ?></td>
+                                <td class="text-center" style="text-align:center;font-size:8px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['c_st_pay_date'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['st_or_no_clear'] ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;" <?php echo (strpos($row['c_pay_type'], 'CANCELLED') !== false) ? 'color: red;' : ''; ?>><?php echo $row['c_pay_type'] ?></td>
