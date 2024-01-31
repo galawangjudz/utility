@@ -124,12 +124,10 @@ if ($l_acct_no != ''){
 			<div class="card-box mb-30">
 				<div class="pd-20">
 						<h2 class="text-blue h4">List of Accounts</h2>
-                        <div class="card-tools">
-                            <a href="javascript:void(0)" id="create_new" class="btn btn-flat btn-sm btn-primary"><i class="dw dw-add"></i> Add New</a>
-                        </div>
 					</div>
 				<div class="pb-20">
-					<table class="data-table table stripe hover nowrap">
+                    
+					<table id="account-table" class="data-table table stripe hover nowrap">
 						<thead>
 							<tr>
 								<th class="table-plus">No</th>
@@ -143,8 +141,7 @@ if ($l_acct_no != ''){
 						</thead>
 						<tbody>
                    
-							<tr>
-								
+						
                             <?php 
                                 $i = 1;
                             
@@ -162,6 +159,7 @@ if ($l_acct_no != ''){
                                 $sql = sprintf($sql, $l_find);
 
                                 $qry = odbc_exec($conn2,$sql);
+
                                 if (odbc_num_rows($qry) == 0) {
                                     echo '<tr><td colspan="11" style="text-align:center;font-size:20px;">No records matching the criteria were found.</td></tr>';
                                 }
@@ -173,7 +171,7 @@ if ($l_acct_no != ''){
                                     $lname = odbc_result($qry, "c_last_name");
                                     $types = odbc_result($qry, "c_types");
                                     $status = odbc_result($qry, "c_status");
-                            ?>
+                                    ?>
                                 <tr>
                                     <td class="text-center"><?php echo $i++; ?></td>
                                     <td class=""><?php echo $acc ?></td>
@@ -217,10 +215,9 @@ if ($l_acct_no != ''){
                                           
                                         </div>
                                     </div>
-        
 
                                     </td>
-                                </tr>
+                                </tr>            
                             <?php endwhile; ?>
 						</tbody>
 					</table>
@@ -239,6 +236,16 @@ if ($l_acct_no != ''){
 </style>
 
 <script>
+
+    $(document).ready(function() {
+        $('#account-table').DataTable({
+            "paging": false,
+            "searching": true,
+            "ordering": true,
+            "info": false,
+            "responsive": false
+        });
+    });
     $(document).ready(function(){
 
         $('.soa_data').click(function(){
