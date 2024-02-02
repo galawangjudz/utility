@@ -57,10 +57,16 @@
 					</li>
 
 
-					<li>
-						<a href="<?php echo base_url ?>admin/?page=report/car_logs" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-newspaper"></span><span class="mtext">CAR Report</span>
+					
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-newspaper"></span><span class="mtext"> Reports </span>
 						</a>
+						<ul class="submenu">
+							<li><a href="<?php echo base_url ?>admin/?page=report/car_logs">Daily Report</a></li>
+							<li><a href="<?php echo base_url ?>admin/?page=report/summary_report">Summary Report</a></li>
+							
+						</ul>
 					</li>
 					<li>
 					<a href="<?php echo base_url ?>admin/?page=user_setting" class="dropdown-toggle no-arrow">

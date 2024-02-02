@@ -29,203 +29,37 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <h5 class="text-center"><b>SUMMARY REPORT </b></h5>
                     <hr>
 
-
                 <div style="height: 500px; overflow-y: auto;">
                     <table id="car_table" class="table table-hover table-bordered">
-                        
-                        <thead>
+                    <thead>
                             <tr>
-                              <!--   <th>Date Encoded</th> -->
-                               <th style="text-align:center;font-size:10px;">No.</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Transaction Date</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Payment Date</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">CAR # </th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Category</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Account #</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Last Name</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">First Name</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Phase</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Block </th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Lot</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Cash</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Check</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Online</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Discount</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
-                            </tr>
-				        </thead>
-                        <tbody>
-                            <?php 
-                            $query = "SELECT 
-                                        x.*, 
-                                        RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
-                                        c_st_pay_date,
-                                        CASE 
-                                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF'
-                                            WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL'
-                                            ELSE 'Others'
-                                        END AS c_pay_type,
-                                        c_st_amount_paid,
-                                        c_st_or_no,
-                                        c_discount,
-                                        c_mop,
-                                        c_ref_no,
-                                        c_check_date,
-                                        c_branch,
-                                        c_encoded_by,
-                                        date_encoded,
-                                        date_updated,
-                                        SUBSTRING(c_st_or_no FROM 5) AS substring_col  -- Add a column alias for the substring
-                                    FROM t_utility_accounts x
-                                    JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                    WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
-                                        AND (
-                                            ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                                            ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                                            ('$category' = 'ALL' AND (
-                                                c_st_or_no LIKE 'MTF-CAR%' OR
-                                                c_st_or_no LIKE 'STL-CAR%'
-                                            ))
-                                        )
-                                       
-                                    UNION
-                                    
-                                    SELECT 
-                                        x.*, 
-                                        RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
-                                        cancelled_date AS c_st_pay_date,
-                                        CASE 
-                                            WHEN c_st_or_no LIKE 'MTF-CAR%' THEN 'GCF-CANCELLED'
-                                            WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL-CANCELLED'
-                                            ELSE 'Others'
-                                        END AS c_pay_type,
-                                        c_st_amount_paid,
-                                        c_st_or_no,
-                                        c_discount,
-                                        c_mop,
-                                        c_ref_no,
-                                        c_check_date,
-                                        c_branch,
-                                        c_encoded_by,
-                                        date_encoded,
-                                        date_updated,
-                                        NULL AS substring_col  -- Add a NULL column alias to match the first SELECT
-                                    FROM t_utility_accounts x
-                                    JOIN t_cancelled_payments z ON x.c_account_no = z.c_account_no
-                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$to'
-                                        AND (
-                                            ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                                            ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                                            '$category' = 'ALL' AND (
-                                            z.c_st_or_no LIKE 'MTF-CAR%' OR
-                                            z.c_st_or_no LIKE 'STL-CAR%'
-                                        ))
-                                      
-                                    ORDER BY substring_col ASC;  -- Use the alias directly in ORDER BY                        
-                                                
-                               ";
-
-                        
-                            
-                            $result = odbc_exec($conn2, $query);
-                            if (!$result) {
-                                die("ODBC query execution failed: " . odbc_errormsg());
-                            }
-                            $i = 1;
-                            while ($row = odbc_fetch_array($result)):
-                            ?>
-                            <tr>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?= $i++ ?></td>
-                                <td class="text-center" style="text-align:center;font-size:8px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['c_st_pay_date'])) ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['st_or_no_clear'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;" <?php echo (strpos($row['c_pay_type'], 'CANCELLED') !== false) ? 'color: red;' : ''; ?>><?php echo $row['c_pay_type'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_account_no'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_last_name'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_first_name'] ?></td>
-                                <?php $phase = "SELECT * FROM t_projects where c_code = ".$row['c_site'];
-
-                                $get_phase = odbc_exec($conn2, $phase);
-
-                                    if (!$result) {
-                                        die("ODBC query execution failed: " . odbc_errormsg());
-                                    }
-                                    // Fetch and display the results
-                                    while ($row2 = odbc_fetch_array($get_phase)) {
-                                        $acronym = $row2['c_acronym'];
-                                    }
-                                ?>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $acronym ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_block'] ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_lot'] ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($row['c_discount']) ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_ref_no'] ?></td>
-                                
-                                <td class="text-center" style="text-align:center;font-size:10px;">
-                                
-                                <?php 
-                                    $query444 = " SELECT * FROM tblemployees where emp_id ='".$row['c_encoded_by']."'";
-                                    $result2 = $conn->query($query444);
-                                    if ($result2) {
-                                        $row3 = $result2->fetch_assoc();
-                                        $usr = $row3['FirstName'] . ' ' . $row3['LastName'];
-                                    } else {
-                                        echo "Error: " . $conn->error;
-                                    }
-                                echo $usr ?></td>
-                        
-                                <td>
-                                    <div class="dropdown">
-                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                            <i class="dw dw-more"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                            <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                    
-					        <?php endwhile; ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="">
-                    <table id="scar_table" class="table table-hover table-bordered">
-                        <thead>
-                            <tr>
+                                <th class="text-center">TRANSACTION DATE</th>
                                 <th class="text-center">TOTAL CASH</th>
                                 <th class="text-center">TOTAL CHECK</th>
                                 <th class="text-center">TOTAL ONLINE</th>
                                 <th class="text-center">TOTAL</th>
                             </tr>
                         </thead>
-                    <tbody>
-                        <?php
+                    <?php
                         $grandTotal= "SELECT
-                            SUM(CASE WHEN c_mop = '1' or c_mop is NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
-                            SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
-                            SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
-                            SUM(c_st_amount_paid) AS Grand_Total
-                            FROM t_utility_accounts x
-                            JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
-                                            AND (
-                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                                ('$category' = 'ALL' AND (
-                                    c_st_or_no LIKE 'MTF-CAR%' OR
-                                    c_st_or_no LIKE 'STL-CAR%'
-                                ))
-                            )";
+                        date(y.date_encoded) AS Transaction_Date,
+                        SUM(CASE WHEN c_mop = '1' OR c_mop IS NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
+                        SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
+                        SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
+                        SUM(c_st_amount_paid) AS Grand_Total
+                    FROM
+                        t_utility_accounts x
+                        JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                    WHERE
+                        ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                        ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                        ('$category' = 'ALL' AND (
+                            c_st_or_no LIKE 'MTF-CAR%' OR
+                            c_st_or_no LIKE 'STL-CAR%'
+                        ))
+                    GROUP BY
+                        date(y.date_encoded) ORDER BY
+                     date(y.date_encoded) DESC";
                        $result3 = odbc_exec($conn2, $grandTotal);
                        if (!$result3) {
                         die("ODBC query execution failed: " . odbc_errormsg());
@@ -233,6 +67,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                        while ($grandTotalRow = odbc_fetch_array($result3)):
                         ?>
                         <tr>
+                        <td class="text-right"><?php echo $grandTotalRow['transaction_date']?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
@@ -243,13 +78,9 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                        endwhile;
 
                         ?>
-                        </tbody>
                     </table>
                 </div>
-
-                    
-                    
-                   
+                
        
 </div>
 </div>
