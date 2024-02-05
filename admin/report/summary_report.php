@@ -6,8 +6,9 @@ function format_num($number){
 }
 
 
-$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d");
-$to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
+$minDate = "2024-01-25";
+$from = isset($_GET['from']) && strtotime($_GET['from']) >= strtotime($minDate) ? $_GET['from'] : date("Y-m-d");
+$to = isset($_GET['to']) && strtotime($_GET['to']) >= strtotime($minDate) ? $_GET['to'] : date("Y-m-d");
 
 $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 
@@ -15,7 +16,37 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 
 
 <div class="main-container">
-	
+
+<div class="card-box mb-30">
+            <div class="pd-20">
+            <h4 class="text-muted">Filter Date</h4>
+            <form action="" id="filter">
+            <div class="row align-items-end">
+                <div class="col-md-2 form-group">
+                    <label for="from" class="control-label">Date From</label>
+                    <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
+                </div>
+                <div class="col-md-2 form-group">
+                    <label for="to" class="control-label">Date To</label>
+                    <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
+                </div>
+                <div class="col-md-2 form-group">
+                    <label for="category" class="control-label">Category</label>
+                    <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
+                        <option value="ALL" <?php echo ($category == 'ALL') ? 'selected' : ''; ?>>ALL</option>
+                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                        <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
+                    </select>
+                </div>
+                <div class="col-md-4 form-group">
+                    <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
+                </div>
+            </div>
+            </form>
+        </div>
+
+
+
         <div class="card-box mb-30">
             <div class="pd-20">
                 <div class="container-fluid" id="outprint">
@@ -27,7 +58,21 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <h3 class="text-center"><b>ASIAN LAND STRATEGIES CORPORATION</b></h3>
                     <h5 class="text-center"><b>CASH ACKNOWLEDGEMENT RECEIPT REPORT</b></h5>
                     <h5 class="text-center"><b>SUMMARY REPORT </b></h5>
+                    <?php if($category == 'STL'): ?>
+                    <p class="m-0 text-center">Streetlight Fee</p>
+                     <?php elseif($category == 'GCF'): ?>
+                    <p class="m-0 text-center">Grass-Cutting Fee</p>
+                    <?php else: ?>
+                    <p class="m-0 text-center">Streetlight & Grass-Cutting Fee</p>
+                    <?php endif; ?>
+                    <?php if ($from == $to): ?>
+                       <!--  <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) ?></p> -->
+                        <p class="m-0 text-center"><?= date("l, F d, Y", strtotime($from)) ?></p>
+                    <?php else: ?>
+                        <p class="m-0 text-center"><?= date("l, F d, Y", strtotime($from)) . ' - ' . date("l, F d, Y", strtotime($to)) ?></p>
+                    <?php endif; ?>
                     <hr>
+                  
 
                 <div style="height: 500px; overflow-y: auto;">
                     <table id="car_table" class="table table-hover table-bordered">
@@ -38,6 +83,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <th class="text-center">TOTAL CHECK</th>
                                 <th class="text-center">TOTAL ONLINE</th>
                                 <th class="text-center">TOTAL</th>
+                                <th class="text-center">STATUS</th>
+                                <th class="text-center">ACTION</th>
                             </tr>
                         </thead>
                     <?php
@@ -56,7 +103,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         ('$category' = 'ALL' AND (
                             c_st_or_no LIKE 'MTF-CAR%' OR
                             c_st_or_no LIKE 'STL-CAR%'
-                        ))
+                        )) AND date(y.date_encoded) BETWEEN '$from' AND '$to'
                     GROUP BY
                         date(y.date_encoded) ORDER BY
                      date(y.date_encoded) DESC";
@@ -67,12 +114,24 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                        while ($grandTotalRow = odbc_fetch_array($result3)):
                         ?>
                         <tr>
-                        <td class="text-right"><?php echo $grandTotalRow['transaction_date']?></td>
+                        <td class="text-center"><?php echo $grandTotalRow['transaction_date']?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total']) ?></td>
  
+                        <td class="text-center"><span class="badge badge-danger border px-3 rounded-pill"><?php echo 'UNENCODED'?></span></td>
+                        <td class="text-center">
+                                    <div class="dropdown">
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                            <i class="dw dw-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                            <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-edit2"></i>Submit</a>
+                                            <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-delete-3"></i>Undo</a>
+                                        </div>
+                                    </div>
+                                </td>
                         </tr>
                         <?php 
                        endwhile;
@@ -133,31 +192,9 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="<?php echo base_url ?>admin/?page=report/car_logs&"+$(this).serialize();
+            location.href="<?php echo base_url ?>admin/?page=report/summary_report&"+$(this).serialize();
         })
-        $('#print').click(function(){
-            start_loader()
-            var _h = $('head').clone();
-            var _p = $('#outprint').clone();
-            var el = $('<div>')
-            _h.find('title').text('Cash Acknowledgement Receipt - Print View')
-            _h.append('<style>html,body{ min-height: unset !important;}</style>')
-            _h.append('<style>@media print { @page { size: landscape; }}</style>');
-            
-            el.append(_h)
-            el.append(_p)
-             var nw = window.open("","_blank","width=900,height=700,top=50,left=250")
-             nw.document.write(el.html())
-             nw.document.close()
-             setTimeout(() => {
-                 nw.print()
-                 setTimeout(() => {
-                     nw.close()
-                     end_loader()
-                 }, 200);
-             }, 500);
-        })
-		
+    
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 	})
 	
