@@ -806,13 +806,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <script>
 $(document).ready(function() {
-/*     $(document).on('keyup', ".pay-date", function(e) {
-		e.preventDefault();
 
-		compute_pay_date();
-        
-
-	});	 */
 
 
     $(document).on('keyup', ".stl_amount_pay", function(e) {
