@@ -571,11 +571,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 </tr>
             </table>
         </div>
-        <div class="fieldset-container" id="ref_no_details" style="display:none;">   
+      <!--   <div class="fieldset-container" id="ref_no_details" style="display:none;">   
             <table style="width:100%;"> 
                 
             </table>
-        </div>
+        </div> -->
     
         <div class="row">
             <div class="col-md-12 text-right">
@@ -985,9 +985,7 @@ function compute_total_amt_paid(){
         }
 
         if (this.value === '2') { 
-            checkDetails.style.display = 'block';
-            refNoDetails.style.display = 'none';
-            
+            checkDetails.style.display = 'block';    
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); 
@@ -1056,7 +1054,7 @@ function compute_total_amt_paid(){
                 branchSelect.style.display = 'none';
             }
             
-            refNoDetails.style.display = 'none';
+            //refNoDetails.style.display = 'none';
             checkDateInput.value = null;
             branchInput.value = null;
         }else {

@@ -523,7 +523,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                             <select name="mode_payment" id="mode_payment" class="form-control form-control-border" style="text-align: center;" required>
                                 <option value="1">Cash</option>
                                 <option value="2">Check</option>
-                                <option value="3">Gcash/Online</option>
+                                <option value="3">Online</option>
+                                <option value="4">Check Voucher</option>
                             </select>
                         </div>
                     </td>
@@ -548,46 +549,33 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 <tr>
                     <td class="col-md-2">
                         <div class="form-group">
-                            <label for="check_date" class="control-label"><b>Check Date: </b></label>
-                            <input type="date" name="check_date" id="check_date" class="form-control form-control-border">
+                            <label for="ref_no" class="control-label"><b>Reference #: </b></label>
+                            <input type="text" name="ref_no" id="ref_no" class="form-control form-control-border">
                         </div>
                     </td>
                     <td class="col-md-2">
                         <div class="form-group">
-                            <label for="branch" class="control-label"><b>Branch: </b></label>
+                            <label for="branch" class="control-label"><b>CHECK BANK: </b></label>
                             <select name="branch" id="branch" class="form-control form-control-border custom" style="text-align: center;">
                                 <option value="" selected>--SELECT BANK--</option>
-                                <option value="RobinsonBank">Robinson Bank</option>
-                                <option value="UB">UB</option>
-                                <option value="BPI">BPI</option>
-                                <option value="BDO">BDO</option>
-                                <option value="CBS">CBS</option>
-                                <option value="SBC">SBC</option>
-                                <option value="PNB">PNB</option>
-                                <option value="PSB">PSB</option>
-                                <option value="EWB">EWB</option>
-                                <option value="BOC">BOC</option>
-                                <option value="RCBC">RCBC</option>
-                                <option value="LB">LB</option>
-                                
+                                <!-- Options will be dynamically added based on mode of payment -->
                             </select>
                         </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="fieldset-container" id="ref_no_details" style="display:none;">   
-            <table style="width:100%;"> 
-                <tr>
-                    <td>
+                    </td>  
+                    <td class="col-md-2">
                         <div class="form-group">
-                            <label for="ref_no" class="control-label"><b>Reference No: </b></label>
-                            <input type="text" name="ref_no" id="ref_no" class="form-control form-control-border">
+                            <label for="check_date" class="control-label"><b>Check Date: </b></label>
+                            <input type="date" name="check_date" id="check_date" class="form-control form-control-border">
                         </div>
                     </td>
                 </tr>
             </table>
         </div>
+      <!--   <div class="fieldset-container" id="ref_no_details" style="display:none;">   
+            <table style="width:100%;"> 
+                
+            </table>
+        </div> -->
     
         <div class="row">
             <div class="col-md-12 text-right">
@@ -702,6 +690,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.check_date { margin:310px -10px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
             printWindow.document.write('.ref_no { margin: 310px -100px; position:absolute; width:200px;}');///Same lang sa mp.
+            
+           
         }else{
             printWindow.document.write('.mp { margin: 290px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
@@ -816,13 +806,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <script>
 $(document).ready(function() {
-/*     $(document).on('keyup', ".pay-date", function(e) {
-		e.preventDefault();
 
-		compute_pay_date();
-        
-
-	});	 */
 
 
     $(document).on('keyup', ".stl_amount_pay", function(e) {
@@ -979,30 +963,116 @@ function compute_total_amt_paid(){
         var refNoDetails = document.getElementById('ref_no_details');
         var checkDateInput = document.getElementById('check_date'); 
         var branchInput = document.getElementById('branch'); 
+        var checkDateLabel = document.querySelector('label[for="check_date"]');
+        var refNoLabel = document.querySelector('#check_details label[for="ref_no"]'); // Added this line
+        var branchLabel = document.querySelector('#check_details label[for="branch"]');
+        var branchSelect = document.getElementById('branch');
+        var selectedMode = this.value;
 
+        // Clear existing options
+        branchSelect.innerHTML = '<option value="" selected>--SELECT BANK--</option>';
 
-        if (this.value === '1' || this.value === '3') { 
+        // Add options based on selected mode
+        if (selectedMode === '2') {
+            addOptions(branchSelect, ['Robinson Bank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB']);
+        } else if (selectedMode === '3') {
+            addOptions(branchSelect, ['GCASH', 'BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UBP', 'UCPB']);
+        }
+   
+
+        if (this.value === '1' || this.value === '3' || this.value === '2' || this.value === '4') { 
             branchInput.value = null;
         }
 
         if (this.value === '2') { 
-            checkDetails.style.display = 'block';
-            refNoDetails.style.display = 'block';
-            
+            checkDetails.style.display = 'block';    
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth() + 1).padStart(2, '0'); 
             var yyyy = today.getFullYear();
             today = yyyy + '-' + mm + '-' + dd;
             checkDateInput.value = today;
+
+              // Change label text for 'Reference No' in mode 2
+            if (refNoLabel) {
+                refNoLabel.innerHTML = '<b>Check No:</b>';
+            }
+
+            if (branchLabel) {
+                branchLabel.style.display = 'block';
+            }
+            if (branchLabel) {
+                branchLabel.innerHTML = '<b>Check Branch:</b>';
+            }
+            
+            if (branchInput) {
+                branchInput.style.display = 'block';
+            }
+
+            if (checkDateLabel) {
+                checkDateLabel.style.display = 'block';
+            }
+            if (checkDateInput) {
+                checkDateInput.style.display = 'block';
+            }
+
+
+           
         } else if (this.value === '3') { 
-            checkDetails.style.display = 'none';
-            refNoDetails.style.display = 'block';
+            checkDetails.style.display = 'block';
+            //refNoDetails.style.display = 'block';
+
             checkDateInput.value = null;
-        } else {
+
+            if (checkDateLabel) {
+                checkDateLabel.style.display = 'none';
+            }
+            if (checkDateInput) {
+                checkDateInput.style.display = 'none';
+            }
+
+            if (refNoLabel) {
+                refNoLabel.innerHTML = '<b>Reference #:</b>';
+            }
+
+            if (branchLabel) {
+                branchLabel.innerHTML = '<b>Online Branch:</b>';
+            }
+
+        }else if (this.value === '4') { 
+            checkDetails.style.display = 'block';
+            if (checkDateLabel) {
+                checkDateLabel.style.display = 'none';
+            }
+            if (checkDateInput) {
+                checkDateInput.style.display = 'none';
+            }
+            if (branchLabel) {
+                branchLabel.style.display = 'none';
+            }
+            if (branchSelect) {
+                branchSelect.style.display = 'none';
+            }
+            
+            //refNoDetails.style.display = 'none';
+            checkDateInput.value = null;
+            branchInput.value = null;
+        }else {
             checkDetails.style.display = 'none';
             refNoDetails.style.display = 'none';
             checkDateInput.value = null;
+            branchInput.value = null;
         }
     });
+
+
+     // Function to add options to a select element
+function addOptions(selectElement, optionsArray) {
+    for (var i = 0; i < optionsArray.length; i++) {
+        var option = document.createElement('option');
+        option.value = optionsArray[i];
+        option.text = optionsArray[i];
+        selectElement.appendChild(option);
+    }
+}
 </script>

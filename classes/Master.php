@@ -510,6 +510,9 @@ Class Master{
 		$stl_discount = ($stl_discount === '') ? 0 : $stl_discount;
 
 		$mode_of_payment = $_POST['mode_payment'];
+		if ($mode_of_payment == 1 || $mode_of_payment == 4) {
+			$mode_of_payment = 1;
+		}
 		$ref_no = isset($_POST['ref_no']) ? $_POST['ref_no'] : '';
 		$branch = isset($_POST['branch']) ? $_POST['branch'] : '';
 		$check_date = isset($_POST['check_date']) ? $_POST['check_date'] : NULL;
