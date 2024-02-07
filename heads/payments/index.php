@@ -1031,6 +1031,13 @@ function compute_total_amt_paid(){
                 checkDateInput.style.display = 'none';
             }
 
+            if (branchLabel) {
+                branchLabel.style.display = 'block';
+            }
+            if (branchSelect) {
+                branchSelect.style.display = 'block';
+            }
+            
             if (refNoLabel) {
                 refNoLabel.innerHTML = '<b>Reference #:</b>';
             }
