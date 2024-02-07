@@ -99,7 +99,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Check</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Online</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Discount</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Deposit</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Bank</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
