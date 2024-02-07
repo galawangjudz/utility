@@ -974,9 +974,9 @@ function compute_total_amt_paid(){
 
         // Add options based on selected mode
         if (selectedMode === '2') {
-            addOptions(branchSelect, ['Robinson Bank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB']);
+            addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB']);
         } else if (selectedMode === '3') {
-            addOptions(branchSelect, ['GCASH', 'BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UBP', 'UCPB']);
+            addOptions(branchSelect, ['GCASH', 'BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB']);
         }
    
 
@@ -1030,7 +1030,6 @@ function compute_total_amt_paid(){
             if (checkDateInput) {
                 checkDateInput.style.display = 'none';
             }
-
             if (branchLabel) {
                 branchLabel.style.display = 'block';
             }
@@ -1038,12 +1037,13 @@ function compute_total_amt_paid(){
                 branchSelect.style.display = 'block';
             }
             
+
             if (refNoLabel) {
                 refNoLabel.innerHTML = '<b>Reference #:</b>';
             }
 
             if (branchLabel) {
-                branchLabel.innerHTML = '<b>Online Branch:</b>';
+                branchLabel.innerHTML = '<b>Online Bank(Depository):</b>';
             }
 
         }else if (this.value === '4') { 
@@ -1075,6 +1075,8 @@ function compute_total_amt_paid(){
 
      // Function to add options to a select element
 function addOptions(selectElement, optionsArray) {
+    optionsArray.sort();
+
     for (var i = 0; i < optionsArray.length; i++) {
         var option = document.createElement('option');
         option.value = optionsArray[i];

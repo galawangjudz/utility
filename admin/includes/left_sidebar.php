@@ -65,6 +65,7 @@
 						<ul class="submenu">
 							<li><a href="<?php echo base_url ?>admin/?page=report/car_logs">Daily Report</a></li>
 							<li><a href="<?php echo base_url ?>admin/?page=report/summary_report">Summary Report</a></li>
+							<li><a href="<?php echo base_url ?>admin/?page=report/summary_per_bank">Summary per Online Bank Report</a></li>
 							
 						</ul>
 					</li>
