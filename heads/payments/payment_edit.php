@@ -63,7 +63,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <option value="1" <?= isset($l_mop) && $l_mop == '1' ? 'selected' : '' ?>>Cash</option>
                         <option value="2" <?= isset($l_mop) && $l_mop == '2' ? 'selected' : '' ?>>Check</option>
                         <option value="3" <?= isset($l_mop) && $l_mop == '3' ? 'selected' : '' ?>>Gcash/Online</option>
-                        <option value="4" <?= isset($l_mop) && $l_mop == '4' ? 'selected' : '' ?>>Check Voucher</option>
+                        <option value="1" <?= isset($l_mop) && $l_mop == '4' ? 'selected' : '' ?>>Check Voucher</option>
                     </select>
                 </div>
             </div>
