@@ -74,35 +74,35 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                     <hr>
                   
                     <?php
-$grandTotal = "SELECT 
-                transaction_date,
-                branch,
-                SUM(c_st_amount_paid) AS subTotal,
-                '' AS total 
-            FROM
-                (
-                    SELECT
-                        date(y.date_encoded) AS Transaction_Date,
-                        y.c_branch AS Branch,
-                        y.c_st_amount_paid
-                    FROM
-                        t_utility_accounts x
-                        JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                    WHERE
-                        ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                        ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                        ('$category' = 'ALL' AND (
-                                c_st_or_no LIKE 'MTF-CAR%' OR
-                                c_st_or_no LIKE 'STL-CAR%'
-                            )
-                        ) AND date(y.date_encoded) BETWEEN '$from' AND '$to' AND c_mop = 3
-                ) as Subquery
-            GROUP BY
-                transaction_date, branch 
-            ORDER BY
-                transaction_date DESC, branch";
-
-$result3 = odbc_exec($conn2, $grandTotal);
+                     
+                        $grandTotal = "SELECT 
+                                        transaction_date,
+                                        branch,
+                                        SUM(c_st_amount_paid) AS subTotal
+                                    FROM
+                                        (
+                                            SELECT
+                                                date(y.date_encoded) AS Transaction_Date,
+                                                y.c_branch AS Branch,
+                                                y.c_st_amount_paid
+                                            FROM
+                                                t_utility_accounts x
+                                                JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                            WHERE
+                                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                                ('$category' = 'ALL' AND (
+                                                        c_st_or_no LIKE 'MTF-CAR%' OR
+                                                        c_st_or_no LIKE 'STL-CAR%'
+                                                    )
+                                                ) AND date(y.date_encoded) BETWEEN '$from' AND '$to' AND c_mop = 3
+                                        ) as Subquery
+                                    GROUP BY
+                                        transaction_date, branch 
+                                    ORDER BY
+                                        transaction_date DESC, branch";
+                        
+                        $result3 = odbc_exec($conn2, $grandTotal);
 ?>
 
 <div style="height: 500px; overflow-y: auto;">
@@ -110,50 +110,64 @@ $result3 = odbc_exec($conn2, $grandTotal);
         <thead>
             <tr>
                 <th class="text-center">TRANSACTION DATE</th>
-                <th class="text-center">BRANCH</th>
-                <th class="text-center">SUB TOTAL</th>
-                <th class="text-center">TOTAL</th>
+                <th class="text-center">BDO</th>
+                <th class="text-center">BOC</th>
+                <th class="text-center">BPI</th>
+                <th class="text-center">CBS</th>
+                <th class="text-center">MBTC</th>
+                <th class="text-center">PBB</th>
+                <th class="text-center">PVB</th>
+                <th class="text-center">RCBC</th>
+                <th class="text-center">ROBBank</th>
+                <th class="text-center">SBC</th>
+                <th class="text-center">UB</th>
+                <th class="text-center">UCBP</th>
+                <th class="text-center">Unknown Bank</th>
+                <th class="text-center">Total</th>
             </tr>
         </thead>
         <?php
+     
         if (!$result3) {
             die("ODBC query execution failed: " . odbc_errormsg());
         }
 
         $currentDate = null;
-        $total = 0;
+        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCBP', '', 'Total'], 0);
 
         while ($grandTotalRow = odbc_fetch_array($result3)):
-
+            // If it's a new date, print the previous row and reset the totals
             if ($currentDate !== $grandTotalRow['transaction_date']) {
-                // Print total for the previous date
                 if ($currentDate !== null) {
-                    echo '<tr><td></td><td></td><td></td><td class="text-right">' . format_num($total) . '</td></tr>';
+                    printRow($currentDate, $totals);
                 }
 
-                // Update current date and reset total
                 $currentDate = $grandTotalRow['transaction_date'];
-                $total = 0;
+                $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCBP','', 'Total'], 0);
             }
-            ?>
-            <tr>
-                <td class="text-center"><?php echo $grandTotalRow['transaction_date'] ?></td>
-                <td class="text-center"><?php echo $grandTotalRow['branch'] ?></td>
-                <td class="text-right"><?php echo format_num($grandTotalRow['subtotal']) ?></td>
-                <td></td> <!-- Leave this empty for now, it will be filled in the next iteration -->
-            </tr>
-            <?php
-            // Accumulate total for the current date
-            $total += $grandTotalRow['subtotal'];
+
+            // Accumulate the subtotals for each branch and the total
+            $totals[$grandTotalRow['branch']] += $grandTotalRow['subtotal'];
+            $totals['Total'] += $grandTotalRow['subtotal'];
         endwhile;
 
-        // Print total for the last date
+        // Print the last row
         if ($currentDate !== null) {
-            echo '<tr><td></td><td></td><td></td><td class="text-right">' . format_num($total) . '</td></tr>';
+            printRow($currentDate, $totals);
+        }
+
+        function printRow($date, $totals) {
+            echo '<tr>';
+            echo '<td class="text-center">' . $date . '</td>';
+            foreach ($totals as $value) {
+                echo '<td class="text-right">' . format_num($value) . '</td>';
+            }
+            echo '</tr>';
         }
         ?>
     </table>
 </div>
+
                 
        
 </div>
