@@ -6,10 +6,7 @@ function format_num($number){
 }
 
 
-
-$minDate = date("Y-m-d", strtotime("-7 days")); // Calculate 7 days before the current date
-
-$from = isset($_GET['from']) && strtotime($_GET['from']) >= strtotime($minDate) ? $_GET['from'] : $minDate;
+$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
 $to = isset($_GET['to']) && strtotime($_GET['to']) >= strtotime($minDate) ? $_GET['to'] : date("Y-m-d");
 
 $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
