@@ -221,7 +221,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="<?php echo base_url ?>admin/?page=report/summary_per_bank&"+$(this).serialize();
+            location.href="<?php echo base_url ?>heads/?page=report/summary_per_bank&"+$(this).serialize();
         })
     
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
