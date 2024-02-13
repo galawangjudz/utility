@@ -175,6 +175,8 @@ Class Master{
 		return json_encode($resp);
 	}
 
+	
+
 	function delete_account(){
 		
 		extract($_POST);
@@ -676,6 +678,27 @@ Class Master{
 		return json_encode($resp);
 	}
 
+	function submit_report(){
+		extract($_POST);
+		$date_submitted = date('Y-m-d H:i:s');
+		$status = "Submitted";
+		
+		$params = "'$id','$cash','$check','$online', '$total', '$status', '$date_submitted'";
+		$report_query = "INSERT INTO summary_report (transaction_date, total_cash, total_check, total_online, total, status, date_submitted) VALUES ($params)";
+
+		if (odbc_exec($this->conn2, $report_query)) {
+			$resp['status'] = 'success';
+			$this->log_log('Summary Report Submit', "Add - $id : $total ");
+			$resp['msg'] = "Summary Report has been successfully submitted.";
+	
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$report_query]";
+		}		
+		return json_encode($resp);
+	}
+
 	public function __destruct() {
         // Close the database connection when the object is destroyed
         odbc_close($this->conn2);
@@ -734,6 +757,10 @@ switch ($action) {
 
 	case 'delete_adjustment':
 		echo $Master->delete_adjustment();
+	break;
+
+	case 'submit_report':
+		echo $Master->submit_report();
 	break;
 
 	default:

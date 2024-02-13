@@ -366,26 +366,16 @@ def log_log(users,module,notes,cnx):
 def initialize():
 
 	import psycopg2
-		#dbname='STLDB_v1',
-		#user='postgres',
-		#password='admin12345',
-		#host='localhost',
-		#port='5432'
 	connection = psycopg2.connect(
 
 
-		dbname='UTLDB_TEST',
+		dbname='UtilityDB',
 		user='postgres',
 		password='admin12345',
-		host='localhost',
+		host='192.168.0.111',
 		port='5432'
 	)
 
-	return connection
-
-def initialize_alter():
-	#connection = pgdb.connect('fsmb002:DailyDB_Francis:::::')
-	connection = pgdb.connect('fsmb002:CMIS_VALIDATION:::::')
 	return connection
 
 

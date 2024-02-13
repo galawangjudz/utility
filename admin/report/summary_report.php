@@ -118,15 +118,41 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total']) ?></td>
- 
-                        <td class="text-center"><span class="badge badge-danger border px-3 rounded-pill"><?php echo 'UNENCODED'?></span></td>
+
+                        <?php
+                            $trans_date = $grandTotalRow['transaction_date'];
+                            $report = "SELECT * FROM summary_report WHERE transaction_date = ?";
+                            $result2 = odbc_prepare($conn2, $report);
+
+                            if ($result2) {
+                                // Bind the parameter and execute the query
+                                odbc_execute($result2, array($trans_date));
+
+                                // Fetch a row from the result set
+                                $summaryRow = odbc_fetch_array($result2);
+
+                                if ($summaryRow) {
+                                    echo '<td class="text-center"><span class="badge badge-success border px-3 rounded-pill">Submitted</span></td>';
+                                } else {
+                                    echo '<td class="text-center"><span class="badge badge-danger border px-3 rounded-pill">Draft</span></td>';
+                                }
+                            } else {
+                                echo '<td class="text-center"><span class="badge badge-warning border px-3 rounded-pill">Error</span></td>';
+                            }
+                            ?>
                         <td class="text-center">
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                            <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-edit2"></i>Submit</a>
+                                            <a class="dropdown-item submit_data" 
+                                            id ="<?php echo $grandTotalRow['transaction_date']?>" 
+                                            cash ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_cash'])?>" 
+                                            check ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_check'])?>" 
+                                            online ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_online'])?>" 
+                                            total ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total'])?>"
+                                            href="javascript:void(0)" ><i class="dw dw-edit2"></i>SUBMIT</a>
                                             <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-delete-3"></i>Undo</a>
                                         </div>
                                     </div>
@@ -203,26 +229,20 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
       $(document).ready(function(){
        
 
-        $('.edit_data').click(function(){
-			uni_modal("Update Payment Details","payments/payment_edit.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
-		})
-		$('.delete_data').click(function(){
-        	uni_modal("Cancel Payment","report/cancel_payment.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
-	
-			//_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
-		})
-
-        
+        $('.submit_data').click(function(){
+	        _conf("Are you sure to submit '<b>"+$(this).attr('id')+"</b>'?","submit_report",["'" + $(this).attr('id') + "'", "'" + $(this).attr('cash') + "'","'" + $(this).attr('check') + "'","'" + $(this).attr('online') + "'","'" + $(this).attr('total') + "'"])
+        })
+    
 
       })
 
-      function delete_payment($id){
+      function submit_report($id,$cash,$check,$online,$total){
             start_loader();
         
             $.ajax({
-                url:_base_url_+"classes/Master.php?f=delete_payment",
+                url:_base_url_+"classes/Master.php?f=submit_report",
                 method:"POST",
-                data:{id: $id},
+                data:{id: $id, cash: $cash, check: $check, online: $online, total: $total},
                 dataType:"json",
                 error:err=>{
                     console.log(err)

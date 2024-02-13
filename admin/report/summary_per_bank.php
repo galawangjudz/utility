@@ -56,7 +56,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 </style>
                     <h3 class="text-center"><b>ASIAN LAND STRATEGIES CORPORATION</b></h3>
                     <h5 class="text-center"><b>CASH ACKNOWLEDGEMENT RECEIPT REPORT</b></h5>
-                    <h5 class="text-center"><b>SUMMARY REPORT PER BANK </b></h5>
+                    <h5 class="text-center"><b>SUMMARY REPORT PER ONLINE BANK </b></h5>
                     <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
                      <?php elseif($category == 'GCF'): ?>
