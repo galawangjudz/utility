@@ -44,8 +44,8 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                 </div>
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
-			        <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
-                </div>
+			       <!--  <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
+            -->     </div>
             </div>
             </form>
         </div>
@@ -103,7 +103,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Issuance Bank</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
+                       <!--         <th class="text-center" style="text-align:center;font-size:10px;">Action</th> -->
                             </tr>
 				        </thead>
                         <tbody>
@@ -268,7 +268,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($onlineTotal) ?></td>
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($voucherTotal) ?></td>
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($discountTotal) ?></td>
-                                <?php for ($i = 0; $i < 4; $i++) : ?>
+                                <?php for ($i = 0; $i < 3; $i++) : ?>
                                     <td class="" ></td>
                                 <?php endfor; ?>
                             </tr> 
