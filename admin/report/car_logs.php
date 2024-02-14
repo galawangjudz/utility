@@ -78,7 +78,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                     <hr>
 
 
-                <div style="height: 500px; overflow-y: auto;">
+                <div style="height: 800px; overflow-y: auto;">
                     <table id="car_table" class="table table-hover table-bordered">
                         
                         <thead>
@@ -98,8 +98,9 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Cash</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Check</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Online</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Voucher</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Discount</th>
-                               <th class="text-center" style="text-align:center;font-size:10px;">Bank</th>
+                               <th class="text-center" style="text-align:center;font-size:10px;">Issuance Bank</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
@@ -107,6 +108,13 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 				        </thead>
                         <tbody>
                             <?php 
+                            $cashTotal = 0;
+                            $checkTotal = 0;
+                            $onlineTotal = 0;
+                            $voucherTotal = 0;
+                            $discountTotal = 0;
+                            
+                            $i = 1; // Initialize row counter
                             $query = "SELECT 
                                         x.*, 
                                         RIGHT(c_st_or_no, LENGTH(c_st_or_no) - 4) AS st_or_no_clear,
@@ -184,10 +192,15 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             }
                             $i = 1;
                             while ($row = odbc_fetch_array($result)):
+                                $cashTotal += ($row['c_mop'] == '1' or $row['c_mop'] == '') ? $row['c_st_amount_paid'] : 0;
+                                $checkTotal += ($row['c_mop'] == '2') ? $row['c_st_amount_paid'] : 0;
+                                $onlineTotal += ($row['c_mop'] == '3') ? $row['c_st_amount_paid'] : 0;
+                                $voucherTotal += ($row['c_mop'] == '4') ? $row['c_st_amount_paid'] : 0;
+                                $discountTotal += ($row['c_discount']) ? $row['c_discount'] : 0;
                             ?>
                             <tr>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= $i++ ?></td>
-                                <td class="text-center" style="text-align:center;font-size:8px;"><?= date("M d, Y g:i A", strtotime($row['date_encoded'])) ?></td>
+                                <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['date_encoded'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?= date("m/d/Y", strtotime($row['c_st_pay_date'])) ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['st_or_no_clear'] ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;" <?php echo (strpos($row['c_pay_type'], 'CANCELLED') !== false) ? 'color: red;' : ''; ?>><?php echo $row['c_pay_type'] ?></td>
@@ -212,8 +225,9 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '1' or $row['c_mop'] == '') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '2') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '3') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?php echo ($row['c_mop'] == '4') ? format_num($row['c_st_amount_paid']) : ''; ?></td>
                                 <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($row['c_discount']) ?></td>
-                                <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
+                                <td class="text-center exclude-copy" style="text-align:center;font-size:10px;"><?php echo $row['c_branch'] . ' - ' . $row['c_check_date']; ?></td>
                                 <td class="text-center" style="text-align:center;font-size:10px;"><?php echo $row['c_ref_no'] ?></td>
                                 
                                 <td class="text-center" style="text-align:center;font-size:10px;">
@@ -235,24 +249,38 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                            <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
+                                            <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                     
 					        <?php endwhile; ?>
+                            <tr>
+                                <?php for ($i = 0; $i < 11; $i++) : ?>
+                                    <td class="" ></td>
+                                <?php endfor; ?>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($cashTotal) ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($checkTotal) ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($onlineTotal) ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($voucherTotal) ?></td>
+                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($discountTotal) ?></td>
+                                <?php for ($i = 0; $i < 4; $i++) : ?>
+                                    <td class="" ></td>
+                                <?php endfor; ?>
+                            </tr> 
                         </tbody>
                     </table>
                 </div>
-                <div class="">
-                    <table id="scar_table" class="table table-hover table-bordered">
+                 <div class="">
+                   <table id="scar_table" class="table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th class="text-center">TOTAL CASH</th>
                                 <th class="text-center">TOTAL CHECK</th>
                                 <th class="text-center">TOTAL ONLINE</th>
+                                <th class="text-center">TOTAL VOUCHER</th>
                                 <th class="text-center">TOTAL</th>
                             </tr>
                         </thead>
@@ -262,6 +290,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             SUM(CASE WHEN c_mop = '1' or c_mop is NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
                             SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
                             SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
+                            SUM(CASE WHEN c_mop = '4' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Voucher,
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
@@ -284,15 +313,16 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_voucher']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total']) ?></td>
  
                         </tr>
                         <?php 
                        endwhile;
-
                         ?>
+                   
                         </tbody>
-                    </table>
+                    </table> 
                 </div>
 
                     
@@ -329,9 +359,24 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
             "responsive": false,
             dom: 'Bfrtip',
             buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5'
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [':visible:not(.exclude-copy)']
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [':visible:not(.exclude-copy)']
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                exportOptions: {
+                    columns: [':visible:not(.exclude-copy)']
+                }
+            }
             ]
         });
     });
@@ -351,6 +396,36 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
         $('#filter').submit(function(e){
             e.preventDefault()
             location.href="<?php echo base_url ?>admin/?page=report/car_logs&"+$(this).serialize();
+
+
+            $('#car_table').DataTable({
+            "paging": false,
+            "searching": true,
+            "ordering": false,
+            "info": true,
+            "responsive": false,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [':visible:not(.exclude-copy)']
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: [':visible:not(.exclude-copy)'] 
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                exportOptions: {
+                    columns: [':visible:not(.exclude-copy)'] // Exclude columns with class 'exclude-copy'
+                }
+            }
+            ]
+        });
         })
         $('#print').click(function(){
             start_loader()
