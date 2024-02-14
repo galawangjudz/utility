@@ -398,34 +398,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
             location.href="<?php echo base_url ?>heads/?page=report/car_logs&"+$(this).serialize();
 
 
-            $('#car_table').DataTable({
-            "paging": false,
-            "searching": true,
-            "ordering": false,
-            "info": true,
-            "responsive": false,
-            dom: 'Bfrtip',
-            buttons: [
-            {
-                extend: 'copyHtml5',
-                exportOptions: {
-                    columns: [':visible:not(.exclude-copy)']
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: [':visible:not(.exclude-copy)'] 
-                }
-            },
-            {
-                extend: 'csvHtml5',
-                exportOptions: {
-                    columns: [':visible:not(.exclude-copy)'] // Exclude columns with class 'exclude-copy'
-                }
-            }
-            ]
-        });
+           
         })
         $('#print').click(function(){
             start_loader()
