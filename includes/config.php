@@ -7,7 +7,7 @@ define('DB_PASS','');
 define('DB_NAME','db_utility');
 define('base_url','http://192.168.0.111/utility/');
 
-$conn = mysqli_connect('192.168.0.111','root','','db_utility') or die(mysqli_error());
+$conn = mysqli_connect('localhost','root','','db_utility') or die(mysqli_error());
 
 // Establish database connection.
 try
