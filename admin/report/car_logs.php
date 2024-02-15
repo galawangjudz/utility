@@ -261,15 +261,100 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                 <?php for ($i = 0; $i < 11; $i++) : ?>
                                     <td class="" ></td>
                                 <?php endfor; ?>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($cashTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($checkTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($onlineTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($voucherTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($discountTotal) ?></td>
+                                <td class="text-right"><?= format_num($cashTotal) ?></td>
+                                <td class="text-right"><?= format_num($checkTotal) ?></td>
+                                <td class="text-right"><?= format_num($onlineTotal) ?></td>
+                                <td class="text-right"><?= format_num($voucherTotal) ?></td>
+                                <td class="text-right"><?= format_num($discountTotal) ?></td>
                                 <?php for ($i = 0; $i < 4; $i++) : ?>
                                     <td class="" ></td>
                                 <?php endfor; ?>
                             </tr> 
+
+                            <?php for ($i = 0; $i < 20; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:12px;" ></td>
+                            <?php endfor; ?>
+                                
+                            <?php
+                            $grandTotal = "SELECT 
+                                            branch,
+                                            SUM(c_st_amount_paid) AS subTotal,
+                                            '' AS total 
+                                        FROM
+                                            (
+                                                SELECT
+                                                    y.c_branch AS Branch,
+                                                    y.c_st_amount_paid
+                                                FROM
+                                                    t_utility_accounts x
+                                                    JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                                WHERE
+                                                    ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                                    ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                                    ('$category' = 'ALL' AND (
+                                                            c_st_or_no LIKE 'MTF-CAR%' OR
+                                                            c_st_or_no LIKE 'STL-CAR%'
+                                                        )
+                                                    ) AND date(y.date_encoded) BETWEEN '$from' AND '$to' AND c_mop = 3
+                                            ) as Subquery
+                                        GROUP BY
+                                            branch 
+                                        ORDER BY
+                                            branch";
+
+                            $result3 = odbc_exec($conn2, $grandTotal);
+                            
+                            if (!$result3) {
+                                die("ODBC query execution failed: " . odbc_errormsg());
+                            }
+
+                            $currentDate = null;
+                            $total = 0;
+
+                            while ($grandTotalRow = odbc_fetch_array($result3)):
+
+                                ?>
+                                
+                                  
+                                <tr>
+                                    <?php for ($i = 0; $i < 3; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo $grandTotalRow['branch'] ?></td>
+                                    <?php for ($i = 0; $i < 9; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($grandTotalRow['subtotal']) ?></td>
+                                    <?php for ($i = 0; $i < 6; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                </tr>
+                                
+
+                                <?php
+            
+                                $total += $grandTotalRow['subtotal'];
+                            endwhile;
+
+                        
+                                
+                            ?>
+                            <tr>
+                                <?php for ($i = 0; $i < 3; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                <?php endfor; ?>
+                                <td class="text-right" style="text-align:center;font-size:10px;">TOTAL</td>
+                                <?php for ($i = 0; $i < 9; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                <td class="text-right"><?php echo  format_num($total) ?></td>
+                                <?php for ($i = 0; $i < 6; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                <?php endfor; ?>
+                            </tr>
+
+
+                            
                         </tbody>
                     </table>
                 </div>
@@ -323,6 +408,12 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                    
                         </tbody>
                     </table> 
+
+                    
+                                   
+                        </table>
+                    </div>
+
                 </div>
 
                     

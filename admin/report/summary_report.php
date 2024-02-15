@@ -81,6 +81,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <th class="text-center">TOTAL CASH</th>
                                 <th class="text-center">TOTAL CHECK</th>
                                 <th class="text-center">TOTAL ONLINE</th>
+                                <th class="text-center">TOTAL VOUCHER</th>
                                 <th class="text-center">TOTAL</th>
                                 <th class="text-center">STATUS</th>
                                 <th class="text-center">ACTION</th>
@@ -92,6 +93,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         SUM(CASE WHEN c_mop = '1' OR c_mop IS NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
                         SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
                         SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
+                        SUM(CASE WHEN c_mop = '4' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Voucher,
                         SUM(c_st_amount_paid) AS Grand_Total
                     FROM
                         t_utility_accounts x
@@ -117,6 +119,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_voucher']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total']) ?></td>
 
                         <?php
@@ -151,6 +154,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                             cash ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_cash'])?>" 
                                             check ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_check'])?>" 
                                             online ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_online'])?>" 
+                                            voucher ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_voucher'])?>"
                                             total ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total'])?>"
                                             href="javascript:void(0)" ><i class="dw dw-edit2"></i>SUBMIT</a>
                                             <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-delete-3"></i>Undo</a>
@@ -230,19 +234,19 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
        
 
         $('.submit_data').click(function(){
-	        _conf("Are you sure to submit '<b>"+$(this).attr('id')+"</b>'?","submit_report",["'" + $(this).attr('id') + "'", "'" + $(this).attr('cash') + "'","'" + $(this).attr('check') + "'","'" + $(this).attr('online') + "'","'" + $(this).attr('total') + "'"])
+	        _conf("Are you sure to submit '<b>"+$(this).attr('id')+"</b>'?","submit_report",["'" + $(this).attr('id') + "'", "'" + $(this).attr('cash') + "'","'" + $(this).attr('check') + "'","'" + $(this).attr('online') + "'","'" + $(this).attr('voucher') + "'","'" + $(this).attr('total') + "'"])
         })
     
 
       })
 
-      function submit_report($id,$cash,$check,$online,$total){
+      function submit_report($id,$cash,$check,$online,$voucher,$total){
             start_loader();
         
             $.ajax({
                 url:_base_url_+"classes/Master.php?f=submit_report",
                 method:"POST",
-                data:{id: $id, cash: $cash, check: $check, online: $online, total: $total},
+                data:{id: $id, cash: $cash, check: $check, online: $online, voucher:$voucher, total: $total},
                 dataType:"json",
                 error:err=>{
                     console.log(err)

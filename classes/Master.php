@@ -683,8 +683,8 @@ Class Master{
 		$date_submitted = date('Y-m-d H:i:s');
 		$status = "Submitted";
 		
-		$params = "'$id','$cash','$check','$online', '$total', '$status', '$date_submitted'";
-		$report_query = "INSERT INTO summary_report (transaction_date, total_cash, total_check, total_online, total, status, date_submitted) VALUES ($params)";
+		$params = "'$id','$cash','$check','$online', '$voucher', '$total', '$status', '$date_submitted'";
+		$report_query = "INSERT INTO summary_report (transaction_date, total_cash, total_check, total_online, total_voucher, total, status, date_submitted) VALUES ($params)";
 
 		if (odbc_exec($this->conn2, $report_query)) {
 			$resp['status'] = 'success';
