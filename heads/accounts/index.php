@@ -8,14 +8,17 @@ $l_lot = isset($_GET["lot"]) ? $_GET["lot"] : '' ;
 
 $l_acct_no = isset($_GET["acct_no"]) ? $_GET["acct_no"] : '' ;
 $last_name = isset($_GET["last_name"]) ? $_GET["last_name"] : '' ;
-
+$tenant = isset($_GET["tenant_lots"]) ? $_GET["tenant_lots"] : '' ;
 
 if ($l_acct_no != ''){
     $l_find = $l_acct_no;
     
 }elseif($last_name != ''){
     $l_find = $last_name;
-}else{
+}elseif($tenant != ''){
+    $l_find = $tenant;
+}
+else{
     if ($l_block == ''):
         $l_find = sprintf("%03d", (int)$l_site);
     else:
@@ -115,6 +118,15 @@ if ($l_acct_no != ''){
                                 </div>
                             </div>
                         </form>
+
+                        <form action="" id="filter">
+                            <div class="col-md-3 form-group">
+                                <input type="hidden" id="page" name="page" value="accounts" class="form-control form-control-sm rounded-0">
+                                <input type="hidden" id="tenant_lots" name="tenant_lots" value="800" class="form-control">
+                                <button class="btn btn-primary"><i class="dw dw-house"></i> Tenant Lots</button>
+                            </div>
+                        </form>
+
                     
 					</div>
 				</div>
@@ -148,11 +160,13 @@ if ($l_acct_no != ''){
                                 if ($l_find == "100"):
                                     $l_find = '1';
                                 endif;
-                              
+                        
                                 if ($l_find == "00000000" && $l_acct_no == "" && $last_name == ""):
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_status = 'Active' ORDER BY c_date_applied DESC limit 10 ";
                                 elseif($last_name != ""):
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_last_name ~*'^%s' ORDER BY c_last_name, c_first_name, c_location";
+                                elseif($tenant == "800"):
+                                    $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE substring(c_account_no::text from '\\d{3}$') ~*'^%s' ORDER BY c_account_no";
                                 else:
                                     $sql = "SELECT c_control_no, c_account_no, c_location, c_first_name, c_last_name, c_types, c_status FROM t_utility_accounts WHERE c_account_no::text ~* '^%s' ORDER BY c_account_no";
                                 endif;

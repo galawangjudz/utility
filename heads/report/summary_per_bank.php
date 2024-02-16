@@ -121,7 +121,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 <th class="text-center">ROBBank</th>
                 <th class="text-center">SBC</th>
                 <th class="text-center">UB</th>
-                <th class="text-center">UCBP</th>
+                <th class="text-center">UCPB</th>
                 <th class="text-center">Unknown Bank</th>
                 <th class="text-center">Total</th>
             </tr>
@@ -133,7 +133,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
         }
 
         $currentDate = null;
-        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCBP', '', 'Total'], 0);
+        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB', '', 'Total'], 0);
 
         while ($grandTotalRow = odbc_fetch_array($result3)):
             // If it's a new date, print the previous row and reset the totals
@@ -143,7 +143,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 }
 
                 $currentDate = $grandTotalRow['transaction_date'];
-                $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCBP','', 'Total'], 0);
+                $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB','', 'Total'], 0);
             }
 
             // Accumulate the subtotals for each branch and the total

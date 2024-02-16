@@ -976,7 +976,7 @@ function compute_total_amt_paid(){
         if (selectedMode === '2') {
             addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB']);
         } else if (selectedMode === '3') {
-            addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCBP']);
+            addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB']);
         }
    
 
