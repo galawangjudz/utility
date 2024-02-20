@@ -158,9 +158,15 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                             WHEN c_st_or_no LIKE 'STL-CAR%' THEN 'STL-CANCELLED'
                                             ELSE 'Others'
                                         END AS c_pay_type,
-                                        c_st_amount_paid,
+                                        CASE 
+                                            WHEN c_st_amount_paid != 0 THEN 0  -- Set to zero if payment is canceled
+                                            ELSE c_st_amount_paid
+                                        END AS c_st_amount_paid,
                                         c_st_or_no,
-                                        c_discount,
+                                        CASE 
+                                            WHEN c_discount != 0 THEN 0  -- Set to zero if payment is canceled
+                                            ELSE c_discount
+                                        END AS c_discount,
                                         c_mop,
                                         c_ref_no,
                                         c_check_date,
