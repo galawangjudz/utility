@@ -39,6 +39,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 </div>
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
+                    <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
+          
                 </div>
             </div>
             </form>

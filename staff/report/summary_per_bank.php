@@ -5,35 +5,30 @@ function format_num($number){
        return number_format($number,2);
 }
 
-// Set default date and time range
-$defaultFromTime = '08:00:00';
-$defaultToTime = '16:00:00';
-$default_encoder = $_SESSION['alogin'];
 
-$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d");
-$to = isset($_GET['to']) ? $_GET['to'] : date("Y-m-d");
+$from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
+$to = isset($_GET['to']) && strtotime($_GET['to']) >= strtotime($minDate) ? $_GET['to'] : date("Y-m-d");
 
 $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
-$encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 
 ?>
 
 
 <div class="main-container">
-	
-        <div class="card-box mb-30">
+
+<div class="card-box mb-30">
             <div class="pd-20">
             <h4 class="text-muted">Filter Date</h4>
             <form action="" id="filter">
             <div class="row align-items-end">
                 <div class="col-md-2 form-group">
-                    <label for="from" class="control-label">Transaction Date</label>
+                    <label for="from" class="control-label">Date From</label>
                     <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
-                <!--   <div class="col-md-2 form-group">
-                    <label for="to" class="control-label">Transaction Date To</label>
+                <div class="col-md-2 form-group">
+                    <label for="to" class="control-label">Date To</label>
                     <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
-                </div> -->
+                </div>
                 <div class="col-md-2 form-group">
                     <label for="category" class="control-label">Category</label>
                     <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
@@ -44,8 +39,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                 </div>
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
-			       <!--  <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
-            -->     </div>
+                </div>
             </div>
             </form>
         </div>
@@ -70,7 +64,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                     <?php else: ?>
                     <p class="m-0 text-center">Streetlight & Grass-Cutting Fee</p>
                     <?php endif; ?>
-                    <?php if ($from == $from): ?>
+                    <?php if ($from == $to): ?>
                        <!--  <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) ?></p> -->
                         <p class="m-0 text-center"><?= date("l, F d, Y", strtotime($from)) ?></p>
                     <?php else: ?>
@@ -100,7 +94,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                                         c_st_or_no LIKE 'MTF-CAR%' OR
                                                         c_st_or_no LIKE 'STL-CAR%'
                                                     )
-                                                ) AND date(y.date_encoded) BETWEEN '$from' AND '$to' AND c_mop = 3 AND  c_encoded_by = '$encoder'
+                                                ) AND date(y.date_encoded) BETWEEN '$from' AND '$to' AND c_mop = 3
                                         ) as Subquery
                                     GROUP BY
                                         transaction_date, branch 
@@ -226,7 +220,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="<?php echo base_url ?>staff/?page=report/summary_per_bank&"+$(this).serialize();
+            location.href="<?php echo base_url ?>admin/?page=report/summary_per_bank&"+$(this).serialize();
         })
     
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
@@ -235,44 +229,41 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 </script>
 
 <script>
-      $(document).ready(function(){
-       
+      
 
-        $('.edit_data').click(function(){
-			uni_modal("Update Payment Details","payments/payment_edit.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
-		})
-		$('.delete_data').click(function(){
-        	uni_modal("Cancel Payment","report/cancel_payment.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
+        $(document).ready(function(){
+        $('#filter').submit(function(e){
+            e.preventDefault()
+            location.href="<?php echo base_url ?>staff/?page=report/car_logs&"+$(this).serialize();
+
+
+           
+        })
+        $('#print').click(function(){
+            start_loader()
+            var _h = $('head').clone();
+            var _p = $('#outprint').clone();
+            var el = $('<div>')
+            _h.find('title').text('Summary per Online Bank - Print View')
+            _h.append('<style>html,body{ min-height: unset !important;}</style>')
+            _h.append('<style>@media print { @page { size: landscape; }}</style>');
+            
+            el.append(_h)
+            el.append(_p)
+             var nw = window.open("","_blank","width=900,height=700,top=50,left=250")
+             nw.document.write(el.html())
+             nw.document.close()
+             setTimeout(() => {
+                 nw.print()
+                 setTimeout(() => {
+                     nw.close()
+                     end_loader()
+                 }, 200);
+             }, 500);
+        })
+		
+		$('.table td,.table th').addClass('py-1 px-2 align-middle')
+	})
 	
-			//_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
-		})
-
-        
-
-      })
-
-      function delete_payment($id){
-            start_loader();
-        
-            $.ajax({
-                url:_base_url_+"classes/Master.php?f=delete_payment",
-                method:"POST",
-                data:{id: $id},
-                dataType:"json",
-                error:err=>{
-                    console.log(err)
-                    alert("An error occured.",'error');
-                    end_loader();
-                },
-                success:function(resp){
-                    if(typeof resp== 'object' && resp.status == 'success'){
-                        alert(resp.msg);
-                        location.reload();
-                    }else{
-                        alert("An error occured.",'error');
-                        end_loader();
-                    }
-                }
-            })
-        }
+</script>
 </script>

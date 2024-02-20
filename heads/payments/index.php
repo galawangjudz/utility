@@ -696,7 +696,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.mp { margin: 290px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no { margin: 300px 130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.branch {display:none;}');
+            printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
         }
 
         
@@ -767,7 +767,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
-        printWindow.document.write('<p class="branch">Bank Branch: ' + document.getElementById("branch").value + '</p>');
+        printWindow.document.write('<p class="branch">Bank : ' + document.getElementById("branch").value + '</p>');
         printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
 
         printWindow.document.write('<p class="remarks">' + document.getElementById("remarks").value + '</p>');
