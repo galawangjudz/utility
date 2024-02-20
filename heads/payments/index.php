@@ -701,7 +701,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         
         printWindow.document.write('.remarks { margin: 260px 360px ; position:absolute; width:250px;}');
-
+        //printWindow.document.write('.remarks { margin: 260px 210px ; position:absolute; width:380px;}');
         printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 260px 230px; width:300px; position:absolute; }');
         printWindow.document.write('.numtowords { margin: 215px 160px; width:400px; position:absolute; }');
@@ -976,7 +976,7 @@ function compute_total_amt_paid(){
         if (selectedMode === '2') {
             addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB']);
         } else if (selectedMode === '3') {
-            addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCBP']);
+            addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB']);
         }
    
 

@@ -27,13 +27,13 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
             <form action="" id="filter">
             <div class="row align-items-end">
                 <div class="col-md-2 form-group">
-                    <label for="from" class="control-label">Transaction Date</label>
+                    <label for="from" class="control-label">Date From</label>
                     <input type="date" id="from" name="from" value="<?= $from ?>" class="form-control form-control-sm rounded-0">
                 </div>
-                <!--   <div class="col-md-2 form-group">
-                    <label for="to" class="control-label">Transaction Date To</label>
+                <div class="col-md-2 form-group">
+                    <label for="to" class="control-label">Date To</label>
                     <input type="date" id="to" name="to" value="<?= $to ?>" class="form-control form-control-sm rounded-0">
-                </div> -->
+                </div>
                 <div class="col-md-2 form-group">
                     <label for="category" class="control-label">Category</label>
                     <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
@@ -44,8 +44,8 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                 </div>
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
-			       <!--  <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
-            -->     </div>
+			        <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print</button>
+                </div>
             </div>
             </form>
         </div>
@@ -103,7 +103,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                <th class="text-center" style="text-align:center;font-size:10px;">Issuance Bank</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Reference #</th>
                                <th class="text-center" style="text-align:center;font-size:10px;">Encoded by</th>
-                       <!--         <th class="text-center" style="text-align:center;font-size:10px;">Action</th> -->
+                               <th class="text-center" style="text-align:center;font-size:10px;">Action</th>
                             </tr>
 				        </thead>
                         <tbody>
@@ -146,8 +146,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                                 c_st_or_no LIKE 'STL-CAR%'
                                             ))
                                         )
-                                        AND ('$encoder' IS NULL OR c_encoded_by = '$encoder')
-                                    
+                                       
                                     UNION
                                     
                                     SELECT 
@@ -172,7 +171,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                         NULL AS substring_col  -- Add a NULL column alias to match the first SELECT
                                     FROM t_utility_accounts x
                                     JOIN t_cancelled_payments z ON x.c_account_no = z.c_account_no
-                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$from'
+                                    WHERE date(z.date_encoded) BETWEEN '$from' AND '$to'
                                         AND (
                                             ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
                                             ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
@@ -180,7 +179,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                             z.c_st_or_no LIKE 'MTF-CAR%' OR
                                             z.c_st_or_no LIKE 'STL-CAR%'
                                         ))
-                                        AND ('$encoder' IS NULL OR z.c_encoded_by = '$encoder')
+                                      
                                     ORDER BY substring_col ASC;  -- Use the alias directly in ORDER BY                        
                                                 
                                ";
@@ -244,18 +243,17 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                     }
                                 echo $usr ?></td>
                         
-                              
-                               <!--  <td>
+                                <td>
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                            <a class="dropdown-item edit_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" data-id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
                                         </div>
                                     </div>
-                                </td> -->
+                                </td>
                             </tr>
                     
 					        <?php endwhile; ?>
@@ -263,15 +261,100 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                 <?php for ($i = 0; $i < 11; $i++) : ?>
                                     <td class="" ></td>
                                 <?php endfor; ?>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($cashTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($checkTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($onlineTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($voucherTotal) ?></td>
-                                <td class="text-right" style="text-align:center;font-size:10px;"><?= format_num($discountTotal) ?></td>
-                                <?php for ($i = 0; $i < 3; $i++) : ?>
+                                <td class="text-right"><?= format_num($cashTotal) ?></td>
+                                <td class="text-right"><?= format_num($checkTotal) ?></td>
+                                <td class="text-right"><?= format_num($onlineTotal) ?></td>
+                                <td class="text-right"><?= format_num($voucherTotal) ?></td>
+                                <td class="text-right"><?= format_num($discountTotal) ?></td>
+                                <?php for ($i = 0; $i < 4; $i++) : ?>
                                     <td class="" ></td>
                                 <?php endfor; ?>
                             </tr> 
+
+                            <?php for ($i = 0; $i < 20; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:12px;" ></td>
+                            <?php endfor; ?>
+                                
+                            <?php
+                            $grandTotal = "SELECT 
+                                            branch,
+                                            SUM(c_st_amount_paid) AS subTotal,
+                                            '' AS total 
+                                        FROM
+                                            (
+                                                SELECT
+                                                    y.c_branch AS Branch,
+                                                    y.c_st_amount_paid
+                                                FROM
+                                                    t_utility_accounts x
+                                                    JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
+                                                WHERE
+                                                    ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
+                                                    ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
+                                                    ('$category' = 'ALL' AND (
+                                                            c_st_or_no LIKE 'MTF-CAR%' OR
+                                                            c_st_or_no LIKE 'STL-CAR%'
+                                                        )
+                                                    ) AND date(y.date_encoded) BETWEEN '$from' AND '$to' AND c_mop = 3
+                                            ) as Subquery
+                                        GROUP BY
+                                            branch 
+                                        ORDER BY
+                                            branch";
+
+                            $result3 = odbc_exec($conn2, $grandTotal);
+                            
+                            if (!$result3) {
+                                die("ODBC query execution failed: " . odbc_errormsg());
+                            }
+
+                            $currentDate = null;
+                            $total = 0;
+
+                            while ($grandTotalRow = odbc_fetch_array($result3)):
+
+                                ?>
+                                
+                                  
+                                <tr>
+                                    <?php for ($i = 0; $i < 3; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo $grandTotalRow['branch'] ?></td>
+                                    <?php for ($i = 0; $i < 9; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num($grandTotalRow['subtotal']) ?></td>
+                                    <?php for ($i = 0; $i < 6; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                </tr>
+                                
+
+                                <?php
+            
+                                $total += $grandTotalRow['subtotal'];
+                            endwhile;
+
+                        
+                                
+                            ?>
+                            <tr>
+                                <?php for ($i = 0; $i < 3; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                <?php endfor; ?>
+                                <td class="text-right" style="text-align:center;font-size:10px;">TOTAL</td>
+                                <?php for ($i = 0; $i < 9; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                    <?php endfor; ?>
+                                <td class="text-right"><?php echo  format_num($total) ?></td>
+                                <?php for ($i = 0; $i < 6; $i++) : ?>
+                                        <td class="text-right" style="text-align:center;font-size:10px;" ></td>
+                                <?php endfor; ?>
+                            </tr>
+
+
+                            
                         </tbody>
                     </table>
                 </div>
@@ -296,7 +379,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             SUM(c_st_amount_paid) AS Grand_Total
                             FROM t_utility_accounts x
                             JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
-                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$from' AND y.c_encoded_by ='$encoder'
+                                            WHERE date(y.date_encoded) BETWEEN '$from' AND '$to'
                                             AND (
                                 ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
                                 ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
@@ -325,6 +408,12 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                    
                         </tbody>
                     </table> 
+
+                    
+                                   
+                        </table>
+                    </div>
+
                 </div>
 
                     
@@ -397,7 +486,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="<?php echo base_url ?>staff/?page=report/car_logs&"+$(this).serialize();
+            location.href="<?php echo base_url ?>admin/?page=report/car_logs&"+$(this).serialize();
 
 
            
@@ -438,7 +527,9 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 			uni_modal("Update Payment Details","payments/payment_edit.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
 		})
 		$('.delete_data').click(function(){
-			_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
+        	uni_modal("Cancel Payment","report/cancel_payment.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
+	
+			//_conf("Are you sure to delete '<b>"+$(this).attr('data-car')+"</b>' from CAR List permanently?","delete_payment",["'" + $(this).attr('data-car') + "'"])
 		})
 
         

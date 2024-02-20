@@ -33,10 +33,16 @@
 						</a>
 					</li>
 					<?php if ($_SESSION['user_type'] == 'Cashier'): ?>
-					<li>
-						<a href="<?php echo base_url ?>staff/?page=report/car_logs" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-newspaper"></span><span class="mtext">CAR Report</span>
+					
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-apartment"></span><span class="mtext"> Reports </span>
 						</a>
+						<ul class="submenu">
+							<li><a href="<?php echo base_url ?>staff/?page=report/car_logs">Daily Report</a></li>
+							<li><a href="<?php echo base_url ?>staff/?page=report/car_logs_v2">Daily Report (NEW)</a></li>
+							
+						</ul>
 					</li>
 					<?php endif; ?>
 					<li>

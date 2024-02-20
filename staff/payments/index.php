@@ -701,7 +701,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         
         printWindow.document.write('.remarks { margin: 260px 360px ; position:absolute; width:250px;}');
-
+        //printWindow.document.write('.remarks { margin: 260px 210px ; position:absolute; width:380px;}');
         printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 260px 230px; width:300px; position:absolute; }');
         printWindow.document.write('.numtowords { margin: 215px 160px; width:400px; position:absolute; }');
