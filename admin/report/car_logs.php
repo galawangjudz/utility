@@ -177,7 +177,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                             z.c_st_or_no LIKE 'STL-CAR%'
                                         ))
                                       
-                                    ORDER BY substring_col ASC;  -- Use the alias directly in ORDER BY                        
+                                    ORDER BY c_st_or_no ,substring_col ASC;  -- Use the alias directly in ORDER BY                        
                                                 
                                ";
 
