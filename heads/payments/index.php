@@ -1002,7 +1002,7 @@ function compute_total_amt_paid(){
                 branchLabel.style.display = 'block';
             }
             if (branchLabel) {
-                branchLabel.innerHTML = '<b>Check Branch:</b>';
+                branchLabel.innerHTML = '<b>Issuing Branch:</b>';
             }
             
             if (branchInput) {
