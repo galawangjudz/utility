@@ -555,7 +555,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </td>
                     <td class="col-md-2">
                         <div class="form-group">
-                            <label for="branch" class="control-label"><b>CHECK BANK: </b></label>
+                            <label for="branch" class="control-label"><b>ISSUING BANK: </b></label>
                             <select name="branch" id="branch" class="form-control form-control-border custom" style="text-align: center;">
                                 <option value="" selected>--SELECT BANK--</option>
                                 <!-- Options will be dynamically added based on mode of payment -->

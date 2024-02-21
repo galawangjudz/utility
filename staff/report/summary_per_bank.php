@@ -266,4 +266,4 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
 	})
 	
 </script>
-</script>
+
