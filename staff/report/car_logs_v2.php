@@ -296,13 +296,12 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                                 t_utility_accounts x
                                                 JOIN t_utility_payments y ON x.c_account_no = y.c_account_no
                                             WHERE
-                                                ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%') OR
-                                                ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%') OR
-                                                ('$category' = 'ALL' AND (
-                                                        c_st_or_no LIKE 'MTF-CAR%' OR
-                                                        c_st_or_no LIKE 'STL-CAR%'
-                                                    )
-                                                ) AND date(y.date_encoded) BETWEEN '$from' AND '$from' AND (c_mop = 2 or c_mop = 3 or c_mop = 4) AND y.c_encoded_by ='$encoder'
+                                                (
+                                                    ('$category' = 'GCF' AND c_st_or_no LIKE 'MTF-CAR%')
+                                                    OR ('$category' = 'STL' AND c_st_or_no LIKE 'STL-CAR%')
+                                                    OR ('$category' = 'ALL' AND (c_st_or_no LIKE 'MTF-CAR%' OR c_st_or_no LIKE 'STL-CAR%'))
+                                                )
+                                                AND date(y.date_encoded) BETWEEN '$from' AND '$from' AND (c_mop = 2 or c_mop = 3 or c_mop = 4) AND y.c_encoded_by ='$encoder'
                                         ) AS Subquery
                                     GROUP BY
                                         branch
