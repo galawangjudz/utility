@@ -492,7 +492,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="<?php echo base_url ?>admin/?page=report/car_logs&"+$(this).serialize();
+            location.href="<?php echo base_url ?>admin/?page=report/car_logs_v2&"+$(this).serialize();
 
 
            
