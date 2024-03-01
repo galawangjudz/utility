@@ -63,6 +63,7 @@
 							<span class="micon dw dw-newspaper"></span><span class="mtext"> Reports </span>
 						</a>
 						<ul class="submenu">
+							<li><a href="<?php echo base_url ?>admin/?page=report/masterlist">Masterlist of Accounts</a></li>
 							<li><a href="<?php echo base_url ?>admin/?page=report/car_logs_v2">Daily Report</a></li>
 							<li><a href="<?php echo base_url ?>admin/?page=report/car_logs">Daily Report v2</a></li>
 							<li><a href="<?php echo base_url ?>admin/?page=report/summary_report">Summary Report</a></li>
