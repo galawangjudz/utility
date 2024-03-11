@@ -428,7 +428,7 @@ function format_num($number){
                             <input type="text" class= "form-control-sm" name="tot_disc" id="tot_disc" value="<?php echo isset($total_mtf_disc) ? format_num($total_mtf_disc): 0; ?>" disabled></td>     
                             
                             <td style="font-size:12px;"><label for="tot_amt_due" class="control-label" style="font-weight:bold;"><b>GCF Remaining Balance:</b></label>
-                            <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
+                            <input type="text" style="background-color:yellow" class="form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_mtf_bal) ? format_num($total_mtf_bal): 0; ?>" disabled></td>
                         </tr>
                         
                         <tr>   
@@ -442,7 +442,7 @@ function format_num($number){
                             <td style="font-size:12px;"><label for="tot_disc" class="control-label" style="font-weight:bold;">STL Total Discount: </label>
                             <input type="text" class= "form-control-sm" name="tot_disc" id="tot_disc" value="<?php echo isset($total_stl_disc) ? format_num($total_stl_disc): 0; ?>" disabled></td> 
                             <td style="font-size:12px;"><label for="tot_amt_due" class="control-label"  style="font-weight:bold;"><b>STL Remaining Balance:</b></label>
-                            <input type="text" class= "form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
+                            <input type="text" style="background-color:yellow" class="form-control-sm" name="tot_amt_due" id="tot_amt_due" value="<?php echo isset($total_stl_bal) ? format_num($total_stl_bal): 0; ?>" disabled></td>
                         </tr>
 
                         <tr>
@@ -482,7 +482,7 @@ function format_num($number){
                             </td>
                             
                             <td style="equal-width-td">
-                                <b><input type="text" class="form-control-sm" name="total_amt_due" id="total_amt_due" value="<?php echo isset($total_amt_due) ? format_num($total_amt_due) : 0; ?>" disabled>
+                                <b><input type="text" style="background-color:yellow" class="form-control-sm" name="total_amt_due" id="total_amt_due" value="<?php echo isset($total_amt_due) ? format_num($total_amt_due) : 0; ?>" disabled>
                                 </b>
                             </td>
                         </tr>

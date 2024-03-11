@@ -24,6 +24,8 @@ require_once('../../includes/config.php');
             $request= $row2['request']; 
             $priority=$row2['priority'];  
             $purpose=$row2['description'];
+            $attachment_path = $row2['attachment'];
+            $attachment_filename = basename($attachment_path);
         }
 
     }
@@ -103,7 +105,6 @@ require_once('../../includes/config.php');
               </select>
           </div>
 
-
           <div class="col-sm-12" id="amount_row">
                     <label for="amount" class="control-label">Amount</label>
                     <input type="number" name="amount" id="amount" class="form-control form-control-border" value ="<?php echo isset($amount) ? $amount : ''; ?>">
@@ -152,6 +153,52 @@ require_once('../../includes/config.php');
                   </label>
               </div>
           </div>
+          <!-- Display current attachment information if it exists -->
+        <input type="hidden" name="attachment_path" id="attachment_path" value="<?php echo isset($attachment_path) ? $attachment_path : ''; ?>">
+        <div class="form-group row" id="attachmentInfoSection">
+            <div class="col-sm-12">
+                <label for="attachment_info" class="block">Current Attachment</label>
+            </div>
+            <div class="col-sm-12">
+                <?php if (!empty($attachment_filename)): ?>
+                    <p>
+                        <strong>Filename:</strong>
+                        <a href="<?php echo base_url?>/sr_attachments/<?php echo $attachment_filename; ?>" target="_blank">
+                            <?php echo $attachment_filename; ?>
+                        </a>
+                        
+                        </a>
+                        <br>
+                    </p>
+                    <button type="button" onclick="changeAttachment()">Change Attachment</button>
+                    <button type="button" onclick="deleteAttachment()">Delete Attachment</button>
+                    <?php else: ?>
+                    <p>No attachment uploaded.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- Display file input for uploading a new attachment -->
+        <div class="form-group row" id="fileInputSection" style="<?php echo empty($attachment_filename) ? 'display: block;' : 'display: none;'; ?>">
+            <div class="col-sm-12">
+                <label for="attachment" class="block">Attachment (JPEG or PNG only)</label>
+            </div>
+            <div class="col-sm-12">
+                <input type="file" name="attachment" id="attachment" class="form-control-file" accept=".jpg, .jpeg, .png">
+                <!-- Add the 'form-control-file' class to style the file input -->
+            </div>
+        </div>
+
+        <script>
+            function changeAttachment() {
+                // Hide the current attachment info
+                document.getElementById('attachmentInfoSection').style.display = 'none';
+            
+                // Show the file input section for uploading a new attachment
+                document.getElementById('fileInputSection').style.display = 'block';
+            }
+        </script>
+
 
           </div>
           <div class="col-sm-12">

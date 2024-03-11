@@ -20,6 +20,8 @@ Class Master{
 		$gcf_edate = isset($_POST['gcf_edate']) ? $_POST['gcf_edate'] : NULL;  
 		$priority=$_POST['priority'];  
 		$purpose=$_POST['purpose'];
+		$attachment_path=  isset($_POST['attachment_path']) ? $_POST['attachment_path'] : NULL;
+	
 
 		if (empty($acc_no) || empty($purpose) || empty($priority) || empty($dept) || empty($adjust_for)) {
 			$resp['status'] = 'error';
@@ -27,6 +29,50 @@ Class Master{
 			return json_encode($resp);
 			exit;
 		}
+		
+		if (!empty($_FILES['attachment']['name'])) {
+			$uploadedFile = $_FILES['attachment'];
+			$allowedExtensions = ['jpg', 'jpeg', 'png'];
+	
+			$fileExtension = strtolower(pathinfo($uploadedFile['name'], PATHINFO_EXTENSION));
+	
+			if (in_array($fileExtension, $allowedExtensions)) {
+				// Delete the old attachment file
+				if (!empty($attachment_path && file_exists($attachment_path))) {
+					if (unlink($attachment_path)) {
+						// File deleted successfully
+						// You can log a success message here if needed
+					} else {
+						// Error deleting file
+						$error = error_get_last();
+						error_log("Unable to delete file: " . $error['message']);
+					}
+				} 
+	
+				// Generate a unique filename
+				//$unique_filename = uniqid() . '_' . time() . '_' . $uploadedFile['name'];
+				$unique_filename = $uploadedFile['name'];
+	
+				// Set the new attachment path
+				$uploadDirectory = 'C:/xampp/htdocs/utility/sr_attachments/';
+				$targetFilePath = $uploadDirectory . $unique_filename;
+	
+				if (move_uploaded_file($uploadedFile['tmp_name'], $targetFilePath)) {
+					$attachment_path = $targetFilePath;
+				} else {
+					$resp['status'] = "error";
+					$resp['msg'] = "Error uploading file.";
+					return json_encode($resp);
+				}
+			} else {
+				$resp['status'] = 'error';
+				$resp['msg'] = "Invalid file type. Please upload a JPEG or PNG file.";
+				return json_encode($resp);
+				exit;
+			}
+		}
+	
+
 
 		$status = 0;
 		$date_created = date('Y-m-d H:i:s');
@@ -34,13 +80,13 @@ Class Master{
 		$loginID = $_SESSION['alogin'];
 		
 		
-		$params = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','$loginID','$status', '$date_created'";
+		$params = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','$loginID','$status', '$date_created', '$attachment_path'";
 		if (empty($id)) {
-			$ticket_query = "INSERT INTO tickets (request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, employee_id,status, date_created) VALUES ($params)";
+			$ticket_query = "INSERT INTO tickets (request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, employee_id,status, date_created, attachment) VALUES ($params)";
 			$update = 0;
 		}else{
-			$data ="request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, status";
-			$values = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','0'";
+			$data ="request, department_id, account_no, transfer_to, request_from, request_to, amount, gcf_edate, priority, description, status, attachment";
+			$values = "'$request','$dept','$acc_no', " . ($acc_no_to ? "'$acc_no_to'" : 'NULL') . ",'$adjust_for','$adjust_to', " . ($amount ? "'$amount'" : 'NULL') . ", " . ($gcf_edate ? "'$gcf_edate'" : 'NULL') . ", '$priority', '$purpose','0', '$attachment_path'";
 			$ticket_query = "UPDATE tickets SET ($data) = ($values) WHERE id = ".$id;
 			$update = 1;
 		}

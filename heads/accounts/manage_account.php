@@ -171,7 +171,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <!-- <div class="col-md-3">
                 <div class="form-group">
                     <label for="billing_method" class="control-label">Billing Method</label><br>
                     <div class="form-check form-check-inline">
@@ -187,9 +187,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <label class="form-check-label" for="billing_method_both">Both</label>
                     </div>
                 </div>
-            </div>
+            </div> -->
             
-          <!--   <div class="col-md-3">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="billing_method" class="control-label">Billing Method *</label>
                     <?php
@@ -212,7 +212,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <input type="hidden" name= "billing_method" id="billing_method" class="form-control form-control-border" value="<?php echo isset($billing_method) ? $billing_method : ''; ?>" required>
                     <input type="text" id="billing_method_label" class="form-control form-control-border" readonly value="<?php echo $billing_method_label; ?>" required>
                 </div>
-            </div> -->
+            </div>
         </div>
         <div class="row">
 			
@@ -226,13 +226,13 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="contact_no" class="control-label">Contact No</label>
-                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="<?php echo isset($contact_no) ? $contact_no : '' ?>">
+                <input type="text" name="contact_no" id="contact_no" class="form-control form-control-border" value ="<?php echo isset($contact_no) ? $contact_no : '' ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
                 <label for="email_add" class="control-label">Email Address</label>
-                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="<?php echo isset($email) ? $email : '' ?>">
+                <input type="email" name="email_add" id="email_add" class="form-control form-control-border" value ="<?php echo isset($email) ? $email : '' ?>" readonly>
                 </div>
             </div>
         </div>

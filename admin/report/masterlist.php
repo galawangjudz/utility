@@ -5,6 +5,16 @@ function format_num($number){
        return number_format($number,2);
 }
 
+
+function glob_recursive($pattern, $flags = 0) {
+    $files = glob($pattern, $flags);
+    foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
+        $files = array_merge($files, glob_recursive($dir . '/' . basename($pattern), $flags));
+    }
+    return $files;
+}
+
+
 $phase = isset($_GET['phase']) ? $_GET['phase'] : '100';
 
 ?>
@@ -47,6 +57,10 @@ $phase = isset($_GET['phase']) ? $_GET['phase'] : '100';
                 </div>
                 <div class="col-md-4 form-group">
                     <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
+                    <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print Master List</button>
+                    <button class="btn btn-default border btn-flat btn-sm" id="print_pdf" type="button"><i class="dw dw-print"></i> Print PDF Files</button>
+                   
+
                 </div>
             </div>
             </form>
@@ -290,42 +304,38 @@ $phase = isset($_GET['phase']) ? $_GET['phase'] : '100';
 </style>
 
 <script>
-     $(document).ready(function() {
-        $('#car_table').DataTable({
-            "paging": false,
-            "searching": true,
-            "ordering": false,
-            "info": true,
-            "responsive": false,
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5'
-            ]
-        });
-    });
-
-    $(document).ready(function() {
-        $('#scar_table').DataTable({
-            "paging": false,
-            "searching": false,
-            "ordering": false,
-            "info": false,
-            "responsive": false
-        });
-    });
-
+   
 
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
             location.href="<?php echo base_url ?>admin/?page=report/masterlist&"+$(this).serialize();
         })
-    
+        $('#print').click(function(){
+            start_loader()
+            var _h = $('head').clone();
+            var _p = $('#outprint').clone();
+            var el = $('<div>')
+            _h.find('title').text('Masterlist of Billing Statement - Print View')
+            _h.append('<style>html,body{ min-height: unset !important;}</style>')
+            _h.append('<style>@media print { @page { size: landscape; }}</style>');
+            
+            el.append(_h)
+            el.append(_p)
+             var nw = window.open("","_blank","width=900,height=700,top=50,left=250")
+             nw.document.write(el.html())
+             nw.document.close()
+             setTimeout(() => {
+                 nw.print()
+                 setTimeout(() => {
+                     nw.close()
+                     end_loader()
+                 }, 200);
+             }, 500);
+        })
+		
 		$('.table td,.table th').addClass('py-1 px-2 align-middle')
 	})
-	
 </script>
 
 <script>
