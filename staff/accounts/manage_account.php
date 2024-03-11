@@ -171,25 +171,25 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     </select>
                 </div>
             </div>
-          <!--   <div class="col-md-3">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="billing_method" class="control-label">Billing Method</label><br>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_email" value="1" <?= isset($billing_method) && $billing_method == 1 ? 'checked' : '' ?>>
+                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_email" value="1" <?= isset($billing_method) && $billing_method == 1 ? 'checked' : '' ?> readonly>
                         <label class="form-check-label" for="billing_method_email">Email</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_text" value="2" <?= isset($billing_method) && $billing_method == 2 ? 'checked' : '' ?>>
+                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_text" value="2" <?= isset($billing_method) && $billing_method == 2 ? 'checked' : '' ?> readonly>
                         <label class="form-check-label" for="billing_method_text">Text</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_both" value="3" <?= isset($billing_method) && $billing_method == 3 ? 'checked' : '' ?>>
+                        <input class="form-check-input" type="radio" name="billing_method" id="billing_method_both" value="3" <?= isset($billing_method) && $billing_method == 3 ? 'checked' : '' ?> readonly>
                         <label class="form-check-label" for="billing_method_both">Both</label>
                     </div>
                 </div>
-            </div> -->
+            </div>
             
-            <div class="col-md-3">
+           <!--  <div class="col-md-3">
                 <div class="form-group">
                     <label for="billing_method" class="control-label">Billing Method *</label>
                     <?php
@@ -212,7 +212,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     <input type="hidden" name= "billing_method" id="billing_method" class="form-control form-control-border" value="<?php echo isset($billing_method) ? $billing_method : ''; ?>" required>
                     <input type="text" id="billing_method_label" class="form-control form-control-border" readonly value="<?php echo $billing_method_label; ?>" required>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="row">
 			
