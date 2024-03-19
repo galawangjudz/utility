@@ -536,6 +536,65 @@ Class Master{
 		return json_encode($resp);
 	}
 
+	function bounce_payment(){
+		
+		extract($_POST);
+		$acc_no = $_POST['acc_no'];
+		$car_no = $_POST['payment_or'];
+		$payment_type = substr($car_no, 0, 3) . '-ADJCM';
+		$check_date = $_POST['check_date'];
+		$amount = (float)$_POST['pay_amount_paid'];
+		$discount = (float)$_POST['pay_discount'];
+		require_once('../includes/session.php');
+		$encoded_by = $_SESSION['alogin'];
+		$date_encoded = date('Y-m-d H:i:s');
+		$date_updated = date('Y-m-d H:i:s');
+		$reason = "Bounced Check";
+		$notes = $reason . ' ' . str_replace(['MTF', 'STL'], '', $car_no);
+		$pay_type = (substr($car_no, 0, 3) == 'MTF') ? 'GCF-CM' : 'STL-CM';
+		$cm_amount = -($amount + $discount);
+
+		
+		$query = "SELECT c_or_no FROM t_adjustment WHERE c_adjustment_type = 'Bounced Check' ORDER BY c_or_no DESC LIMIT 1";
+		$result = odbc_prepare($this->conn2, $query);
+		odbc_execute($result);
+		// Fetch the result
+		if ($row = odbc_fetch_array($result)) {
+			$last_cm_no = $row['c_or_no'];
+			preg_match('/([A-Za-z]+)(\d+)/', $last_cm_no, $matches);
+			$alphabetic_part = $matches[1];
+			$numeric_part = $matches[2];
+			$incremented_numeric_part = sprintf('%04d', intval($numeric_part) + 1);
+			$cm_no = $payment_type . $incremented_numeric_part;
+
+		} else {
+			$cm_no = $payment_type .'0001';
+		}
+
+		
+		$params_to = "'$acc_no', '$cm_no', '$date_encoded', '$cm_amount','0','$encoded_by','$date_encoded','$pay_type'";
+		$insert_query_to = "INSERT INTO t_utility_payments (c_account_no, c_st_or_no, c_st_pay_date, c_st_amount_paid, c_discount, c_encoded_by, date_encoded, payment_type) VALUES ($params_to)";
+
+		#$cm_params = "'$cm_no', '$acc_no', '$car_no', '$check_date', '$cm_amount','$reason','$encoded_by','$date_encoded','$date_updated','1'";
+		#$insert_cm = "INSERT INTO t_credit_memo (c_cm_no,c_account_no, c_car_no, c_date, c_amount, c_reason, c_employee_id, c_date_created, c_date_modified, c_status) VALUES ($cm_params)";
+		$cm_params = "'$cm_no','$acc_no', '$date_encoded', '$reason','$notes'";
+		$insert_cm = "INSERT INTO t_adjustment VALUES ($cm_params)";
+
+
+
+		if (odbc_exec($this->conn2, $insert_cm) && odbc_exec($this->conn2, $insert_query_to)) {
+			$this->log_log('Utility Credit Memo'," $acc_no | $cm_no | $reason");
+			$resp['status'] = 'success';
+			$resp['msg'] = "Credit Memo has been successfully added.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$insert_cm] [$insert_query_to]";
+		}
+		
+		return json_encode($resp);
+	}
+
 
 
 	function save_payment(){
@@ -807,6 +866,10 @@ switch ($action) {
 
 	case 'submit_report':
 		echo $Master->submit_report();
+	break;
+
+	case 'bounce_payment':
+		echo $Master->bounce_payment();
 	break;
 
 	default:

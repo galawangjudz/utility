@@ -183,7 +183,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                             z.c_st_or_no LIKE 'STL-CAR%'
                                         ))
                                       
-                                    ORDER BY c_st_or_no, substring_col ASC;  -- Use the alias directly in ORDER BY                        
+                                    ORDER BY c_st_or_no ,substring_col ASC;  -- Use the alias directly in ORDER BY                        
                                                 
                                ";
 
@@ -253,6 +253,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
                                             <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
                                             <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
+                                            <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-return"></i>Bounce Check</a>
                                         </div>
                                     </div>
                                 </td>
@@ -482,6 +483,9 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 
         $('.edit_data').click(function(){
 			uni_modal("Update Payment Details","payments/payment_edit.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
+		})
+        $('.bounce_check').click(function(){
+			uni_modal("Bounce Check","payments/payment_bounce.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
 		})
 		$('.delete_data').click(function(){
         	uni_modal("Cancel Payment","report/cancel_payment.php?id="+$(this).attr('id')+ "&data-car=" + $(this).attr('data-car'),'mid-large')
