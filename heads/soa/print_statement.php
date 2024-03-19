@@ -158,6 +158,8 @@ if(isset($_GET['id'])){
                                 WHEN payment_type = 'STL-SA' THEN 'STL Surcharge Adj.'
                                 WHEN payment_type = 'GCF-RF' THEN 'GCF Refund'
                                 WHEN payment_type = 'STL-RF' THEN 'STL Refund'
+                                WHEN payment_type = 'GCF-CM' THEN 'GCF Bounced Check'
+                                WHEN payment_type = 'STL-CM' THEN 'STL Bounced Check'
                                 ELSE ''
                             END AS c_pay_type,
                             c_st_amount_paid as c_tot_amt_paid,

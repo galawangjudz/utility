@@ -89,6 +89,8 @@ if(isset($_GET['id'])){
                                 WHEN payment_type = 'STL-SA' THEN 'STL Surcharge Adj.'
                                 WHEN payment_type = 'GCF-RF' THEN 'GCF Refund'
                                 WHEN payment_type = 'STL-RF' THEN 'STL Refund'
+                                WHEN payment_type = 'GCF-CM' THEN 'GCF Bounced Check'
+                                WHEN payment_type = 'STL-CM' THEN 'STL Bounced Check'
 
                                 ELSE ''
                             END AS c_pay_type,
@@ -191,6 +193,7 @@ function fetchDataFromOtherTable($content, $l_acc_no) {
 
     $conn2 = odbc_connect($dsn, $user, $pass);
     $sql = "SELECT c_notes FROM t_adjustment WHERE c_or_no = '$content' and c_account_no = '$l_acc_no'";
+    #echo $sql;
     $result = odbc_prepare($conn2, $sql);
 	odbc_execute($result);
     if ($result) {  
@@ -249,6 +252,7 @@ function format_num($number){
                     <col width="10%">
                     <col width="10%">
                     <col width="15%">
+                    <col width="15%">
                     
 			
 				</colgroup>
@@ -266,6 +270,7 @@ function format_num($number){
                         <th style="text-align:center;font-size:13px;">OR #</th>
                         <th style="text-align:center;font-size:13px;">PAYMENT TYPE</th>
                         <th style="text-align:center;font-size:13px;">BALANCE</th>
+                        <th style="text-align:center;font-size:13px;">NOTES</th>
                         
                     </tr>
                 </thead>
@@ -284,6 +289,7 @@ function format_num($number){
                     <col width="7%">
                     <col width="10%">
                     <col width="10%">
+                    <col width="14%">
                     <col width="14%">
                     
 			
@@ -304,30 +310,29 @@ function format_num($number){
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[8]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[9]; ?></td>
                                 <td style="text-align:center;font-size:13px;"><?php echo $l_data[13]; ?></td>
-                      <!--           <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td> -->
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[10]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
+                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[12]; ?></td>
                                 <td style="text-align:center; font-size:13px;">
                                     <?php
                                     $content = $l_data[10];
                                     $type = $l_data[11];
+                                    #echo $type;
                                     if (strpos($type, 'STL') !== false) {
                                         $content = 'STL-' . $content;
                                     } elseif (strpos($type, 'GCF') !== false) {
                                         $content = 'MTF-' . $content;
                                     }
-                                   
-                                    if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false) {
-                                        echo '<a href="#" class="link-with-hover">' . $l_data[10] . '</a>';
-                                         $queryResult = fetchDataFromOtherTable($content, $l_acc_no);
-                                        echo '<div class="hover-info">' . $queryResult . '</div>';
+                                    
+                                    if (strpos($content, 'BA') !== false || strpos($content, 'ADJ') !== false || strpos($content, 'ADJCM') !== false) {
+                                       # echo $content;
+                                        $queryResult = fetchDataFromOtherTable($content, $l_acc_no);
+                                        echo $queryResult ;
                                     } else {
-                                        echo $l_data[10];
+                                        echo "----------";
                                     }
                                     ?>
                                 </td>
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[11]; ?></td>
-                             
-                                                        
-                                <td style="text-align:center;font-size:13px;"><?php echo $l_data[12]; ?></td>
                             </tr>
                             <?php
                         endforeach;
