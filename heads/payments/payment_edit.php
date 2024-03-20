@@ -128,6 +128,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <option value="SBC" <?= isset($l_branch) && $l_branch == 'SBC' ? 'selected' : '' ?>>SBC</option>
                         <option value="UB" <?= isset($l_branch) && $l_branch == 'UB' ? 'selected' : '' ?>>UB</option>
                         <option value="UCPB" <?= isset($l_branch) && $l_branch == 'UCPB' ? 'selected' : '' ?>>UCPB</option>
+                        <option value="PBCOM" <?= isset($l_branch) && $l_branch == 'PBCOM' ? 'selected' : '' ?>>PBCOM</option>
+                       
 
                      
                     </select>
