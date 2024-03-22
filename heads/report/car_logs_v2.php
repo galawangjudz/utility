@@ -245,18 +245,55 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                     }
                                 echo $usr ?></td>
                         
-                                <td>
-                                    <div class="dropdown">
-                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                            <i class="dw dw-more"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                            <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>"><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
-                                            <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>"><i class="dw dw-return"></i>Bounce Check</a>
+                                <?php
+                                    // Set the timezone to Philippine Time
+                                    date_default_timezone_set('Asia/Manila');
+
+                                    // Get the current date and time
+                                    $current_datetime = date("m/d/Y H:i:s", strtotime($row['date_encoded']));
+
+                                    // Get the current date and time
+                                    $current_datetime = new DateTime();
+
+                                    // Set the time to 11 AM today
+                                    $today_11am = clone $current_datetime;
+                                    $today_11am->setTime(11, 0, 0);
+
+                                    // Check if the current time is 11 AM or later today
+                                    $is_past_11am_today = $current_datetime >= $today_11am;
+
+                                    // Get the date_encoded from the $row variable
+                                    $date_encoded = new DateTime($row['date_encoded']);
+
+                                    // Check if the date_encoded is today
+                                    $is_today = $date_encoded->format('Y-m-d') === $current_datetime->format('Y-m-d');
+                                    ?>
+                                    <?php if (!$is_past_11am_today || $is_today): ?>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                <i class="dw dw-more"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                                <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-edit2"></i> Edit</a>
+                                                <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
+                                                <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    
+                                    <td>
+                                    <?php else: ?>
+                                    <td>
+                                        <div>
+                                            <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                <i class="dw dw-more"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                                <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
                     
 					        <?php endwhile; ?>

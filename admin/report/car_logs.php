@@ -250,37 +250,25 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             date_default_timezone_set('Asia/Manila');
 
                             // Get the current date and time
-                            $current_datetime = date("m/d/Y", strtotime($row['date_encoded']));
+                            $current_datetime = date("m/d/Y H:i:s", strtotime($row['date_encoded']));
 
-                            //echo $current_datetime;
-                            // Calculate yesterday's date and set the time to 11 AM
-                            $yesterday_11am = (new DateTime('yesterday'))->setTime(11, 0, 0);
+                            // Get the current date and time
+                            $current_datetime = new DateTime();
 
+                            // Set the time to 11 AM today
+                            $today_11am = clone $current_datetime;
+                            $today_11am->setTime(11, 0, 0);
 
-                            //echo $yesterday_11am->format('Y-m-d');
-                            // Check if the current time is past yesterday 11 AM
-                            // Check if the current time is past yesterday 11 AM
-                            $disabled = ($current_datetime < $yesterday_11am);
+                            // Check if the current time is 11 AM or later today
+                            $is_past_11am_today = $current_datetime >= $today_11am;
 
-                            // Convert boolean value to string for easier understanding when echoed
-                            $disabled_str = $disabled ? 'true' : 'false';
-                            
-                            // Echo the disabled status
-                            //echo $disabled_str;
+                            // Get the date_encoded from the $row variable
+                            $date_encoded = new DateTime($row['date_encoded']);
+
+                            // Check if the date_encoded is today
+                            $is_today = $date_encoded->format('Y-m-d') === $current_datetime->format('Y-m-d');
                             ?>
-                            
-                            <?php if ($disabled_str): ?>
-                            <td>
-                                <div>
-                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                        <i class="dw dw-more"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                        <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
-                                    </div>
-                                </div>
-                            <td>
-                            <?php else: ?>
+                            <?php if (!$is_past_11am_today || $is_today): ?>
                             <td>
                                 <div class="dropdown">
                                     <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -289,6 +277,18 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
                                         <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-edit2"></i> Edit</a>
                                         <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
+                                        <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                    </div>
+                                </div>
+                               
+                            <td>
+                            <?php else: ?>
+                            <td>
+                                <div>
+                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                        <i class="dw dw-more"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
                                         <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
                                     </div>
                                 </div>
