@@ -269,7 +269,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             //echo $disabled_str;
                             ?>
                             
-                            <?php if ($disabled): ?>
+                            <?php if ($disabled_str): ?>
                             <td>
                                 <div>
                                     <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
