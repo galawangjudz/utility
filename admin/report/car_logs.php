@@ -281,7 +281,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                     </div>
                                 </div>
                                
-                            <td>
+                            </td>
                             <?php else: ?>
                             <td>
                                 <div>

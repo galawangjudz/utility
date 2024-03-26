@@ -273,30 +273,30 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                     $is_today = $date_encoded->format('Y-m-d') === $current_datetime->format('Y-m-d');
                                     ?>
                                     <?php if (!$is_past_11am_today || $is_today): ?>
-                                    <td>
-                                        <div class="dropdown">
-                                            <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                                <i class="dw dw-more"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                                <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-edit2"></i> Edit</a>
-                                                <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
-                                                <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                    <i class="dw dw-more"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                                    <a class="dropdown-item edit_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-edit2"></i> Edit</a>
+                                                    <a class="dropdown-item delete_data exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-delete-3"></i> Delete/Cancelled</a>
+                                                    <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                                </div>
                                             </div>
-                                        </div>
                                     
-                                    <td>
+                                        </td>
                                     <?php else: ?>
-                                    <td>
-                                        <div>
-                                            <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                                <i class="dw dw-more"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                                <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                        <td>
+                                            <div>
+                                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                    <i class="dw dw-more"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
+                                                    <a class="dropdown-item bounce_check exclude-copy" href="javascript:void(0)" data-car ="<?php echo $row['c_st_or_no'] ?>" id ="<?php echo $row['c_account_no'] ?>" ><i class="dw dw-return"></i> Bounce Check</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
+                                        </td>
                                 <?php endif; ?>
                             
                             </tr>
