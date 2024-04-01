@@ -6,7 +6,6 @@ function format_num($number){
 }
 
 
-
 $from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
 $to = isset($_GET['to']) && strtotime($_GET['to']) >= strtotime($minDate) ? $_GET['to'] : date("Y-m-d");
 
@@ -116,6 +115,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 <th class="text-center">CBS</th>
                 <th class="text-center">MBTC</th>
                 <th class="text-center">PBB</th>
+                <th class="text-center">PBCOM</th>
                 <th class="text-center">PVB</th>
                 <th class="text-center">RCBC</th>
                 <th class="text-center">ROBBank</th>
@@ -133,7 +133,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
         }
 
         $currentDate = null;
-        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB', '', 'Total'], 0);
+        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PBCOM','PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB', '', 'Total'], 0);
 
         while ($grandTotalRow = odbc_fetch_array($result3)):
             // If it's a new date, print the previous row and reset the totals
@@ -143,7 +143,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 }
 
                 $currentDate = $grandTotalRow['transaction_date'];
-                $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB','', 'Total'], 0);
+                $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB','PBCOM',  'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB','', 'Total'], 0);
             }
 
             // Accumulate the subtotals for each branch and the total
