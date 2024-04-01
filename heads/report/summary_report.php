@@ -6,7 +6,6 @@ function format_num($number){
 }
 
 
-
 $from = isset($_GET['from']) ? $_GET['from'] : date("Y-m-d",strtotime(date('Y-m-d')." -1 week"));
 $to = isset($_GET['to']) && strtotime($_GET['to']) >= strtotime($minDate) ? $_GET['to'] : date("Y-m-d");
 
@@ -82,6 +81,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                                 <th class="text-center">TOTAL CASH</th>
                                 <th class="text-center">TOTAL CHECK</th>
                                 <th class="text-center">TOTAL ONLINE</th>
+                                <th class="text-center">TOTAL VOUCHER</th>
                                 <th class="text-center">TOTAL</th>
                                 <th class="text-center">STATUS</th>
                                 <th class="text-center">ACTION</th>
@@ -93,6 +93,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         SUM(CASE WHEN c_mop = '1' OR c_mop IS NULL THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Cash,
                         SUM(CASE WHEN c_mop = '2' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Check,
                         SUM(CASE WHEN c_mop = '3' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Online,
+                        SUM(CASE WHEN c_mop = '4' THEN c_st_amount_paid ELSE 0 END) AS Grand_Total_Voucher,
                         SUM(c_st_amount_paid) AS Grand_Total
                     FROM
                         t_utility_accounts x
@@ -118,16 +119,44 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_cash'])?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_check']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_online']) ?></td>
+                        <td class="text-right"><?php echo format_num($grandTotalRow['grand_total_voucher']) ?></td>
                         <td class="text-right"><?php echo format_num($grandTotalRow['grand_total']) ?></td>
- 
-                        <td class="text-center"><span class="badge badge-danger border px-3 rounded-pill"><?php echo 'UNENCODED'?></span></td>
-                        <td class="text-center">
+
+                        <?php
+                            $trans_date = $grandTotalRow['transaction_date'];
+                            $report = "SELECT * FROM summary_report WHERE transaction_date = ?";
+                            $result2 = odbc_prepare($conn2, $report);
+
+                            if ($result2) {
+                                // Bind the parameter and execute the query
+                                odbc_execute($result2, array($trans_date));
+
+                                // Fetch a row from the result set
+                                $summaryRow = odbc_fetch_array($result2);
+
+                                if ($summaryRow) {
+                                    echo '<td class="text-center"><span class="badge badge-success border px-3 rounded-pill">Submitted</span></td>';
+                                } else {
+                                    echo '<td class="text-center"><span class="badge badge-danger border px-3 rounded-pill">Draft</span></td>';
+                                }
+                            } else {
+                                echo '<td class="text-center"><span class="badge badge-warning border px-3 rounded-pill">Error</span></td>';
+                            }
+                            ?>
+                            <td class="text-center">
                                     <div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">    
-                                            <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-edit2"></i>Submit</a>
+                                            <a class="dropdown-item submit_data" 
+                                            id ="<?php echo $grandTotalRow['transaction_date']?>" 
+                                            cash ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_cash'])?>" 
+                                            check ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_check'])?>" 
+                                            online ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_online'])?>" 
+                                            voucher ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total_voucher'])?>"
+                                            total ="<?php echo sprintf('%.2f', $grandTotalRow['grand_total'])?>"
+                                            href="javascript:void(0)" ><i class="dw dw-edit2"></i>SUBMIT</a>
                                             <a class="dropdown-item " href="javascript:void(0)"><i class="dw dw-delete-3"></i>Undo</a>
                                         </div>
                                     </div>
