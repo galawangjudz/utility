@@ -767,7 +767,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
-        printWindow.document.write('<p class="branch">Bank: ' + document.getElementById("branch").value + '</p>');
+        printWindow.document.write('<p class="branch">Bank : ' + document.getElementById("branch").value + '</p>');
         printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
 
         printWindow.document.write('<p class="remarks">' + document.getElementById("remarks").value + '</p>');
@@ -974,9 +974,9 @@ function compute_total_amt_paid(){
 
         // Add options based on selected mode
         if (selectedMode === '2') {
-            addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB','MBTC','PBCOM']);
+            addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB','MBTC','PBCOM','AUB']);
         } else if (selectedMode === '3') {
-            addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB']);
+            addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB','AUB']);
         }
    
 
