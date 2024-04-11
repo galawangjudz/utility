@@ -60,6 +60,8 @@ if (!empty($keyword)) {
                             ?>
                         </select>
                     </div>
+                       
+               
                     <div class="col-md-4 form-group">
                         <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
                         <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print Master List</button>
@@ -84,12 +86,12 @@ if (!empty($keyword)) {
             </form>
         </div>
     </div>
-</div>
 
 
-        <div class="card-box mb-50">
-            <div class="pd-20">
-                <div class="container-fluid" id="outprint">
+
+    <div class="card-box mb-30">
+        <div class="pd-20">
+            <div class="container-fluid" id="outprint">
                 <style>
                     th.p-0, td.p-0{
                         padding: 0 !important;
@@ -266,7 +268,7 @@ if (!empty($keyword)) {
                                     GROUP BY 
                                         c_account_no
                                 ) as last_payment_stl ON last_payment_stl.c_account_no = my_table_v2.c_account_no
-                            WHERE ua.c_status = 'Active'and ua.c_with_mtf is NULL and (ua.billing_method != 1 and ua.billing_method != 3) and ua.c_site= '$phase' and x.c_ed IS NOT NULL";
+                            WHERE ua.c_status = 'Active'and ua.c_with_mtf is NULL and ((ua.billing_method != 1 and ua.billing_method != 3) or ua.billing_method is NULL) and ua.c_site= '$phase' and x.c_ed IS NOT NULL";
                                 
                            
                            $result3 = odbc_exec($conn2, $combine);
@@ -290,10 +292,10 @@ if (!empty($keyword)) {
                         ?>
                     </table>
                 
-                
-       
-</div>
-</div>
+            </div>    
+        
+        </div>
+    </div>
                 
 </div>
 

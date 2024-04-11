@@ -5,7 +5,7 @@ define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASS','');
 define('DB_NAME','db_utility');
-define('base_url','http://192.168.0.111/utility/');
+define('base_url','http://localhost/utility/');
 
 $conn = mysqli_connect('localhost','root','','db_utility') or die(mysqli_error());
 
@@ -25,7 +25,6 @@ $user = "glicelo";    // Replace with your database username
 $pass = "admin12345";    // Replace with your database password
 
 $conn2 = odbc_connect($dsn, $user, $pass);
-
 
 // Check if the connection was successful
 if (!$conn2) {
