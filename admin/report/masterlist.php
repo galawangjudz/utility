@@ -18,7 +18,7 @@ function glob_recursive($pattern, $flags = 0) {
 
 
 $phase = isset($_GET['phase']) ? $_GET['phase'] : '100';
-$directory = "C:\Users\Asian Land\Desktop\UTL_AUTO_BILLING";
+$directory = "C:\\xampp\\htdocs\\utility\\soa_6mos";
 
 if ($phase == '100') {
     $keyword = '';
@@ -28,6 +28,8 @@ if ($phase == '100') {
 
 $pdfFiles = glob($directory . '/*.pdf');
 
+
+
 if (!empty($keyword)) {
     $filteredPdfFiles = array_filter($pdfFiles, function($pdfFile) use ($keyword) {
         return stripos(basename($pdfFile), $keyword) !== false;
@@ -35,6 +37,8 @@ if (!empty($keyword)) {
 } else {
     $filteredPdfFiles = $pdfFiles;
 }
+
+
 ?>
 
 <div class="main-container">
@@ -60,6 +64,8 @@ if (!empty($keyword)) {
                             ?>
                         </select>
                     </div>
+                       
+               
                     <div class="col-md-4 form-group">
                         <button class="btn btn-default border btn-flat btn-sm"><i class="dw dw-filter"></i> Filter</button>
                         <button class="btn btn-default border btn-flat btn-sm" id="print" type="button"><i class="dw dw-print"></i> Print Master List</button>
@@ -84,12 +90,23 @@ if (!empty($keyword)) {
             </form>
         </div>
     </div>
-</div>
+    <?php
+    $database = "UTLDB_20240331";
+    $username = "glicelo";
+    $password = "password12345";
+    
+    // Adjust connection string
+    $dsn = "Driver={PostgreSQL Unicode};Server=192.168.0.111;Database=$database;Uid=$username;Pwd=$password;";
+
+    // Attempt connection
+    $conn3 = odbc_connect($dsn, $username, $password);
+    ?>
 
 
-        <div class="card-box mb-50">
-            <div class="pd-20">
-                <div class="container-fluid" id="outprint">
+
+    <div class="card-box mb-30">
+        <div class="pd-20">
+            <div class="container-fluid" id="outprint">
                 <style>
                     th.p-0, td.p-0{
                         padding: 0 !important;
@@ -266,10 +283,10 @@ if (!empty($keyword)) {
                                     GROUP BY 
                                         c_account_no
                                 ) as last_payment_stl ON last_payment_stl.c_account_no = my_table_v2.c_account_no
-                            WHERE ua.c_status = 'Active'and ua.c_with_mtf is NULL and (ua.billing_method != 1 and ua.billing_method != 3) and ua.c_site= '$phase' and x.c_ed IS NOT NULL";
+                            WHERE ua.c_status = 'Active'and ua.c_with_mtf is NULL and ((ua.billing_method != 1 and ua.billing_method != 3) or ua.billing_method is NULL) and ua.c_site= '$phase' and x.c_ed IS NOT NULL";
                                 
                            
-                           $result3 = odbc_exec($conn2, $combine);
+                           $result3 = odbc_exec($conn3, $combine);
                            # print ($combine);
                        if (!$result3) {
                         die("ODBC query execution failed: " . odbc_errormsg());
@@ -290,10 +307,10 @@ if (!empty($keyword)) {
                         ?>
                     </table>
                 
-                
-       
-</div>
-</div>
+            </div>    
+        
+        </div>
+    </div>
                 
 </div>
 

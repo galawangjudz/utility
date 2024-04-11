@@ -26,7 +26,6 @@ $pass = "admin12345";    // Replace with your database password
 
 $conn2 = odbc_connect($dsn, $user, $pass);
 
-
 // Check if the connection was successful
 if (!$conn2) {
     die("Connection failed: " . odbc_errormsg());
