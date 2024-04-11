@@ -335,7 +335,7 @@ if (!empty($keyword)) {
 	$(document).ready(function(){
         $('#filter').submit(function(e){
             e.preventDefault()
-            location.href="<?php echo base_url ?>admin/?page=report/masterlist&"+$(this).serialize();
+            location.href="<?php echo base_url ?>heads/?page=report/masterlist&"+$(this).serialize();
         })
         $('#print').click(function(){
             start_loader()
