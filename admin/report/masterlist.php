@@ -18,7 +18,7 @@ function glob_recursive($pattern, $flags = 0) {
 
 
 $phase = isset($_GET['phase']) ? $_GET['phase'] : '100';
-$directory = "C:\Users\Asian Land\Desktop\UTL_AUTO_BILLING";
+$directory = "C:\\xampp\\htdocs\\utility\\soa_6mos";
 
 if ($phase == '100') {
     $keyword = '';
@@ -28,6 +28,8 @@ if ($phase == '100') {
 
 $pdfFiles = glob($directory . '/*.pdf');
 
+
+
 if (!empty($keyword)) {
     $filteredPdfFiles = array_filter($pdfFiles, function($pdfFile) use ($keyword) {
         return stripos(basename($pdfFile), $keyword) !== false;
@@ -35,6 +37,8 @@ if (!empty($keyword)) {
 } else {
     $filteredPdfFiles = $pdfFiles;
 }
+
+
 ?>
 
 <div class="main-container">

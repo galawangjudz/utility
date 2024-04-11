@@ -18,7 +18,7 @@ function glob_recursive($pattern, $flags = 0) {
 
 
 $phase = isset($_GET['phase']) ? $_GET['phase'] : '100';
-$directory = "C:\Users\Asian Land\Desktop\UTL_AUTO_BILLING";
+$directory = "C:\\xampp\\htdocs\\utility\\soa_6mos";
 
 if ($phase == '100') {
     $keyword = '';
