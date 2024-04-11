@@ -90,6 +90,17 @@ if (!empty($keyword)) {
             </form>
         </div>
     </div>
+    <?php
+    $database = "UTLDB_20240331";
+    $username = "glicelo";
+    $password = "password12345";
+    
+    // Adjust connection string
+    $dsn = "Driver={PostgreSQL Unicode};Server=192.168.0.111;Database=$database;Uid=$username;Pwd=$password;";
+
+    // Attempt connection
+    $conn3 = odbc_connect($dsn, $username, $password);
+    ?>
 
 
 
@@ -275,7 +286,7 @@ if (!empty($keyword)) {
                             WHERE ua.c_status = 'Active'and ua.c_with_mtf is NULL and ((ua.billing_method != 1 and ua.billing_method != 3) or ua.billing_method is NULL) and ua.c_site= '$phase' and x.c_ed IS NOT NULL";
                                 
                            
-                           $result3 = odbc_exec($conn2, $combine);
+                           $result3 = odbc_exec($conn3, $combine);
                            # print ($combine);
                        if (!$result3) {
                         die("ODBC query execution failed: " . odbc_errormsg());
