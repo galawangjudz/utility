@@ -35,7 +35,8 @@ if (!empty($keyword)) {
         return stripos(basename($pdfFile), $keyword) !== false;
     });
 } else {
-    $filteredPdfFiles = $pdfFiles;
+    $filteredPdfFiles = [];
+    
 }
 
 
