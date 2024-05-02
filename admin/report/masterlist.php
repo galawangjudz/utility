@@ -93,8 +93,10 @@ if (!empty($keyword)) {
     </div>
     <?php
     $database = "UTLDB_20240331";
+    #$database = "UTLDB_TEST";
     $username = "glicelo";
-    $password = "password12345";
+    $password = "admin12345";
+    #$password = "password12345";
     
     // Adjust connection string
     $dsn = "Driver={PostgreSQL Unicode};Server=192.168.0.111;Database=$database;Uid=$username;Pwd=$password;";
