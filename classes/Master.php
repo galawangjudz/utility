@@ -831,12 +831,6 @@ switch ($action) {
 	case 'delete_payment':
 		echo $Master->delete_payment();
 	break;
-	case 'save_mtf_payment':
-		echo $Master->save_mtf_payment();
-	break;
-	case 'save_stl_payment':
-		echo $Master->save_stl_payment();
-	break;
 	case 'delete_bill':
 		echo $Master->delete_bill();
 	break;
@@ -849,13 +843,9 @@ switch ($action) {
 	case 'adjust_payment':
 		echo $Master->adjust_payment();
 	break;
-	case 'save_user':
-		echo $Master->save_user();
-	break;
 	case 'add_ticket':
 		echo $Master->add_ticket();
 	break;
-
 	case 'update_request':
 		echo $Master->update_request();
 	break;
