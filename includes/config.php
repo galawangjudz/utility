@@ -7,8 +7,14 @@ define('DB_PASS','');
 define('DB_NAME','db_utility');
 define('base_url','http://192.168.0.111/utility/');
 
-$conn = mysqli_connect('localhost','root','','db_utility') or die(mysqli_error());
+#$conn = mysqli_connect('localhost','root','','db_utility') or die(mysqli_error());
 
+$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+
+// Check connection
+if (mysqli_connect_errno()) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
 // Establish database connection.
 try
 {
