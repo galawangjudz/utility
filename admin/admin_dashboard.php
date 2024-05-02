@@ -5,8 +5,6 @@ function format_num($number){
 }
 
 ?>
-
-
 <div class="main-container"> 
     <div class="">
         <div class="pd-ltr-20">
