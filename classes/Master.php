@@ -221,6 +221,63 @@ Class Master{
 		return json_encode($resp);
 	}
 
+	public function transfer_account(){
+	
+		extract($_POST);
+		$old_acc_no = $_POST['old_acc_no'];
+		$new_acc_no = $_POST['new_acc_no'];
+		$new_lot_area = $_POST['new_lot_area'];
+		if (empty($new_acc_no)) {
+			$resp['status'] = 'error';
+			$resp['msg'] = "Please fill in all required fields";
+			return json_encode($resp);
+			exit;
+		}
+
+		$site = substr($new_acc_no, 0, 3);
+		$blk = substr($new_acc_no, 3, 3);
+		$lot = substr($new_acc_no, 6, 2);
+		$no = substr($new_acc_no, 8);
+
+		$check = "SELECT * FROM t_projects where c_code = $site";
+
+		$result = odbc_exec($this->conn2, $check);
+
+			if (!$result) {
+				die("ODBC query execution failed: " . odbc_errormsg());
+			}
+			// Fetch and display the results
+			while ($row = odbc_fetch_array($result)) {
+				$acronym = $row['c_acronym'];
+			}
+		$pbl = sprintf("%s B-%d L-%d No. %d", $acronym, $blk, $lot, $no);
+		
+
+		$data = "c_account_no, c_site, c_block, c_lot, c_no,c_location, c_lot_area";
+		$values = "'$new_acc_no', '$site','$blk', '$lot', '$no', '$pbl', $new_lot_area";
+		
+		$sql1 = "UPDATE t_utility_accounts SET ($data) = ($values) WHERE c_account_no = '$old_acc_no'";
+		$sql2 = "UPDATE t_utility_bill SET c_account_no = $new_acc_no WHERE c_account_no = '$old_acc_no'";
+		$sql3 = "UPDATE t_utility_payments SET c_account_no = $new_acc_no  WHERE c_account_no = '$old_acc_no'";
+		$sql4 = "UPDATE t_utility_flags SET c_account_no = $new_acc_no  WHERE c_account_no = '$old_acc_no'";
+		$save = odbc_exec($this->conn2, $sql1);
+		$save2 = odbc_exec($this->conn2, $sql2);
+		$save3 = odbc_exec($this->conn2, $sql3);
+		$save4 = odbc_exec($this->conn2, $sql4);
+		
+		if ($save && $save2 && $save3 && $save4) {
+			$this->log_log('Transfer Account', "TRANSFER - from $old_acc_no to $new_acc_no");
+			$resp['status'] = 'success';
+			$resp['msg'] = "Account has been transferred successfully.";
+		} else {
+			$resp['status'] = 'failed';
+			$resp['msg'] = "An error occurred.";
+			$resp['err'] = odbc_errormsg($this->conn2) . " [$sql]";
+		}
+
+		return json_encode($resp);
+	}
+
 	
 
 	function delete_account(){
@@ -821,6 +878,9 @@ switch ($action) {
 	break;
 	case 'delete_account':
 		echo $Master->delete_account();
+	break;
+	case 'transfer_account':
+		echo $Master->transfer_account();
 	break;
 	case 'save_payment':
 		echo $Master->save_payment();

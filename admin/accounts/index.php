@@ -224,6 +224,7 @@ else{
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                                             <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
+                                            <a class="dropdown-item transfer_acc" id ="<?php echo $acc ?>"><i class="dw dw-cursor2"></i>Transfer</a>
                                             <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> GCF & STL Records</a>
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
                                             <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> Grass-Cutting Records</a>
@@ -270,6 +271,10 @@ else{
 
         $('#create_new').click(function(){
 			uni_modal("Add New Account","accounts/manage_account.php",'mid-large')
+		})
+
+        $('.transfer_acc').click(function(){
+			uni_modal("Transfer Account","accounts/transfer_account.php?id="+$(this).attr('id'),'mid-large')
 		})
         $('.soa_data').click(function(){
 			uni_modal_2("Due and Payment Details", "soa/statement.php?id=" + $(this).attr('id'), 'large');
