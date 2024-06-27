@@ -77,6 +77,8 @@ require_once('../../includes/config.php');
                 <option value="PTO" <?php echo (isset($request) &&  $request == 'PTO') ? 'selected' : ''; ?>>PERMIT TO OCCUPY</option>
                 <option value="PTC" <?php echo (isset($request) &&  $request == 'PTC') ? 'selected' : ''; ?>>PERMIT TO CONSTRUCT</option>
                 <option value="ATC" <?php echo (isset($request) &&  $request == 'ATC') ? 'selected' : ''; ?>>AUTHORITY TO CONSTRUCT</option>
+                <option value="REF" <?php echo (isset($request) &&  $request == 'REF') ? 'selected' : ''; ?>>REFUND</option>
+         
               </select>
           </div>
           <div class="col-sm-12">

@@ -97,7 +97,7 @@ Class Master{
 				$resp['msg'] = "Utility Ticket has been successfully updated.";
 			}else{
 				$this->log_log('Ticket Add', "ADD : $request : $acc_no ");
-				$resp['msg'] = "Account has been successfully added.";
+				$resp['msg'] = "Request has been successfully added.";
 			}
 		} else {
 			$resp['status'] = 'failed';

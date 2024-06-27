@@ -302,6 +302,7 @@ while ($row = odbc_fetch_array($result)) {
                                     'PTO' => 'PERMIT TO OCCUPY',
                                     'PTC' => 'PERMIT TO CONSTRUCT',
                                     'ATC' => 'AUTHORITY TO CONSTRUCT',
+                                    'REF' => 'REFUND',
                                 ];
 
                                 echo isset($result['request']) ? $requestAcronyms[$result['request']] : '';
