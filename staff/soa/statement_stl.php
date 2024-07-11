@@ -351,7 +351,7 @@ function format_num($number){
                         ?> 
                         <hr>
                       
-                        <td style="font-size:12px;"><label for="tot_bill" class="control-label"><b>STL Total Due: </b></label>
+                        <td style="font-size:12px;"><label for="tot_bill" class="control-label"><b>STL Total Bill: </b></label>
                         <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
                         <td style="font-size:12px;"><label for="tot_sur" class="control-label"><b>STL Total Surcharge: </b></label>
                         <input type="text" class= "form-control-sm" name="tot_sur" id="tot_sur" value="<?php echo isset($total_stl_sur) ? format_num($total_stl_sur): 0; ?>" disabled></td>

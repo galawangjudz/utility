@@ -399,7 +399,7 @@ function format_num($number){
                         ?> 
                     <hr>
                         <tr>
-                            <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">GCF Total Due: </label>
+                            <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">GCF Total Bill: </label>
                             <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_mtf_bill) ? format_num($total_mtf_bill): 0; ?>" disabled></td>
                             <td style="font-size:12px;"><label for="gcf_sur" class="control-label" style="font-weight:bold;">GCF Total Surcharge: </label>
                             <input type="text" class= "form-control-sm" name="gcf_sur" id="gcf_sur" value="<?php echo isset($total_mtf_sur) ? format_num($total_mtf_sur): 0; ?>" disabled></td>
@@ -414,7 +414,7 @@ function format_num($number){
                         </tr>
                         
                         <tr>   
-                            <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">STL Total Due: </label>
+                            <td style="font-size:12px;"><label for="tot_bill" class="control-label" style="font-weight:bold;">STL Total Bill: </label>
                             <input type="text" class= "form-control-sm" name="tot_bill" id="tot_bill" value="<?php echo isset($total_stl_bill) ? format_num($total_stl_bill): 0; ?>" disabled></td>
                             <td style="font-size:12px;"><label for="stl_sur" class="control-label" style="font-weight:bold;">STL Total Surcharge: </label>
                             <input type="text" class= "form-control-sm" name="stl_sur" id="stl_sur" value="<?php echo isset($total_stl_sur) ? format_num($total_stl_sur): 0; ?>" disabled></td>
@@ -442,7 +442,7 @@ function format_num($number){
                         </tr>
                         <tr><td></td></tr>
                         <tr>
-                            <td style="font-size:12px;"><b><label for="gcf_stl_total" class="control-label" style="font-weight:bold;">TOTAL DUE: </b></label></td>
+                            <td style="font-size:12px;"><b><label for="gcf_stl_total" class="control-label" style="font-weight:bold;">Total Bill: </b></label></td>
                             <td style="font-size:12px;"><b><label for="gcf_stl_total" class="control-label" style="font-weight:bold;">TOTAL SURCHARGE: </b></label></td>
                             <td style="font-size:12px;"><b><label for="gcf_stl_paid" class="control-label" style="font-weight:bold;">TOTAL PAID:</b></label></td>
                             <td style="font-size:12px;"><b><label for="gcf_stl_disc" class="control-label" style="font-weight:bold;">TOTAL DISCOUNT:</b></label></td>
