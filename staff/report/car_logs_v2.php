@@ -322,7 +322,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
 
                                 ?>
                                 
-                                  
+                                            
                                 <tr>
                                     <?php for ($i = 0; $i < 3; $i++) : ?>
                                         <td class="text-right" style="text-align:center;font-size:10px;" ></td>
@@ -332,9 +332,9 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                         <td class="text-right" style="text-align:center;font-size:10px;" ></td>
                                     <?php endfor; ?>
                                     <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num(-$grandTotalRow['subtotal_online_cdv']) ?></td>
-                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num(-$grandTotalRow['subtotal_check']) ?></td>
-                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num(-($grandTotalRow['subtotal_online_cdv'] + $grandTotalRow['subtotal_check'])) ?></td>
-                                    <?php for ($i = 0; $i < 3; $i++) : ?>
+                                    <td class="text-right" style="text-align:center;font-size:10px;"></td>
+                                    <td class="text-right" style="text-align:center;font-size:10px;"><?php echo format_num(-($grandTotalRow['subtotal_online_cdv'])) ?></td>
+                                    <?php for ($i = 0; $i < 4; $i++) : ?>
                                         <td class="text-right" style="text-align:center;font-size:10px;" ></td>
                                     <?php endfor; ?>
                                 </tr>
@@ -348,8 +348,10 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                             endwhile;
 
                             $gtotal = $cashTotal - $btotal;
-                            $htotal = $checkTotal - $ctotal;
-                            $supertotal = $Total - ($btotal + $ctotal);  
+                            $htotal = $checkTotal ;
+                            $supertotal = $gtotal + $htotal;  
+                           # $htotal = $checkTotal  $ctotal;
+                            #$supertotal = $Total - ($btotal + $ctotal);
                             ?>
                             <tr>
                                 <?php for ($i = 0; $i < 3; $i++) : ?>
@@ -363,7 +365,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                                 <td class="text-right"><?php echo  format_num($htotal)  ?></td>
                                 <td class="text-right"><?php echo  format_num($supertotal)  ?></td>
                                 <td class="text-right"><?php echo  format_num($discountTotal)  ?></td>
-                                <?php for ($i = 0; $i < 2; $i++) : ?>
+                                <?php for ($i = 0; $i < 3; $i++) : ?>
                                         <td class="text-right" style="text-align:center;font-size:10px;" ></td>
                                 <?php endfor; ?>
                             </tr>
