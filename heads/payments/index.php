@@ -4,6 +4,7 @@ function format_num($number){
     $decimals = 2; 
     return number_format($number, $decimals);
 }
+session_name('session_utility');
 session_start();
 ?>
 <?php
@@ -974,7 +975,7 @@ function compute_total_amt_paid(){
 
         // Add options based on selected mode
         if (selectedMode === '2') {
-            addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS', 'SBC', 'PBB','PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB','MBTC','PBCOM','AUB','TRBank']);
+            addOptions(branchSelect, ['ROBBank', 'UB', 'BPI', 'BDO', 'CBS','CTBC', 'SBC', 'PBB','PNB', 'PSB', 'EWB', 'BOC', 'RCBC', 'LB','MBTC','PBCOM','AUB','TRBank']);
         } else if (selectedMode === '3') {
             addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB','AUB']);
         }

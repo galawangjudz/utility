@@ -15,6 +15,7 @@ $conn_notif = new mysqli($servername, $username, $password, $dbname);
 if ($conn_notif->connect_error) {
     die("Connection failed: " . $conn_notif->connect_error);
 }
+session_name('session_utility');
 session_start();
 // Retrieve notifications for a specific user
 $user_id = $_SESSION['alogin'];

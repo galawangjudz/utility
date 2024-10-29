@@ -1,5 +1,6 @@
 <?php
 date_default_timezone_set('Africa/Accra');
+session_name('session_utility');
 session_start();
 include('../includes/config.php');
 

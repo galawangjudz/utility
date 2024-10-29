@@ -1,4 +1,5 @@
 <?php
+session_name('session_utility');
 session_start();
 require_once('includes/config.php');
 $errorMsg = '';

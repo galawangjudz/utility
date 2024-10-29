@@ -106,6 +106,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <option value="BPI" <?= isset($l_branch) && $l_branch == 'BPI' ? 'selected' : '' ?>>BPI</option>
                         <option value="BOC" <?= isset($l_branch) && $l_branch == 'BOC' ? 'selected' : '' ?>>BOC</option>
                         <option value="CBS" <?= isset($l_branch) && $l_branch == 'CBS' ? 'selected' : '' ?>>CBS</option>
+                        <option value="CTBC" <?= isset($l_branch) && $l_branch == 'CTBC' ? 'selected' : '' ?>>CTBC</option>
                         <option value="EWB" <?= isset($l_branch) && $l_branch == 'EWB' ? 'selected' : '' ?>>EWB</option>
                         <option value="GCASH" <?= isset($l_branch) && $l_branch == 'GCASH' ? 'selected' : '' ?>>GCASH</option>
                         <option value="LB"  <?= isset($l_branch) && $l_branch == 'LB' ? 'selected' : '' ?>>LB</option>

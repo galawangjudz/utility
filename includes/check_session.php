@@ -2,6 +2,7 @@
 require_once('../includes/config.php');
 
 if (session_status() == PHP_SESSION_NONE) {
+    session_name('session_utility');
     session_start();
    
 }

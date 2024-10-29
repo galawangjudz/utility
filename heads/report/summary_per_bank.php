@@ -113,6 +113,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
                 <th class="text-center">BOC</th>
                 <th class="text-center">BPI</th>
                 <th class="text-center">CBS</th>
+                <th class="text-center">CTBC</th>
                 <th class="text-center">MBTC</th>
                 <th class="text-center">PBB</th>
                 <th class="text-center">PBCOM</th>
@@ -133,7 +134,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
         }
 
         $currentDate = null;
-        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PBCOM','PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB', '', 'Total'], 0);
+        $totals = array_fill_keys(['BDO', 'BOC', 'BPI', 'CBS','CTBC','MBTC', 'PBB', 'PBCOM','PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB', '', 'Total'], 0);
 
         while ($grandTotalRow = odbc_fetch_array($result3)):
             // If it's a new date, print the previous row and reset the totals
