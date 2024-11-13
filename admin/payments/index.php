@@ -974,7 +974,7 @@ function compute_total_amt_paid(){
 
         // Add options based on selected mode
         if (selectedMode === '2') {
-            addOptions(branchSelect, ['Check On Hand','UB','BPI', 'BDO', 'CBS', 'SBC','PBB','PNB']);
+            addOptions(branchSelect, ['Check On Hand', 'CBS', 'SBC','PBB']);
         } else if (selectedMode === '3') {
             addOptions(branchSelect, ['BDO', 'BOC', 'BPI', 'CBS', 'MBTC', 'PBB', 'PVB', 'RCBC', 'ROBBank', 'SBC', 'UB', 'UCPB','AUB']);
         }
