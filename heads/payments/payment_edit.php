@@ -132,7 +132,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                         <option value="PBCOM" <?= isset($l_branch) && $l_branch == 'PBCOM' ? 'selected' : '' ?>>PBCOM</option>
                         <option value="AUB" <?= isset($l_branch) && $l_branch == 'AUB' ? 'selected' : '' ?>>AUB</option>
                         <option value="TRBank" <?= isset($l_branch) && $l_branch == 'TRBank' ? 'selected' : '' ?>>TRBank</option>
-
+                        <option value="Check On Hand" <?= isset($l_branch) && $l_branch == 'Check On Hand' ? 'selected' : '' ?>>Check On Hand</option>
                      
                     </select>
                 </div>
