@@ -221,7 +221,7 @@ if(isset($_GET['id'])){
             <th class="report-header-cell">
                 <div class="header-info">
                 <img src="images/Header.jpg" class="img-thumbnail" style="height:110px;width:750px;margin-left:-55px;border:none;margin-bottom:-5px;z-index:-1;position: relative;margin-bottom:-35px;" alt="">
-                <h6 style="margin-top:-25px;margin-left:65px;font-weight:normal;font-size:12px;"><b>GRASS-CUTTING OVERDUE AMOUNT AND LAST PAYMENT RECORDS</b></h6>
+                <h6 style="margin-top:-25px;margin-left:65px;font-weight:normal;font-size:12px;"><b>GRASS CONTROL OVERDUE AMOUNT AND LAST PAYMENT RECORDS</b></h6>
 
                     <div class="container" style="margin-top:15px;">
                         <div class="buyer_info">

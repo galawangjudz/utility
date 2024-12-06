@@ -91,14 +91,14 @@ require_once('../../includes/config.php');
           <div class="col-sm-12">
             <label for="adjust_for">Adjustment for</label>
               <select class="form-control form-control-border" name="adjust_for" id="adjust_for" readonly>
-                        <option value="GCF" <?php echo (isset($adjust_for) && $adjust_for == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                        <option value="GCF" <?php echo (isset($adjust_for) && $adjust_for == 'GCF') ? 'selected' : ''; ?>>GRASS CONTROL</option>
                         <option value="STL" <?php echo (isset($adjust_for) && $adjust_for == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
               </select>
           </div>
           <div class="col-sm-12" id="transferto_row">
               <label for="adjust_to">Transfer to</label>
               <select name="adjust_to" id="adjust_to" class="form-control form-control-border">
-                    <option value="GCF" <?php echo (isset($adjust_to) && $adjust_to == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                    <option value="GCF" <?php echo (isset($adjust_to) && $adjust_to == 'GCF') ? 'selected' : ''; ?>>GRASS CONTROL</option>
                     <option value="STL" <?php echo (isset($adjust_to) && $adjust_to == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
               </select>
           </div>

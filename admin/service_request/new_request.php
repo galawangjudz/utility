@@ -93,7 +93,7 @@ require_once('../../includes/config.php');
             <label for="adjust_for">Adjustment for</label>
               <select class="form-control form-control-border" name="adjust_for" id="adjust_for" required>
                         <option value="" <?php echo empty($adjust_for) ? 'selected' : ''; ?>>Select an option</option>
-                        <option value="GCF" <?php echo (isset($adjust_for) && $adjust_for == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                        <option value="GCF" <?php echo (isset($adjust_for) && $adjust_for == 'GCF') ? 'selected' : ''; ?>>GRASS CONTROL</option>
                         <option value="STL" <?php echo (isset($adjust_for) && $adjust_for == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
               </select>
           </div>
@@ -101,7 +101,7 @@ require_once('../../includes/config.php');
               <label for="adjust_to">Transfer to</label>
               <select name="adjust_to" id="adjust_to" class="form-control form-control-border">
                     <option value="" <?php echo empty($adjust_to) ? 'selected' : ''; ?>>Select an option</option>
-                    <option value="GCF" <?php echo (isset($adjust_to) && $adjust_to == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                    <option value="GCF" <?php echo (isset($adjust_to) && $adjust_to == 'GCF') ? 'selected' : ''; ?>>GRASS CONTROL</option>
                     <option value="STL" <?php echo (isset($adjust_to) && $adjust_to == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
               </select>
           </div>

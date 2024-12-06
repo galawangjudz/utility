@@ -37,7 +37,7 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                     <label for="category" class="control-label">Category</label>
                     <select name="category" id="category" class="form-control form-control-sm rounded-0" required>
                         <option value="ALL" <?php echo ($category == 'ALL') ? 'selected' : ''; ?>>ALL</option>
-                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASS-CUTTING</option>
+                        <option value="GCF" <?php echo ($category == 'GCF') ? 'selected' : ''; ?>>GRASS CONTROL</option>
                         <option value="STL" <?php echo ($category == 'STL') ? 'selected' : ''; ?>>STREETLIGHT</option>
                     </select>
                 </div>
@@ -65,9 +65,9 @@ $encoder = isset($_GET['encoder']) ? $_GET['encoder'] : $default_encoder;
                     <?php if($category == 'STL'): ?>
                     <p class="m-0 text-center">Streetlight Fee</p>
                      <?php elseif($category == 'GCF'): ?>
-                    <p class="m-0 text-center">Grass-Cutting Fee</p>
+                    <p class="m-0 text-center">Grass Control Fee</p>
                     <?php else: ?>
-                    <p class="m-0 text-center">Streetlight & Grass-Cutting Fee</p>
+                    <p class="m-0 text-center">Streetlight & Grass Control Fee</p>
                     <?php endif; ?>
                     <?php if ($from == $from): ?>
                        <!--  <p class="m-0 text-center"><?= date("M d, Y g:i A", strtotime($from)) ?></p> -->

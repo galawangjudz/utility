@@ -226,7 +226,7 @@ else{
                                             <a class="dropdown-item view_data" id ="<?php echo $acc ?>"><i class="dw dw-eye"></i> View</a>
                                             <a class="dropdown-item soa_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i> GCF & STL Records</a>
                                             <a class="dropdown-item stl_bill_data" id ="<?php echo $acc ?>" bill_type ="STL" ><i class="dw dw-light-bulb"></i> StreetLight Records</a>
-                                            <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> Grass-Cutting Records</a>
+                                            <a class="dropdown-item mtf_bill_data" id ="<?php echo $acc ?>" bill_type ="MTF" ><i class="dw dw-scissors"></i> Grass Control Records</a>
                                             <?php if ($_SESSION['user_type'] != 'Staff') { ?>
                                             <a class="dropdown-item payment_data" id ="<?php echo $acc ?>"><i class="dw dw-file-4"></i>Payment Window</a>
                                             <?php } ?>
