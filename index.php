@@ -138,7 +138,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signin']))
 							<div class="alert alert-danger <?php echo $errorMsg ? '' : 'd-none'; ?>"><?php echo $errorMsg; ?></div>
 							
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" placeholder="Employe ID" name="username" id="username" autocomplete="off">
+								<input type="text" class="form-control form-control-lg" placeholder="Employee ID" name="username" id="username" autocomplete="off">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="icon-copy fa fa-user-o" aria-hidden="true"></i></span>
 								</div>
