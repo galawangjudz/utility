@@ -380,7 +380,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
 <div class="container-fluid">
 <form action="" id="pay-form">
-<img src="payments/car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-30px;display:none;" alt="">
+<img src="payments/new_car.jpg" class="img-thumbnail" style="height:105px;width:670px;border:none;margin-left:190px;margin-top:-30px;display:none;" alt="">
 
         <input type="hidden" name="id" value="<?php echo isset($account_no) ? $account_no : '' ?>">
         <div class="fieldset-container">
@@ -665,46 +665,54 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<html><head>');
         printWindow.document.write('<style>');
         printWindow.document.write('body {');
-        printWindow.document.write('    background-image: url("payments/car.jpg");');
+        printWindow.document.write('    background-image: url("payments/new_car.png");');
         printWindow.document.write('    background-size: 820px 350px;');
         printWindow.document.write('}');
-        printWindow.document.write('.pay-date { margin: 133px 390px; width: 100px; position:absolute; }');
-        printWindow.document.write('.full-name { margin: 155px 180px; width: 250px; position:absolute; }');
+        printWindow.document.write('.pay-date { margin: 133px 470px; width: 100px; position:absolute; }');
+        printWindow.document.write('.location { margin: 150px -55px; width: 200px; position:absolute; }');
+        printWindow.document.write('.acc-no { margin: 166px 470px; width: 100px; position:absolute; }');
+        printWindow.document.write('.full-name { margin: 133px -55px; width: 500px; position:absolute; }');
         printWindow.document.write('.add { margin: 190px 150px; width: 350px; position:absolute; }');
         printWindow.document.write('.payment-or { margin: 20px 180px; }');
         printWindow.document.write('.mode-payment { margin: 10px 0; }');
        
-        printWindow.document.write('.stl { margin: 100px -155px; position:absolute;}');
+        printWindow.document.write('.stl { margin: 200px 20px; position:absolute;}');
 
-        printWindow.document.write('.mtf { margin: 100px -155px; position:absolute;}');
+        printWindow.document.write('.mtf { margin: 200px 20px; position:absolute;}');
 
 
-        printWindow.document.write('.usr { margin: 280px 380px; position:absolute; width:200px;font-weight:bold}');
+        printWindow.document.write('.usr { margin: 300px 470px; position:absolute; width:200px;font-weight:bold}');
 
         if (mp === "1") {
-            printWindow.document.write('.mp { margin: 270px -110px; position:absolute; width:200px;}');
+            printWindow.document.write('.mp { margin: 268px -177px; position:absolute; width:200px;}');
             printWindow.document.write('.check_date {display:none;}');
             printWindow.document.write('.ref_no {display:none;}');
             printWindow.document.write('.branch {display:none;}');
         } else if(mp === "2") {
-            printWindow.document.write('.mp { margin: 290px -95px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
-            printWindow.document.write('.check_date { margin:310px -10px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.ref_no { margin: 310px -100px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.mp { margin: 280px -177px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date { margin:275px 50px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 275px 210px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no { margin: 275px -100px; position:absolute; width:200px;}');///Same lang sa mp.
+          
+        }else if(mp === "4") {
+            printWindow.document.write('.mp { margin: 310px -177px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.check_date {display:none;}');
+            printWindow.document.write('.ref_no { margin: 305px -100px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 290px 210px; position:absolute; width:200px;}');///Same lang sa mp.
             
         }else{
-            printWindow.document.write('.mp { margin: 290px -110px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
+            printWindow.document.write('.mp { margin: 295px -177px; position:absolute; width:200px;}');//////Adjust the amount if not sakto. 300 yung top margin. -130 yung right.
             printWindow.document.write('.check_date {display:none;}');
-            printWindow.document.write('.ref_no { margin: 300px 130px; position:absolute; width:200px;}');///Same lang sa mp.
-            printWindow.document.write('.branch { margin: 260px -130px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.ref_no { margin: 290px -100px; position:absolute; width:200px;}');///Same lang sa mp.
+            printWindow.document.write('.branch { margin: 290px 210px; position:absolute; width:200px;}');///Same lang sa mp.
         }
 
         
-       // printWindow.document.write('.remarks { margin: 260px 360px ; position:absolute; width:250px;}');
-        printWindow.document.write('.remarks { margin: 260px 210px ; position:absolute; width:380px;}');
-        printWindow.document.write('.total-amount-paid { margin: 240px 420px; width: 200px; position:absolute; }');
-        printWindow.document.write('.payment-for { margin: 260px 230px; width:300px; position:absolute; }');
-        printWindow.document.write('.numtowords { margin: 215px 160px; width:400px; position:absolute; }');
+        printWindow.document.write('.remarks { margin: 200px 470px ; position:absolute; width:180px;}');
+        //printWindow.document.write('.remarks { margin: 260px 210px ; position:absolute; width:380px;}');
+        printWindow.document.write('.total-amount-paid { margin: 275px 470px; width: 200px; position:absolute; }');
+        printWindow.document.write('.payment-for { margin: 200px -160px; width:300px; position:absolute; }');
+        printWindow.document.write('.numtowords { margin: 340px -160px; width:400px; position:absolute; }');
 
         printWindow.document.write('.stl-pay { text-align:right; position:absolute; }');
         printWindow.document.write('.stl-disc { text-align:right; position:absolute; }');
@@ -720,7 +728,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.mtf { display: block; }');
             printWindow.document.write('.stl { display: none; }');
         }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
-            printWindow.document.write('.mtf { display: block; margin: 180px -155px; position:absolute; }');
+            printWindow.document.write('.mtf { display: block; margin: 200px 200px; position:absolute; }');
             printWindow.document.write('.stl { display: block; }');
         }else{
             printWindow.document.write('.mtf { display: none; }');
@@ -741,14 +749,15 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         var accNo = document.getElementById("acc_no").value;
         //var pbl = document.getElementById("pbl").value
         // Limit the full name to 50 characters
-        var limitedFullName = fullName.length > 65 ? fullName.substring(0, 65) + ' ...' : fullName;
+        var limitedFullName = fullName.length > 75 ? fullName.substring(0, 75) + ' ...' : fullName;
 
         
 
         // Print the formatted string
         printWindow.document.write('<p class="full-name">' + limitedFullName + '</p>');
 
-        printWindow.document.write('<p class="add">' + document.getElementById("pbl").value + ' / ' + accNo + '</p>');
+        printWindow.document.write('<p class="location">' + document.getElementById("pbl").value + '</p>');
+        printWindow.document.write('<p class="acc-no">' + accNo + '</p>');
         printWindow.document.write('<p class="pay-date">' + document.getElementById("trans_date").value + '</p>');
         //printWindow.document.write('<p class="payment-or">Or No.: ' + '' + '</p>');
         //printWindow.document.write('<p class="mode-payment">Mode of Payment: ' + '' + '</p>');
@@ -765,9 +774,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<tr><td>GCF Amount Paid:</td><td style="text-align:right;">' + formatNumberWithCommas(parseFloat(document.getElementById("main_amount_paid").value)) + '</td></tr>');
         printWindow.document.write('</table>');
 
-        printWindow.document.write('<p class="mp">' + document.getElementById("total_amount_paid").value + '</p>');
+        printWindow.document.write('<p class="mp"> X </p>');
         printWindow.document.write('<p class="check_date">' + document.getElementById("check_date").value + '</p>');
-        printWindow.document.write('<p class="branch">Bank : ' + document.getElementById("branch").value + '</p>');
+        printWindow.document.write('<p class="branch">' + document.getElementById("branch").value + '</p>');
         printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
 
         printWindow.document.write('<p class="remarks">' + document.getElementById("remarks").value + '</p>');
@@ -777,7 +786,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<p class="numtowords">' + amtToWord + ' Pesos Only' + '</p>');
 
        
-        //printWindow.document.write('<p class="payment-for">' + paymentForText +'</p>');
+        printWindow.document.write('<p class="payment-for">' + paymentForText +'</p>');
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();
