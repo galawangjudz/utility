@@ -676,9 +676,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('.payment-or { margin: 20px 180px; }');
         printWindow.document.write('.mode-payment { margin: 10px 0; }');
        
-        printWindow.document.write('.stl { margin: 240px 20px; position:absolute;}');
+        printWindow.document.write('.stl { margin: 240px -10px; position:absolute;}');
 
-        printWindow.document.write('.mtf { margin: 240px 20px; position:absolute;}');
+        printWindow.document.write('.mtf { margin: 240px -10px; position:absolute;}');
 
 
         printWindow.document.write('.usr { margin: 385px 520px; position:absolute; width:200px;font-weight:bold}');
@@ -709,8 +709,8 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
         
         printWindow.document.write('.remarks { margin: 315px -50px ; position:absolute; width:450px;}');
-        //printWindow.document.write('.remarks { margin: 260px 210px ; position:absolute; width:380px;}');
-        printWindow.document.write('.total-amount-paid { margin: 350px 510px; width: 200px; position:absolute; }');
+        printWindow.document.write('.total-amount-paid2 { margin: 230px 520px ; position:absolute; width:380px;}');
+        printWindow.document.write('.total-amount-paid { margin: 350px 520px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 250px -160px; width:300px; position:absolute; }');
         printWindow.document.write('.numtowords { margin: 440px -160px; width:400px; position:absolute; }');
 
@@ -728,7 +728,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             printWindow.document.write('.mtf { display: block; }');
             printWindow.document.write('.stl { display: none; }');
         }else if(mainAmountPaid !== 0 && stlAmountPaid !== 0) {
-            printWindow.document.write('.mtf { display: block; margin: 240px 200px; position:absolute; }');
+            printWindow.document.write('.mtf { display: block; margin: 240px 170px; position:absolute; }');
             printWindow.document.write('.stl { display: block; }');
         }else{
             printWindow.document.write('.mtf { display: none; }');
@@ -780,10 +780,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         printWindow.document.write('<p class="ref_no">' + document.getElementById("ref_no").value + '</p>');
 
         printWindow.document.write('<p class="remarks">' + document.getElementById("remarks").value + '</p>');
-
+        printWindow.document.write('<p class="total-amount-paid2">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="total-amount-paid">' + document.getElementById("total_amount_paid").value + '</p>');
         printWindow.document.write('<p class="usr">' + document.getElementById("usr").value + '</p>');
-        printWindow.document.write('<p class="numtowords"> ** ' + amtToWord + 'Pesos Only **' + '</p>');
+        printWindow.document.write('<p class="numtowords"> ** ' + amtToWord + ' Pesos Only **' + '</p>');
 
        
         printWindow.document.write('<p class="payment-for">' + paymentForText +'</p>');

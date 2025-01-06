@@ -458,7 +458,7 @@ Class Master{
 			exit;
 		endif;
 		do {
-			$random_no = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+			$random_no = str_pad(mt_rand(800000, 999999), 6, '0', STR_PAD_LEFT);
 			$unique_no = $adjust_for . '-BA'. $random_no;
 			if ($adjust_for == 'MTF'):
 					$adjust_for1 = 'GCF';
@@ -538,7 +538,7 @@ Class Master{
 			exit;
 		endif;
 		do {
-			$random_no = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+			$random_no = str_pad(mt_rand(800000, 999999), 6, '0', STR_PAD_LEFT);
 			$unique_no1 = $adjust_from . '-' . $adjust_type . $random_no;
 			if ($adjust_from == 'MTF'):
 				$adjust_from1 = 'GCF';
