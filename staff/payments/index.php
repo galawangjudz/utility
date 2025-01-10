@@ -712,7 +712,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         //printWindow.document.write('.remarks { margin: 260px 210px ; position:absolute; width:380px;}');
         printWindow.document.write('.total-amount-paid { margin: 350px 510px; width: 200px; position:absolute; }');
         printWindow.document.write('.payment-for { margin: 250px -160px; width:300px; position:absolute; }');
-        printWindow.document.write('.numtowords { margin: 440px -160px; width:400px; position:absolute; }');
+        printWindow.document.write('.numtowords { margin: 395px -160px; width:500px; position:absolute; }');
 
         printWindow.document.write('.stl-pay { text-align:right; position:absolute; }');
         printWindow.document.write('.stl-disc { text-align:right; position:absolute; }');
